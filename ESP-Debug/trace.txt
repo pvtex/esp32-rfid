@@ -1,0 +1,122 @@
+Exception Cause: 9  [LoadStoreAlignmentCause: Load or store to an unaligned address]
+
+0x4020fb2c: AsyncWebSocketClient::_onAck(unsigned int, unsigned int) at ??:?
+0x40232684: tcp_free_acked_segments at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/tcp_in.c:1109
+0x4020fb59: std::_Function_handler<void (void*, AsyncClient*, unsigned int, unsigned int), AsyncWebSocketClient::AsyncWebSocketClient(AsyncWebServerRequest*, AsyncWebSocket*)::{lambda(void*, AsyncClient*, unsigned int, unsigned int)#4}>::_M_invoke(std::_Any_data const&, void*, AsyncClient*, unsigned int, unsigned int) at AsyncWebSocket.cpp:?
+0x4020d249: AsyncClient::_sent(std::shared_ptr<ACErrorTracker>&, tcp_pcb*, unsigned short) at ??:?
+0x4020d92a: AsyncClient::_s_sent(void*, tcp_pcb*, unsigned short) at ??:?
+0x40233d9c: tcp_input at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/tcp_in.c:469 (discriminator 1)
+0x401017c2: malloc at ??:?
+0x4023983e: ip4_input at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1467
+0x4010178b: free at ??:?
+0x4024fb34: ppRecycleRxPkt at ??:?
+0x402308b1: ethernet_input_LWIP2 at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/netif/ethernet.c:188
+0x402306d4: esp2glue_ethernet_input at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/glue-lwip/lwip-git.c:469
+0x4025a03a: ethernet_input at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/glue-esp/lwip-esp.c:365
+0x4025a04b: ethernet_input at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/glue-esp/lwip-esp.c:373
+0x4024f75b: ppPeocessRxPktHdr at ??:?
+0x4025584f: ets_snprintf at ??:?
+0x40000f49: ?? ??:0
+0x40000f49: ?? ??:0
+0x40000e19: ?? ??:0
+0x40001878: ?? ??:0
+0x401056d9: call_user_start_local at ??:?
+0x401056df: call_user_start_local at ??:?
+0x4010000d: call_user_start at ??:?
+0x4024e2c4: cont_ret at cont.S.o:?
+0x4024e275: cont_continue at cont.S.o:?
+0x4000444e: ?? ??:0
+0x40100d94: ets_post at ??:?
+0x4000422e: ?? ??:0
+0x40004aa0: ?? ??:0
+0x4000444e: ?? ??:0
+0x4000422e: ?? ??:0
+0x40004aa0: ?? ??:0
+0x401069f0: spi_flash_write at ??:?
+0x4000444e: ?? ??:0
+0x4000444e: ?? ??:0
+0x4000422e: ?? ??:0
+0x40004aa0: ?? ??:0
+0x401069f0: spi_flash_write at ??:?
+0x4000444e: ?? ??:0
+0x400041bc: ?? ??:0
+0x40004b14: ?? ??:0
+0x401069f0: spi_flash_write at ??:?
+0x40100d94: ets_post at ??:?
+0x402192ba: EspClass::flashWrite(unsigned int, unsigned int*, unsigned int) at ??:?
+0x4021bf82: yield at ??:?
+0x4021e611: flash_hal_write(unsigned int, unsigned int, unsigned char const*) at ??:?
+0x40105e79: ets_timer_disarm at ??:?
+0x4000050c: ?? ??:0
+0x40004aa0: ?? ??:0
+0x402508cf: pp_attach at ??:?
+0x40100d94: ets_post at ??:?
+0x4025091e: pp_attach at ??:?
+0x40254477: pm_post at ??:?
+0x40250a02: pp_attach at ??:?
+0x4010245b: ppCalFrameTimes at ??:?
+0x4024f97c: ppTxPkt at ??:?
+0x4023f437: ieee80211_output_pbuf at ??:?
+0x40105c23: wdt_feed at ??:?
+0x400042db: ?? ??:0
+0x40004b31: ?? ??:0
+0x40230295: glue2esp_linkoutput at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/glue-esp/lwip-esp.c:301
+0x40106a38: spi_flash_read at ??:?
+0x402192e5: EspClass::flashRead(unsigned int, unsigned int*, unsigned int) at ??:?
+0x40100de5: __wrap_spi_flash_read at ??:?
+0x40230522: new_linkoutput at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/glue-lwip/lwip-git.c:260
+0x4023093c: ethernet_output at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/netif/ethernet.c:312
+0x40238054: etharp_output_to_arp_index at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:770
+0x40100d94: ets_post at ??:?
+0x40105e79: ets_timer_disarm at ??:?
+0x402382a8: etharp_output_LWIP2 at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/etharp.c:885
+0x401017c2: malloc at ??:?
+0x40239aa0: ip4_output_if_opt_src at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1764
+0x4023a5bc: mem_malloc at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/mem.c:210
+0x402309d0: memp_malloc at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/memp.c:356
+0x40239ae8: ip4_output_if_opt at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1577
+0x40239b0e: ip4_output_if at /home/gauchard/dev/esp8266/esp8266/tools/sdk/lwip2/builder/lwip2-src/src/core/ipv4/ip4.c:1550
+0x40100e8c: millis at ??:?
+0x4020d2db: AsyncClient::add(char const*, unsigned int, unsigned char) at ??:?
+0x4020d1b0: AsyncClient::send() at ??:?
+0x4020e748: webSocketSendFrame(AsyncClient*, bool, unsigned char, bool, unsigned char*, unsigned int) at ??:?
+0x401044cb: lmacProcessTXStartData at ??:?
+0x401044c8: lmacProcessTXStartData at ??:?
+0x4010342b: wDev_ProcessFiq at ??:?
+0x401017c2: malloc at ??:?
+0x401017c2: malloc at ??:?
+0x4000050c: ?? ??:0
+0x4010327c: wDev_ProcessFiq at ??:?
+0x4020f3b3: AsyncWebSocketClient::_queueMessage(AsyncWebSocketMessage*) at ??:?
+0x4021a158: run_scheduled_recurrent_functions() at ??:?
+0x4021bf82: yield at ??:?
+0x4024e275: cont_continue at cont.S.o:?
+0x4024cc30: sendLogFile(int, String, int, AsyncWebSocketClient*) at ??:?
+0x40100d94: ets_post at ??:?
+0x40102320: pp_post at ??:?
+0x401055bb: lmacTxFrame at ??:?
+0x4021ad0e: String::changeBuffer(unsigned int) at ??:?
+0x40104796: lmacRecycleMPDU at ??:?
+0x40104c07: lmacRecycleMPDU at ??:?
+0x40226768: spiffs_cache_page_get_by_fd at ??:?
+0x401046cf: lmacProcessTxSuccess at ??:?
+0x40103594: wDev_ProcessFiq at ??:?
+0x40101500: umm_free_core at umm_malloc.cpp:?
+0x40101500: umm_free_core at umm_malloc.cpp:?
+0x4000050c: ?? ??:0
+0x4010327c: wDev_ProcessFiq at ??:?
+0x4010178b: free at ??:?
+0x4000e24d: ?? ??:0
+0x40202fdc: trySyncNTPtime(unsigned long) at ??:?
+0x4020abf2: rfidOutsideMessaging() at ??:?
+0x40100e8c: millis at ??:?
+0x4010178b: free at ??:?
+0x40105fbd: ets_timer_arm_new at ??:?
+0x4021bf50: esp_yield at ??:?
+0x4021c562: __delay at ??:?
+0x402032f4: cleanRfidLoop() at ??:?
+0x4020b2b8: rfidLoop() at ??:?
+0x401003ed: loop at ??:?
+0x4024c90f: setup at ??:?
+0x40100d94: ets_post at ??:?
+0x4021c06f: loop_wrapper() at core_esp8266_main.cpp:?

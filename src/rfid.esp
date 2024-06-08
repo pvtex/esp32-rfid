@@ -1,0 +1,686 @@
+int accountType;
+int accountTypes[MAX_NUM_RELAYS];
+String currentInput = "";
+String pinCode = "";
+String type = "";
+String uid = "";
+String v1uid = "";
+String username = "";
+bool wiegandAvailable = false;
+
+#define WIEGAND_ENT 0xD
+#define WIEGAND_ESC 0x1B
+
+enum RfidStates
+{
+	waitingRfid,
+	cardSwiped,
+	pinCodeEntered
+};
+enum RfidProcessingStates
+{
+	waitingProcessing,
+	notValid,
+	wrongPincode,
+	expired,
+	unknown,
+	valid,
+	validAdmin,
+	cancelled
+};
+
+RfidStates rfidState = waitingRfid;
+RfidProcessingStates processingState = waitingProcessing;
+
+void loadWiegandData()
+{
+	wiegandAvailable = false;
+	// wg.available checks if there's new info and populates all the internal data
+	// so it should be called only once per loop
+	wiegandAvailable = wg.available();
+}
+
+void rfidPrepareRead()
+{
+	if (config.readertype == READER_WIEGAND)
+	{
+		loadWiegandData();
+	}
+}
+
+void wiegandRead()
+{
+	if (wiegandAvailable && rfidState == waitingRfid)
+	{
+		// if we get anything between 24 or 34 bit burst then we have a scanned PICC
+		if (wg.getWiegandType() >= WIEGANDTYPE_PICC24 && wg.getWiegandType() <= WIEGANDTYPE_PICC58)
+		{
+			uid = String(wg.getCode(), config.wiegandReadHex ? HEX : DEC);
+			type = String(wg.getWiegandType(), DEC);
+#ifdef DEBUG
+			Serial.print(F("[ INFO ] PICC's UID: "));
+			Serial.println(uid);
+#endif
+
+			File f = SPIFFS.open("/P/" + uid, "r");
+			// user exists, we should wait for pincode
+			if (f)
+			{
+				size_t size = f.size();
+				std::unique_ptr<char[]> buf(new char[size]);
+				f.readBytes(buf.get(), size);
+				f.close();
+				DynamicJsonDocument json(512);
+				auto error = deserializeJson(json, buf.get(), size);
+				if (error)
+				{
+					processingState = notValid;
+#ifdef DEBUG
+					Serial.println("");
+					Serial.println(F("[ WARN ] Failed to parse User Data"));
+#endif
+					return;
+				}
+				rfidState = cardSwiped;
+				if (config.pinCodeRequested)
+				{
+					if(json["pincode"] == "")
+					{
+						rfidState = pinCodeEntered;
+					} else
+					{
+						keyTimer = millis();
+						ledWaitingOn();
+					}
+				}
+			} else
+			{
+				cooldown = millis() + COOLDOWN_MILIS;
+				rfidState = waitingRfid;
+				processingState = unknown;
+			}
+		}
+	}
+}
+
+void mfrc522Read()
+{
+	if (!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial())
+	{
+		return;
+	}
+	mfrc522.PICC_HaltA();
+	cooldown = millis() + COOLDOWN_MILIS;
+
+	/*
+	 *  Convert RC522 UID into string
+	 *  esp-rfid v1 had a bug where the UID string may miss some '0's. To
+	 *  maintain compatibility, calculate incorrect UID here as well for
+	 *  later checking in case old users exist in the config.
+	 */
+	for (byte i = 0; i < mfrc522.uid.size; i++) 
+	{
+		uid+=(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
+		uid+=(String(mfrc522.uid.uidByte[i], HEX));
+		v1uid+=(String(mfrc522.uid.uidByte[i], HEX));
+	}
+	rfidState = cardSwiped;
+
+#ifdef DEBUG
+	Serial.print(F("[ INFO ] PICC's UID: "));
+	Serial.print(uid);
+#endif
+
+	MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
+	type = mfrc522.PICC_GetTypeName(piccType);
+
+#ifdef DEBUG
+	Serial.print(" " + type);
+#endif
+}
+
+void pn532Read()
+{
+	bool found = false;
+	byte pnuid[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	eCardType e_CardType;
+	byte u8_UidLength = 0x00; // UID = 4 or 7 bytes
+	found = pn532.ReadPassiveTargetID(pnuid, &u8_UidLength, &e_CardType);
+	if (found && u8_UidLength >= 4)
+	{
+#ifdef DEBUG
+		Serial.print(F("[ INFO ] PICC's UID: "));
+#endif
+		for (uint8_t i = 0; i < u8_UidLength; i++)
+		{
+			uid += String(pnuid[i], HEX);
+			rfidState = cardSwiped;
+		}
+#ifdef DEBUG
+		Serial.print(uid);
+#endif
+		cooldown = millis() + COOLDOWN_MILIS;
+	}
+}
+
+
+/*
+ *  Try first to read from RDM6300 hardware. If that received
+ *  nothing, check the other configured reader.
+ */
+void genericRead()
+{
+	/*
+	 *  Test RDM6300 125khz reader
+	 */
+	while (Serial.available() > 0)
+	{
+		RFIDr.rfidSerial(Serial.read());
+	}
+	if (RFIDr.Available())
+	{
+		uid = RFIDr.GetHexID();
+		type = RFIDr.GetTagType();
+		rfidState = cardSwiped;
+		cooldown = millis() + COOLDOWN_MILIS;
+#ifdef DEBUG
+		Serial.print(F("[ INFO ] PICC's UID: "));
+		Serial.print(uid);
+#endif
+	}
+
+	/*
+	 *  If nothing read from the RDM6300, check the other hardware
+	 */
+	if (uid.length() == 0) {
+		if (config.readertype == READER_MFRC522_RDM6300)
+		{
+			mfrc522Read();
+		}
+
+		else if (config.readertype == READER_WIEGAND_RDM6300)
+		{
+			wiegandRead();
+		}
+
+		else if (config.readertype == READER_PN532_RDM6300)
+		{
+			pn532Read();
+		}
+	}
+}
+
+
+/*
+ *  Main function to read RFID cards. This function will call the
+ *  correct reader function depending on the configured hardware,
+ *  or otherwise call genericRead to read both RDM6300 and another
+ *  configured reader.
+ */
+void rfidRead()
+{
+	/*
+	 *  Do not try and read if we are already processing a card
+	 */
+	if (rfidState == cardSwiped)
+	{
+		return;
+	}
+
+	/*
+	 *  Call the appropriate function based on the configured
+	 *  hardware
+	 */
+	if (config.readertype == READER_MFRC522)
+	{
+		mfrc522Read();
+	}
+
+	else if (config.readertype == READER_WIEGAND)
+	{
+		wiegandRead();
+	}
+
+	else if (config.readertype == READER_PN532)
+	{
+		pn532Read();
+	}
+
+	else if (config.readertype > READER_PN532)
+	{
+		// This is a combination of RDM6300 and one of the above
+		genericRead();
+	}
+}
+
+
+/*
+ *  Try and read a PIN code from Wiegand hardware
+ */
+void pinCodeRead()
+{
+	if (config.readertype != READER_WIEGAND ||
+			!wiegandAvailable ||
+			(!config.pinCodeRequested && rfidState == cardSwiped) ||
+			(!config.pinCodeOnly && rfidState == waitingRfid) ||
+			rfidState == pinCodeEntered)
+	{
+		return;
+	}
+
+	// if we get a 4 bit burst then a key has been pressed
+	// add the key to the current input and reset the Waiting time
+	// for the next key unless * or # have been pressed
+	// we do not require * as the first character because some
+	// readers use this as special admin code and would hence require *#PIN#
+	if (wg.getWiegandType() == WIEGANDTYPE_KEYPRESS4 || wg.getWiegandType() == WIEGANDTYPE_KEYPRESS8)
+	{
+		if (wg.getCode() != WIEGAND_ENT && wg.getCode() != WIEGAND_ESC) // normal key entry, add to currentInput
+		{
+#ifdef DEBUG
+			Serial.println("Keycode captured. . .");
+#endif
+			currentInput = currentInput + String(wg.getCode());
+			keyTimer = millis();
+			ledWaitingOn();
+		} else if (keyTimer > 0) // if we are waitingProcessing on input still
+		{
+			if(wg.getCode() == WIEGAND_ESC) // esc, abort pincode
+			{
+#ifdef DEBUG
+				Serial.println("Keycode escape, aborting pincode entry");
+#endif
+				rfidState = waitingRfid;
+				processingState = cancelled;
+				cooldown = millis() + COOLDOWN_MILIS;
+			}
+			if(wg.getCode() == WIEGAND_ENT) // enter, process pincode
+			{
+				pinCode = currentInput;
+				if (config.pinCodeOnly && rfidState == waitingRfid)
+				{
+					uid = pinCode;
+					rfidState = cardSwiped;
+				} else
+				{
+					rfidState = pinCodeEntered;
+				}
+#ifdef DEBUG
+				Serial.println("Stop capture keycode . . .");
+				Serial.print(F("[ INFO ] PICC's pin code: "));
+				Serial.println(currentInput);
+#endif
+				currentInput = "";
+				keyTimer = 0;
+				cooldown = millis() + COOLDOWN_MILIS;
+			}
+		}
+	}
+}
+
+int weekdayFromMonday(int weekdayFromSunday) {
+	// we expect weeks starting from Sunday equals to 1
+	// we return week day starting from Monday equals to 0
+	return ( weekdayFromSunday + 5 ) % 7;
+}
+
+
+/*
+ *  If we have successfully read an RFID card, check if access
+ *  should be granted
+ */
+void rfidProcess()
+{
+	if (rfidState == waitingRfid ||
+			(config.pinCodeRequested && rfidState == cardSwiped))
+	{
+		return;
+	}
+
+	/* Each user has a file named after the RFID UID */
+	File f = SPIFFS.open("/P/" + uid, "r");
+
+	/*
+	 *  If the file was not found then this is an unknown user, so no more
+	 *  processing to be done. However, for backwards compatibility we do a
+	 *  secondary check here to see if an old esp-rfid v1 uid exists and if
+	 *  so use that.
+	 */
+	if (!f)
+	{
+		/* Test to see if there was a uid in v1 format */
+		f = SPIFFS.open("/P/" + v1uid, "r");
+		if (!f)
+		{
+			processingState = unknown;
+			return;
+		}
+		uid = v1uid;
+#ifdef DEBUG
+		Serial.print(" (found uid in v1 format: ");
+		Serial.print(v1uid);
+		Serial.print(")");
+#endif
+	}
+
+	/*
+	 *  Read the user's settings
+	 */
+	size_t size = f.size();
+	std::unique_ptr<char[]> buf(new char[size]);
+	f.readBytes(buf.get(), size);
+	f.close();
+	DynamicJsonDocument json(512);
+	auto error = deserializeJson(json, buf.get(), size);
+
+	/*
+	 *  Corrupt user data file, so return invalid user
+	 */
+	if (error)
+	{
+		processingState = notValid;
+#ifdef DEBUG
+		Serial.println("");
+		Serial.println(F("[ WARN ] Failed to parse User Data"));
+#endif
+		return;
+	}
+
+	// if the pin code is wrong we deny access
+	// pinCode is equal to uid if we allow pin code only access
+	if(config.pinCodeRequested && pinCode != json["pincode"] && pinCode != uid && json["pincode"] != "")
+	{
+		processingState = wrongPincode;
+#ifdef DEBUG
+		Serial.println("Wrong pin code");
+#endif
+		return;
+	}
+
+	/*
+	 *  Get account type (for FIRST relay only) and username from user's data
+	 */
+	accountType = json["acctype"];
+	username = json["user"].as<String>();
+
+#ifdef DEBUG
+	Serial.println(" = known PICC");
+	Serial.print("[ INFO ] User Name: '");
+	if (username == "undefined")
+		Serial.print(uid);
+	else
+		Serial.print(username);
+	Serial.print("'");
+#endif
+
+	if (accountType == ACCESS_GRANTED)
+	{
+		/*
+		 *  Normal user - relay but no admin access
+		 */
+		unsigned long validSinceL = json["validsince"];
+		unsigned long validUntilL = json["validuntil"];
+		unsigned long nowL = epoch;
+		int hourTz = timeinfo.tm_hour;
+
+		if (validUntilL < nowL || validSinceL > nowL)
+		{
+			processingState = expired;
+		} else if (config.openingHours[weekdayFromMonday(weekday(epoch))][hourTz] != '1')
+		{
+			processingState = notValid;
+		} else
+		{
+			processingState = valid;
+		}
+	} else if (accountType == ACCESS_ADMIN)
+	{
+		/*
+		 *  Admin user - enable relay (with no time limits) and wifi
+		 */
+#ifdef DEBUG
+		Serial.println(" has admin access, enable wifi");
+#endif
+		doEnableWifi = true;
+		processingState = validAdmin;
+	} else {
+		/*
+		 *  User exists but does not have access
+		 */
+		processingState = notValid;
+	}
+
+	/*
+	 *  If user is valid and opening hour time is allowed, go through each relay
+	 *  in turn to see if it needs to be activated
+	 */
+	if (processingState == valid || processingState == validAdmin)
+	{
+		for (int currentRelay = 0; currentRelay < config.numRelays; currentRelay++)
+		{
+			// Get user data JSON access type entry for this relay
+			if (currentRelay == 0) {
+				accountTypes[currentRelay] = json["acctype"];
+			} else {
+				accountTypes[currentRelay] = json["acctype" + String(currentRelay + 1)];
+			}
+
+			// Enable activation if permissions are correct
+			activateRelay[currentRelay] = (accountTypes[currentRelay] == ACCESS_GRANTED);
+
+			// ...except Admin, which always activates everything
+			if (processingState == validAdmin)
+			{
+				activateRelay[currentRelay] = true;
+			}
+		}
+	}
+}
+
+void rfidOutsideMessaging()
+{
+	if (processingState == valid)
+	{
+		ws.textAll("{\"command\":\"giveAccess\"}");
+#ifdef DEBUG
+		Serial.println(" has access relay");
+#endif
+		writeLatest(uid, username, accountType, ACCESS_GRANTED);
+		if (config.numRelays == 1) {
+			mqttPublishAccess(epoch, "true", "Always", username, uid, pinCode);
+		} else {
+			mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
+		}
+		beeperValidAccess();
+	}
+	if (processingState == validAdmin)
+	{
+		ws.textAll("{\"command\":\"giveAccess\"}");
+		writeLatest(uid, username, accountType, ACCESS_GRANTED);
+		if (config.numRelays == 1) {
+			mqttPublishAccess(epoch, "true", "Admin", username, uid, pinCode);
+		} else {
+			mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
+		}
+		beeperAdminAccess();
+	}
+	if (processingState == expired)
+	{
+#ifdef DEBUG
+		Serial.println(" expired");
+#endif
+		writeLatest(uid, username, accountType, ACCESS_DENIED);
+		mqttPublishAccess(epoch, "true", "Expired", username, uid, pinCode);
+		ledAccessDeniedOn();
+		beeperAccessDenied();
+	}
+	if (processingState == wrongPincode)
+	{
+		writeLatest(uid, username, accountType, ACCESS_DENIED);
+		mqttPublishAccess(epoch, "true", "Wrong pin code", username, uid, pinCode);
+		ledAccessDeniedOn();
+		beeperAccessDenied();
+	}
+	if (processingState == notValid)
+	{
+#ifdef DEBUG
+		Serial.println(" does not have access");
+#endif
+		writeLatest(uid, username, accountType, ACCESS_DENIED);
+		mqttPublishAccess(epoch, "true", "Disabled", username, uid, pinCode);
+		ledAccessDeniedOn();
+		beeperAccessDenied();
+	}
+	if (processingState == unknown)
+	{
+		String data = String(uid) += " " + String(type);
+		writeEvent("WARN", "rfid", "Unknown rfid tag is scanned", data);
+		writeLatest(uid, "Unknown", 98, ACCESS_DENIED);
+		DynamicJsonDocument root(512);
+		root["command"] = "piccscan";
+		root["uid"] = uid;
+		root["type"] = type;
+		root["known"] = 0;
+		size_t len = measureJson(root);
+		AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
+		if (buffer)
+		{
+			serializeJson(root, (char *)buffer->get(), len + 1);
+			ws.textAll(buffer);
+		}
+		mqttPublishAccess(epoch, "false", "Denied", "Unknown", uid, " ");
+		ledAccessDeniedOn();
+		beeperAccessDenied();
+	} else if (uid != "" && processingState != waitingProcessing)
+	{
+		// message to the web UI to tell who has opened the door
+		DynamicJsonDocument root(512);
+		root["command"] = "piccscan";
+		root["uid"] = uid;
+		root["type"] = type;
+		root["known"] = 1;
+		root["acctype"] = accountType;
+		root["user"] = username;
+		size_t len = measureJson(root);
+		AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
+		if (buffer)
+		{
+			serializeJson(root, (char *)buffer->get(), len + 1);
+			ws.textAll(buffer);
+		}
+	}
+}
+
+void cleanRfidLoop()
+{
+	if (rfidState == waitingRfid)
+	{
+		delay(50);
+	}
+	// Keep an eye on timeout waitingProcessing for keypress
+	// Clear code and timer when timeout is reached
+	if ((keyTimer > 0 && millis() - keyTimer >= KEYBOARD_TIMEOUT_MILIS) || processingState != waitingProcessing)
+	{
+#ifdef DEBUG
+		Serial.println("[ INFO ] Read timeout or clean after read");
+#endif
+		keyTimer = 0;
+		currentInput = "";
+		type = "";
+		uid = "";
+		v1uid = "";
+		rfidState = waitingRfid;
+		processingState = waitingProcessing;
+		ledWaitingOff();
+	}
+}
+
+void rfidLoop()
+{
+	rfidPrepareRead();
+	rfidRead();
+	pinCodeRead();
+	rfidProcess();
+	rfidOutsideMessaging();
+	cleanRfidLoop();
+}
+
+#ifdef DEBUG
+void ICACHE_FLASH_ATTR ShowMFRC522ReaderDetails()
+{
+	// Get the MFRC522 software version
+	byte v = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
+	Serial.print(F("[ INFO ] MFRC522 Version: 0x"));
+	Serial.print(v, HEX);
+	if (v == 0x91)
+		Serial.print(F(" = v1.0"));
+	else if (v == 0x92)
+		Serial.print(F(" = v2.0"));
+	else if (v == 0x88)
+		Serial.print(F(" = clone"));
+	else
+		Serial.print(F(" (unknown)"));
+	Serial.println("");
+	// When 0x00 or 0xFF is returned, communication probably failed
+	if ((v == 0x00) || (v == 0xFF))
+	{
+		Serial.println(F("[ WARN ] Communication failure, check if MFRC522 properly connected"));
+	}
+}
+#endif
+
+void ICACHE_FLASH_ATTR setupWiegandReader(int d0, int d1, bool removeParityBits)
+{
+	wg.begin(d0, d1, removeParityBits);
+	rfidState = waitingRfid;
+}
+
+void ICACHE_FLASH_ATTR setupMFRC522Reader(int rfidss, int rfidgain)
+{
+	SPI.begin();						 // MFRC522 Hardware uses SPI protocol
+	mfrc522.PCD_Init(rfidss, UINT8_MAX); // Initialize MFRC522 Hardware
+	// Set RFID Hardware Antenna Gain
+	// This may not work with some boards
+	mfrc522.PCD_SetAntennaGain(rfidgain);
+#ifdef DEBUG
+	Serial.printf("[ INFO ] RFID SS_PIN: %u and Gain Factor: %u", rfidss, rfidgain);
+	Serial.println("");
+#endif
+#ifdef DEBUG
+	ShowMFRC522ReaderDetails(); // Show details of PCD - MFRC522 Card Reader details
+#endif
+}
+
+void ICACHE_FLASH_ATTR setupPN532Reader(int rfidss)
+{
+	// init controller
+	pn532.InitSoftwareSPI(14, 12, 13, rfidss, 0);
+	do
+	{ // pseudo loop (just used for aborting with break;)
+		// Reset the PN532
+		pn532.begin(); // delay > 400 ms
+		byte IC, VersionHi, VersionLo, Flags;
+		if (!pn532.GetFirmwareVersion(&IC, &VersionHi, &VersionLo, &Flags))
+			break;
+#ifdef DEBUG
+		char Buf[80];
+		sprintf(Buf, "Chip: PN5%02X, Firmware version: %d.%d\r\n", IC, VersionHi, VersionLo);
+		Utils::Print(Buf);
+		sprintf(Buf, "Supports ISO 14443A:%s, ISO 14443B:%s, ISO 18092:%s\r\n", (Flags & 1) ? "Yes" : "No",
+				(Flags & 2) ? "Yes" : "No",
+				(Flags & 4) ? "Yes" : "No");
+		Utils::Print(Buf);
+#endif
+		// Set the max number of retry attempts to read from a card.
+		// This prevents us from waitingProcessing forever for a card, which is the default behaviour of the PN532.
+		if (!pn532.SetPassiveActivationRetries())
+		{
+			break;
+		}
+		// configure the PN532 to read RFID tags
+		if (!pn532.SamConfig())
+		{
+			break;
+		}
+	} while (false);
+}
