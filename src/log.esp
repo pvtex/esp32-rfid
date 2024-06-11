@@ -158,9 +158,6 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 		File newFile1 = SPIFFS.open(filename + ".split." + rolloverExtension1, "w");
 		File newFile2 = SPIFFS.open(filename + ".split." + rolloverExtension2, "w");
 
-		FSInfo fs_info;
-		SPIFFS.info(fs_info);
-
 		size_t truncatePosition = logFile.size() / 2;
 		logFile.seek(truncatePosition);
 		logFile.readStringUntil('\n');
@@ -169,7 +166,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 
 		// check if we have enough space for the split operation
 
-		if ((fs_info.totalBytes - fs_info.usedBytes) < (logFile.size() + MIN_SPIFF_BYTES))
+		if ((SPIFFS.totalBytes() - SPIFFS.usedBytes()) < (logFile.size() + MIN_SPIFF_BYTES))
 		{
 			if (client)
 			{
@@ -181,8 +178,8 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 
 			// mind the watchdog timer - this may take a couple of seconds...
 
-			ESP.wdtDisable();
-			ESP.wdtEnable(1500);
+			esp_task_wdt_init(2, true); //enable panic so ESP32 restarts
+  			esp_task_wdt_add(NULL);
 
 			// read the first half of the file
 
@@ -191,7 +188,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 				String item = String();
 				item = logFile.readStringUntil('\n');
 				newFile1.println(item);
-				ESP.wdtFeed(); // tell the watchdog we're still doing stuff
+				esp_task_wdt_reset(); // tell the watchdog we're still doing stuff
 			}
 
 			// read the rest
@@ -201,7 +198,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 				String item = String();
 				item = logFile.readStringUntil('\n');
 				newFile2.println(item);
-				ESP.wdtFeed(); // no reset please ;-)
+				esp_task_wdt_reset(); // no reset please ;-)
 			}
 
 			logFile.close();
@@ -210,13 +207,12 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 		}
 	}
 
-	ESP.wdtEnable(5000);
+	esp_task_wdt_init(5, true);
 	if (client)
 	{
 		client->text("{\"command\":\"result\",\"resultof\":\"logfileMaintenance\",\"result\": true}");
 	}
 }
-
 void ICACHE_FLASH_ATTR sendFileList(int page, AsyncWebSocketClient *client)
 {
 
@@ -229,23 +225,24 @@ void ICACHE_FLASH_ATTR sendFileList(int page, AsyncWebSocketClient *client)
 	size_t last = page * FILES_PER_PAGE;
 	size_t numFiles = 0;
 
-	Dir dir = SPIFFS.openDir("/");
-	while (dir.next())
+  	File dir = SPIFFS.open("/");
+	while (dir)
 	{
 
 		//	if (dir.isFile()) // isFile is implemented in Arduino Core 2.5.1 - We'll have to wait for the ISR not in IRAM fix
 
-		String thisFileName = dir.fileName();
+		String thisFileName = dir.name();
 		if ((thisFileName.indexOf("latestlog") >= 0) || (thisFileName.indexOf("eventlog") >= 0)) // for the time being we just check filenames
 		{
 			if (numFiles >= first && numFiles < last)
 			{
 				JsonObject item = items.createNestedObject();
-				item["filename"] = dir.fileName();
-				item["filesize"] = dir.fileSize();
+				item["filename"] = dir.name();
+				item["filesize"] = dir.size();
 			} // first, last
 			numFiles++;
 		} // isFile
+		dir.openNextFile();
 	}	  // dir next
 
 	float pages = numFiles / FILES_PER_PAGE;

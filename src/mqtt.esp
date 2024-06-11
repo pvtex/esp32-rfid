@@ -416,17 +416,17 @@ void getUserList()
 {
 	DynamicJsonDocument root(512);
 	JsonArray users = root.createNestedArray("list");
-	Dir dir = SPIFFS.openDir("/P/");
+	File dir = SPIFFS.open("/P/");
 #ifdef DEBUG
 	Serial.println("[ INFO ] getUserList");
 #endif
-	while (dir.next())
+	while (dir)
 	{
 		JsonObject item = users.createNestedObject();
-		String uid = dir.fileName();
+		String uid = dir.name();
 		uid.remove(0, 3);
 		item["uid"] = uid;
-		File f = SPIFFS.open(dir.fileName(), "r");
+		File f = SPIFFS.open(dir.name(), "r");
 		size_t size = f.size();
 		std::unique_ptr<char[]> buf(new char[size]);
 		f.readBytes(buf.get(), size);
@@ -436,17 +436,18 @@ void getUserList()
 		{
 			mqttPublishEvent(&json);
 		}
+		dir.openNextFile();
 	}
 }
 
 void deleteAllUserFiles()
 {
-	Dir dir = SPIFFS.openDir("/P/");
-	while (dir.next())
+	File dir = SPIFFS.open("/P/");
+	while (dir.openNextFile())
 	{
-		String uid = dir.fileName();
+		String uid = dir.name();
 		uid.remove(0, 3);
-		SPIFFS.remove(dir.fileName());
+		SPIFFS.remove(dir.name());
 	}
 }
 
@@ -455,16 +456,17 @@ void deleteUserID(const char *uid)
 	// only do this if a user id has been provided
 	if (uid)
 	{
-		Dir dir = SPIFFS.openDir("/P/");
-		while (dir.next())
+		File dir = SPIFFS.open("/P/");
+		while (dir)
 		{
-			String user_id = dir.fileName();
+			String user_id = dir.name();
 			String myuid = uid;
 			user_id.remove(0, 3);
 			if (myuid == user_id)
 			{
-				SPIFFS.remove(dir.fileName());
+				SPIFFS.remove(dir.name());
 			}
+			dir.openNextFile();
 		}
 	}
 }

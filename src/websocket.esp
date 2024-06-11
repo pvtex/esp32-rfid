@@ -76,7 +76,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 			{
 				len++;
 			}
-			f.write(incomingMessage->serializedMessage, len);
+			//f.write(incomingMessage->serializedMessage, len);
 			f.close();
 			shouldReboot = true;
 			writeEvent("INFO", "sys", "Config stored in the SPIFFS", String(len) + " bytes");
@@ -182,7 +182,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "scan") == 0)
 	{
-		WiFi.scanNetworksAsync(printScanResult, true);
+		WiFi.scanNetworks(printScanResult, true);
 	}
 	else if (strcmp(command, "gettime") == 0)
 	{

@@ -3,7 +3,7 @@ void setEnableWifi()
 	doEnableWifi = true;
 }
 
-void onWifiConnect(const WiFiEventStationModeConnected &event)
+void onWifiConnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 {
 #ifdef DEBUG
 	Serial.println(F("[ INFO ] WiFi STA Connected"));
@@ -16,7 +16,7 @@ void onWifiConnect(const WiFiEventStationModeConnected &event)
 	ledWifiOff();
 }
 
-void onWifiDisconnect(const WiFiEventStationModeDisconnected &event)
+void onWifiDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 {
 	if ( !WiFi.isConnected() )
 	{
@@ -34,7 +34,7 @@ void onWifiDisconnect(const WiFiEventStationModeDisconnected &event)
 	ledWifiOff();
 }
 
-void onWifiGotIP(const WiFiEventStationModeGotIP &event)
+void onWifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 {
 #ifdef DEBUG
 	Serial.print("[ INFO ] WiFi IP Connected: ");
@@ -227,9 +227,9 @@ void setupWifi(bool configured)
 		fallbacktoAPMode();
 	} else
 	{
-		wifiConnectHandler = WiFi.onStationModeConnected(onWifiConnect);
-		wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
-		wifiOnStationModeGotIPHandler = WiFi.onStationModeGotIP(onWifiGotIP);
+		WiFi.onEvent(onWifiConnect, WiFiEvent_t::SYSTEM_EVENT_STA_CONNECTED);
+		WiFi.onEvent(onWifiDisconnect, WiFiEvent_t::SYSTEM_EVENT_STA_DISCONNECTED);
+		WiFi.onEvent(onWifiGotIP, WiFiEvent_t::SYSTEM_EVENT_STA_GOT_IP);
 		WiFi.hostname(config.deviceHostname);
 		enableWifi();
 	}

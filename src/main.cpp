@@ -25,18 +25,22 @@ SOFTWARE.
 #define VERSION "2.0.6"
 
 #include "Arduino.h"
-#include <ESP8266WiFi.h>
+#include <WiFi.h>
+//#include "WiFiEventHandler.h"
 #include <SPI.h>
-#include <ESP8266mDNS.h>
+#include <ESPmDNS.h>
 #include <ArduinoJson.h>
 #include <FS.h>
-#include <ESPAsyncTCP.h>
+#include <SPIFFS.h>
+#include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <TimeLib.h>
 #include <Ticker.h>
 #include <time.h>
 #include <AsyncMqttClient.h>
 #include <Bounce2.h>
+#include <esp_task_wdt.h>
+#include <Update.h>
 #include "magicnumbers.h"
 #include "config.h"
 
@@ -72,7 +76,6 @@ AsyncMqttClient mqttClient;
 Ticker mqttReconnectTimer;
 Ticker wifiReconnectTimer;
 Ticker wsMessageTicker;
-WiFiEventHandler wifiDisconnectHandler, wifiConnectHandler, wifiOnStationModeGotIPHandler;
 Bounce openLockButton;
 
 AsyncWebServer server(80);
@@ -155,6 +158,13 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
 #include "door.esp"
 #include "doorbell.esp"
 
+char* numberToHexStr(char* out, unsigned char* in, size_t length)
+{
+        char* ptr = out;
+        for (int i = length-1; i >= 0 ; i--)
+            ptr += sprintf(ptr, "%02X", in[i]);
+        return ptr;
+}
 
 void ICACHE_FLASH_ATTR setup()
 {
@@ -165,10 +175,18 @@ void ICACHE_FLASH_ATTR setup()
 	Serial.print(F("[ INFO ] ESP RFID v"));
 	Serial.println(VERSION);
 
-	uint32_t realSize = ESP.getFlashChipRealSize();
+	uint32_t realSize = spi_flash_get_chip_size();
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
-	Serial.printf("Flash real id:   %08X\n", ESP.getFlashChipId());
+	char* chipID;
+	uint64_t macAddress = ESP.getEfuseMac();
+	uint64_t macAddressTrunc = macAddress << 40;
+	
+	char str[32];
+	numberToHexStr(str, (unsigned char*) &macAddressTrunc, sizeof(macAddressTrunc));
+	sprintf(chipID, "%s", str);
+	
+	Serial.printf("Flash real id:   %s\n", chipID);
 	Serial.printf("Flash real size: %u\n\n", realSize);
 	Serial.printf("Flash ide  size: %u\n", ideSize);
 	Serial.printf("Flash ide speed: %u\n", ESP.getFlashChipSpeed());
