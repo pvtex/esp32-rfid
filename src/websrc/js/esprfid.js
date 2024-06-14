@@ -253,8 +253,6 @@ function savehardware() {
   config.hardware.requirepincodeafterrfid = document.getElementById("requirepincodeafterrfid").checked;
   config.hardware.allowpincodeonly = document.getElementById("allowpincodeonly").checked;
   config.hardware.removeparitybits = document.getElementById("removeparitybits").checked;
-  config.hardware.sspin = parseInt(document.getElementById("gpioss").value);
-  config.hardware.rfidgain = parseInt(document.getElementById("gain").value);
   config.hardware.rtype = parseInt(document.getElementById("typerly").value);
   config.hardware.ltype = parseInt(document.getElementById("lockType").value);
   config.hardware.rpin = parseInt(document.getElementById("gpiorly").value);
