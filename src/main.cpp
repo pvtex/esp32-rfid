@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#define VERSION "2.0.6"
+#define VERSION "1.0.0"
 
 #include "Arduino.h"
 #include <WiFi.h>
-//#include "WiFiEventHandler.h"
+#include "WiFiEventHandler.h"
 #include <SPI.h>
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
@@ -37,7 +37,7 @@ SOFTWARE.
 #include <TimeLib.h>
 #include <Ticker.h>
 #include <time.h>
-#include <AsyncMqttClient.h>
+//#include <AsyncMqttClient.h>
 #include <Bounce2.h>
 #include <esp_task_wdt.h>
 #include <Update.h>
@@ -46,17 +46,11 @@ SOFTWARE.
 
 Config config;
 
-#include <MFRC522.h>
-#include "PN532.h"
 #include <Wiegand.h>
-#include "rfid125kHz.h"
 
 File fsUploadFile;                      //Hält den aktuellen Upload
 
-MFRC522 mfrc522 = MFRC522();
-PN532 pn532;
 WIEGAND wg;
-RFID_Reader RFIDr;
 
 // relay specific variables
 bool activateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
@@ -72,8 +66,8 @@ bool deactivateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
 #include "webh/esprfid.htm.gz.h"
 #include "webh/index.html.gz.h"
 
-AsyncMqttClient mqttClient;
-Ticker mqttReconnectTimer;
+//syncMqttClient mqttClient;
+//Ticker mqttReconnectTimer;
 Ticker wifiReconnectTimer;
 Ticker wsMessageTicker;
 Bounce openLockButton;
@@ -147,16 +141,16 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
 #include "led.esp"
 #include "beeper.esp"
 #include "log.esp"
-#include "mqtt.esp"
+//#include "mqtt.esp"
 #include "helpers.esp"
 #include "wsResponses.esp"
-#include "rfid.esp"
+//#include "rfid.esp"
 #include "wifi.esp"
 #include "config.esp"
 #include "websocket.esp"
 #include "webserver.esp"
-#include "door.esp"
-#include "doorbell.esp"
+//#include "door.esp"
+//#include "doorbell.esp"
 
 char* numberToHexStr(char* out, unsigned char* in, size_t length)
 {
@@ -175,13 +169,14 @@ void ICACHE_FLASH_ATTR setup()
 	Serial.print(F("[ INFO ] ESP RFID v"));
 	Serial.println(VERSION);
 
+/*
 	uint32_t realSize = spi_flash_get_chip_size();
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
 	char* chipID;
+
 	uint64_t macAddress = ESP.getEfuseMac();
-	uint64_t macAddressTrunc = macAddress << 40;
-	
+	uint64_t macAddressTrunc = macAddress << 40;	
 	char str[32];
 	numberToHexStr(str, (unsigned char*) &macAddressTrunc, sizeof(macAddressTrunc));
 	sprintf(chipID, "%s", str);
@@ -196,19 +191,20 @@ void ICACHE_FLASH_ATTR setup()
 																						   : "UNKNOWN"));
 	if (ideSize != realSize)
 	{
-		Serial.println("Flash Chip configuration wrong!\n");
+		Serial.println(F("Flash Chip configuration wrong!\n"));
 	}
 	else
 	{
-		Serial.println("Flash Chip configuration ok.\n");
+		Serial.println(F("Flash Chip configuration ok.\n"));
 	}
+*/
 #endif
-
 	if (!SPIFFS.begin())
 	{
 		if (SPIFFS.format())
 		{
-			writeEvent("WARN", "sys", "Filesystem formatted", "");
+			//writeEvent("WARN", "sys", "Filesystem formatted", "");
+			Serial.println(F("[ WARN ] Filesystem formatted!"));
 		}
 		else
 		{
@@ -221,10 +217,11 @@ void ICACHE_FLASH_ATTR setup()
 
 	bool configured = false;
 	configured = loadConfiguration(config);
-	setupMqtt();
-	setupWebServer();
 	setupWifi(configured);
-	writeEvent("INFO", "sys", "System setup completed, running", "");
+	setupWebServer();
+	//setupMqtt();
+	//writeEvent("INFO", "sys", "System setup completed, running", "");
+	Serial.println(F("[ INFO ] System setup completed, running"));
 }
 
 void ICACHE_RAM_ATTR loop()
@@ -236,25 +233,27 @@ void ICACHE_RAM_ATTR loop()
 	
 	trySyncNTPtime(10);
 
+	/*
 	openLockButton.update();
 	if (config.openlockpin != 255 && openLockButton.fell())
 	{
-		writeLatest(" ", "Button", 1);
-		mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
+		//writeLatest(" ", "Button", 1);
+		//mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
 		activateRelay[0] = true;
-		beeperValidAccess();
+		//beeperValidAccess();
 		// TODO: handle other relays
 	}
+	*/
 
 	ledWifiStatus();
 	ledAccessDeniedOff();
-	beeperBeep();
-	doorStatus();
-	doorbellStatus();
+	//beeperBeep();
+	//tatus();
+	//doorbellStatus();
 
 	if (currentMillis >= cooldown)
 	{
-		rfidLoop();
+		//rfidLoop();
 	}
 
 	for (int currentRelay = 0; currentRelay < config.numRelays; currentRelay++)
@@ -265,9 +264,9 @@ void ICACHE_RAM_ATTR loop()
 			{
 				if (digitalRead(config.relayPin[currentRelay]) == !config.relayType[currentRelay]) // currently OFF, need to switch ON
 				{
-					mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
+					//mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
 #ifdef DEBUG
-					Serial.print("mili : ");
+					Serial.print(F("mili : "));
 					Serial.println(millis());
 					Serial.printf("activating relay %d now\n", currentRelay);
 #endif
@@ -275,9 +274,9 @@ void ICACHE_RAM_ATTR loop()
 				}
 				else // currently ON, need to switch OFF
 				{
-					mqttPublishIo("lock" + String(currentRelay), "LOCKED");
+					//mqttPublishIo("lock" + String(currentRelay), "LOCKED");
 #ifdef DEBUG
-					Serial.print("mili : ");
+					Serial.print(F("mili : "));
 					Serial.println(millis());
 					Serial.printf("deactivating relay %d now\n", currentRelay);
 #endif
@@ -290,9 +289,9 @@ void ICACHE_RAM_ATTR loop()
 		{
 			if (activateRelay[currentRelay])
 			{
-				mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
+				//mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
 #ifdef DEBUG
-				Serial.print("mili : ");
+				Serial.print(F("mili : "));
 				Serial.println(millis());
 				Serial.printf("activating relay %d now\n", currentRelay);
 #endif
@@ -303,15 +302,15 @@ void ICACHE_RAM_ATTR loop()
 			}
 			else if ((currentMillis - previousMillis >= config.activateTime[currentRelay]) && (deactivateRelay[currentRelay]))
 			{
-				mqttPublishIo("lock" + String(currentRelay), "LOCKED");
+				//mqttPublishIo("lock" + String(currentRelay), "LOCKED");
 #ifdef DEBUG
-				Serial.println(currentMillis);
-				Serial.println(previousMillis);
-				Serial.println(config.activateTime[currentRelay]);
-				Serial.println(activateRelay[currentRelay]);
-				Serial.println("deactivate relay after this");
-				Serial.print("mili : ");
-				Serial.println(millis());
+				Serial.println(F(currentMillis));
+				Serial.println(F(previousMillis));
+				Serial.println(F(config.activateTime[currentRelay]));
+				Serial.println(F(activateRelay[currentRelay]));
+				Serial.println(F("deactivate relay after this"));
+				Serial.print(F("mili : "));
+				Serial.println(F(millis()));
 #endif
 				digitalWrite(config.relayPin[currentRelay], !config.relayType[currentRelay]);
 				deactivateRelay[currentRelay] = false;
@@ -331,13 +330,19 @@ void ICACHE_RAM_ATTR loop()
 
 	if (config.autoRestartIntervalSeconds > 0 && uptimeSeconds > config.autoRestartIntervalSeconds)
 	{
-		writeEvent("WARN", "sys", "Auto restarting...", "");
+		//writeEvent("WARN", "sys", "Auto restarting...", "");
+#ifdef DEBUG
+		Serial.println(F("[ WARN ] Auto retarting..."));
+#endif
 		shouldReboot = true;
 	}
 
 	if (shouldReboot)
 	{
-		writeEvent("INFO", "sys", "System is going to reboot", "");
+		//writeEvent("INFO", "sys", "System is going to reboot", "");
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] System is going to reboot..."));
+#endif
 		SPIFFS.end();
 		ESP.restart();
 	}
@@ -349,8 +354,12 @@ void ICACHE_RAM_ATTR loop()
 
 	if (config.wifiTimeout > 0 && wiFiUptimeMillis > (config.wifiTimeout * 1000) && WiFi.isConnected())
 	{
-		writeEvent("INFO", "wifi", "WiFi is going to be disabled", "");
+		//writeEvent("INFO", "wifi", "WiFi is going to be disabled", "");
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] WiFi is going to be disabled..."));
+#endif
 		//disableWifi();
+
 	}
 
 	// don't try connecting to WiFi when waiting for pincode
@@ -359,11 +368,15 @@ void ICACHE_RAM_ATTR loop()
 		if (!WiFi.isConnected())
 		{
 			enableWifi();
-			writeEvent("INFO", "wifi", "Enabling WiFi", "");
+			//writeEvent("INFO", "wifi", "Enabling WiFi", "");
 			//doEnableWifi = false;
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] Enabling WiFi..."));
+#endif
 		}
 	}
 
+	/*
 	if (config.mqttEnabled && mqttClient.connected())
 	{
 		if ((unsigned)epoch > nextbeat)
@@ -377,6 +390,7 @@ void ICACHE_RAM_ATTR loop()
 		}
 		processMqttQueue();
 	}
+	*/
 
 	processWsQueue();
 

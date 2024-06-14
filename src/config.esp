@@ -11,6 +11,10 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	size_t size = configFile.size();
 	std::unique_ptr<char[]> buf(new char[size]);
 	configFile.readBytes(buf.get(), size);
+#ifdef DEBUG
+	Serial.print(F("[ INFO ] config file: "));
+	Serial.println(configFile);
+#endif
 	DynamicJsonDocument json(2048);
 	auto error = deserializeJson(json, buf.get(), size);
 	if (error)
@@ -97,12 +101,14 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	if (hardware.containsKey("openlockpin"))
 	{
 		config.openlockpin = hardware["openlockpin"];
+		/*
 		if (config.openlockpin != 255)
 		{
 			openLockButton = Bounce();
 			openLockButton.attach(config.openlockpin, INPUT_PULLUP);
 			openLockButton.interval(30);
 		}
+		*/
 	}
 
 	if (hardware.containsKey("numrelays"))
@@ -113,46 +119,29 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		config.numRelays = 1;
 
 	config.readertype = hardware["readertype"];
-	int rfidss;
 	config.pinCodeRequested = false;
 	config.pinCodeOnly = false;
-	if (config.readertype == READER_WIEGAND || config.readertype == READER_WIEGAND_RDM6300)
+
+	int wgd0pin = hardware["wgd0pin"];
+	int wgd1pin = hardware["wgd1pin"];
+	if (hardware.containsKey("requirepincodeafterrfid"))
 	{
-		int wgd0pin = hardware["wgd0pin"];
-		int wgd1pin = hardware["wgd1pin"];
-		if (hardware.containsKey("requirepincodeafterrfid"))
-		{
-			config.pinCodeRequested = hardware["requirepincodeafterrfid"];
-		}
-		if (hardware.containsKey("allowpincodeonly"))
-		{
-			config.pinCodeOnly = hardware["allowpincodeonly"];
-		}
-		if (hardware.containsKey("removeparitybits"))
-		{
-			config.removeParityBits = hardware["removeparitybits"];
-		}
-		if (hardware.containsKey("useridstoragemode"))
-		{
-			config.wiegandReadHex = hardware["useridstoragemode"] == "hexadecimal";
-		}
-		setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits); // also some other settings like weather to use keypad or not, LED pin, BUZZER pin, Wiegand 26/34 version
+		config.pinCodeRequested = hardware["requirepincodeafterrfid"];
 	}
-	else if (config.readertype == READER_MFRC522 || config.readertype == READER_MFRC522_RDM6300)
+	if (hardware.containsKey("allowpincodeonly"))
 	{
-		rfidss = 15;
-		if (hardware.containsKey("sspin"))
-		{
-			rfidss = hardware["sspin"];
-		}
-		int rfidgain = hardware["rfidgain"];
-		setupMFRC522Reader(rfidss, rfidgain);
+		config.pinCodeOnly = hardware["allowpincodeonly"];
 	}
-	else if (config.readertype == READER_PN532 || config.readertype == READER_PN532_RDM6300)
+	if (hardware.containsKey("removeparitybits"))
 	{
-		rfidss = hardware["sspin"];
-		setupPN532Reader(rfidss);
+		config.removeParityBits = hardware["removeparitybits"];
 	}
+	if (hardware.containsKey("useridstoragemode"))
+	{
+		config.wiegandReadHex = hardware["useridstoragemode"] == "hexadecimal";
+	}
+	//setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits); // also some other settings like weather to use keypad or not, LED pin, BUZZER pin, Wiegand 26/34 version
+
 	if (network.containsKey("fallbackmode"))
 	{
 		config.fallbackMode = network["fallbackmode"] == 1;
@@ -322,7 +311,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		{
 			uint8_t macAddr[6];
 			WiFi.softAPmacAddress(macAddr);
-			char topicSuffix[7];
+			char topicSuffix[10];
 			sprintf(topicSuffix, "-%02x%02x%02x", macAddr[3], macAddr[4], macAddr[5]);
 			char *newTopic = (char *)malloc(sizeof(char) * 80);
 			strcpy(newTopic, config.mqttTopic);

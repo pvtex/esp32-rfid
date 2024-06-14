@@ -103,114 +103,6 @@ void wiegandRead()
 	}
 }
 
-void mfrc522Read()
-{
-	if (!mfrc522.PICC_IsNewCardPresent() || !mfrc522.PICC_ReadCardSerial())
-	{
-		return;
-	}
-	mfrc522.PICC_HaltA();
-	cooldown = millis() + COOLDOWN_MILIS;
-
-	/*
-	 *  Convert RC522 UID into string
-	 *  esp-rfid v1 had a bug where the UID string may miss some '0's. To
-	 *  maintain compatibility, calculate incorrect UID here as well for
-	 *  later checking in case old users exist in the config.
-	 */
-	for (byte i = 0; i < mfrc522.uid.size; i++) 
-	{
-		uid+=(String(mfrc522.uid.uidByte[i] < 0x10 ? "0" : ""));
-		uid+=(String(mfrc522.uid.uidByte[i], HEX));
-		v1uid+=(String(mfrc522.uid.uidByte[i], HEX));
-	}
-	rfidState = cardSwiped;
-
-#ifdef DEBUG
-	Serial.print(F("[ INFO ] PICC's UID: "));
-	Serial.print(uid);
-#endif
-
-	MFRC522::PICC_Type piccType = mfrc522.PICC_GetType(mfrc522.uid.sak);
-	type = mfrc522.PICC_GetTypeName(piccType);
-
-#ifdef DEBUG
-	Serial.print(" " + type);
-#endif
-}
-
-void pn532Read()
-{
-	bool found = false;
-	byte pnuid[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-	eCardType e_CardType;
-	byte u8_UidLength = 0x00; // UID = 4 or 7 bytes
-	found = pn532.ReadPassiveTargetID(pnuid, &u8_UidLength, &e_CardType);
-	if (found && u8_UidLength >= 4)
-	{
-#ifdef DEBUG
-		Serial.print(F("[ INFO ] PICC's UID: "));
-#endif
-		for (uint8_t i = 0; i < u8_UidLength; i++)
-		{
-			uid += String(pnuid[i], HEX);
-			rfidState = cardSwiped;
-		}
-#ifdef DEBUG
-		Serial.print(uid);
-#endif
-		cooldown = millis() + COOLDOWN_MILIS;
-	}
-}
-
-
-/*
- *  Try first to read from RDM6300 hardware. If that received
- *  nothing, check the other configured reader.
- */
-void genericRead()
-{
-	/*
-	 *  Test RDM6300 125khz reader
-	 */
-	while (Serial.available() > 0)
-	{
-		RFIDr.rfidSerial(Serial.read());
-	}
-	if (RFIDr.Available())
-	{
-		uid = RFIDr.GetHexID();
-		type = RFIDr.GetTagType();
-		rfidState = cardSwiped;
-		cooldown = millis() + COOLDOWN_MILIS;
-#ifdef DEBUG
-		Serial.print(F("[ INFO ] PICC's UID: "));
-		Serial.print(uid);
-#endif
-	}
-
-	/*
-	 *  If nothing read from the RDM6300, check the other hardware
-	 */
-	if (uid.length() == 0) {
-		if (config.readertype == READER_MFRC522_RDM6300)
-		{
-			mfrc522Read();
-		}
-
-		else if (config.readertype == READER_WIEGAND_RDM6300)
-		{
-			wiegandRead();
-		}
-
-		else if (config.readertype == READER_PN532_RDM6300)
-		{
-			pn532Read();
-		}
-	}
-}
-
-
 /*
  *  Main function to read RFID cards. This function will call the
  *  correct reader function depending on the configured hardware,
@@ -231,26 +123,8 @@ void rfidRead()
 	 *  Call the appropriate function based on the configured
 	 *  hardware
 	 */
-	if (config.readertype == READER_MFRC522)
-	{
-		mfrc522Read();
-	}
-
-	else if (config.readertype == READER_WIEGAND)
-	{
-		wiegandRead();
-	}
-
-	else if (config.readertype == READER_PN532)
-	{
-		pn532Read();
-	}
-
-	else if (config.readertype > READER_PN532)
-	{
-		// This is a combination of RDM6300 and one of the above
-		genericRead();
-	}
+	/*
+	wiegandRead();
 }
 
 
@@ -605,82 +479,8 @@ void rfidLoop()
 	cleanRfidLoop();
 }
 
-#ifdef DEBUG
-void ICACHE_FLASH_ATTR ShowMFRC522ReaderDetails()
-{
-	// Get the MFRC522 software version
-	byte v = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
-	Serial.print(F("[ INFO ] MFRC522 Version: 0x"));
-	Serial.print(v, HEX);
-	if (v == 0x91)
-		Serial.print(F(" = v1.0"));
-	else if (v == 0x92)
-		Serial.print(F(" = v2.0"));
-	else if (v == 0x88)
-		Serial.print(F(" = clone"));
-	else
-		Serial.print(F(" (unknown)"));
-	Serial.println("");
-	// When 0x00 or 0xFF is returned, communication probably failed
-	if ((v == 0x00) || (v == 0xFF))
-	{
-		Serial.println(F("[ WARN ] Communication failure, check if MFRC522 properly connected"));
-	}
-}
-#endif
-
 void ICACHE_FLASH_ATTR setupWiegandReader(int d0, int d1, bool removeParityBits)
 {
 	wg.begin(d0, d1, removeParityBits);
 	rfidState = waitingRfid;
-}
-
-void ICACHE_FLASH_ATTR setupMFRC522Reader(int rfidss, int rfidgain)
-{
-	SPI.begin();						 // MFRC522 Hardware uses SPI protocol
-	mfrc522.PCD_Init(rfidss, UINT8_MAX); // Initialize MFRC522 Hardware
-	// Set RFID Hardware Antenna Gain
-	// This may not work with some boards
-	mfrc522.PCD_SetAntennaGain(rfidgain);
-#ifdef DEBUG
-	Serial.printf("[ INFO ] RFID SS_PIN: %u and Gain Factor: %u", rfidss, rfidgain);
-	Serial.println("");
-#endif
-#ifdef DEBUG
-	ShowMFRC522ReaderDetails(); // Show details of PCD - MFRC522 Card Reader details
-#endif
-}
-
-void ICACHE_FLASH_ATTR setupPN532Reader(int rfidss)
-{
-	// init controller
-	pn532.InitSoftwareSPI(14, 12, 13, rfidss, 0);
-	do
-	{ // pseudo loop (just used for aborting with break;)
-		// Reset the PN532
-		pn532.begin(); // delay > 400 ms
-		byte IC, VersionHi, VersionLo, Flags;
-		if (!pn532.GetFirmwareVersion(&IC, &VersionHi, &VersionLo, &Flags))
-			break;
-#ifdef DEBUG
-		char Buf[80];
-		sprintf(Buf, "Chip: PN5%02X, Firmware version: %d.%d\r\n", IC, VersionHi, VersionLo);
-		Utils::Print(Buf);
-		sprintf(Buf, "Supports ISO 14443A:%s, ISO 14443B:%s, ISO 18092:%s\r\n", (Flags & 1) ? "Yes" : "No",
-				(Flags & 2) ? "Yes" : "No",
-				(Flags & 4) ? "Yes" : "No");
-		Utils::Print(Buf);
-#endif
-		// Set the max number of retry attempts to read from a card.
-		// This prevents us from waitingProcessing forever for a card, which is the default behaviour of the PN532.
-		if (!pn532.SetPassiveActivationRetries())
-		{
-			break;
-		}
-		// configure the PN532 to read RFID tags
-		if (!pn532.SamConfig())
-		{
-			break;
-		}
-	} while (false);
 }

@@ -32,8 +32,6 @@
 #include <Wire.h> // Hardware I2C bus
 #elif USE_SOFTWARE_SPI
 // no #include required
-#else
-#error "You must specify the PN532 communication mode."
 #endif
 
 #define LF "\r\n" // LineFeed

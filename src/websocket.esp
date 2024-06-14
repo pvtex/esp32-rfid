@@ -57,6 +57,10 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	// Web Browser sends some commands, check which command is given
 	const char *command = root["command"];
+#ifdef DEBUG
+		Serial.print(F("[ INFO ] Processing WS Message: "));
+		Serial.println(command);
+#endif
 	// Check whatever the command is and act accordingly
 	if (strcmp(command, "remove") == 0)
 	{
@@ -68,18 +72,28 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "configfile") == 0)
 	{
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] Opening config file"));
+#endif
 		File f = SPIFFS.open("/config.json", "w");
 		if (f)
 		{
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] Opened config file, writing config"));
+#endif
 			size_t len = 0;
 			while (incomingMessage->serializedMessage[len] != '\0' && len < MAX_WS_BUFFER)
 			{
 				len++;
 			}
 			//f.write(incomingMessage->serializedMessage, len);
+			f.println(incomingMessage->serializedMessage);
 			f.close();
 			shouldReboot = true;
-			writeEvent("INFO", "sys", "Config stored in the SPIFFS", String(len) + " bytes");
+#ifdef DEBUG
+			Serial.println(F("[ INFO ] Config stored"));
+#endif
+			//writeEvent("INFO", "sys", "Config stored in the SPIFFS", String(len) + " bytes");
 		}
 	}
 	else if (strcmp(command, "userlist") == 0)
@@ -106,34 +120,34 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "geteventlog") == 0)
 	{
-		int page = root["page"];
-		const char *xfileName = root["filename"];
-		sendEventLog(page, xfileName, client);
+		//int page = root["page"];
+		//const char *xfileName = root["filename"];
+		//sendEventLog(page, xfileName, client);
 	}
 	else if (strcmp(command, "getlatestlog") == 0)
 	{
-		int page = root["page"];
-		const char *xfileName = root["filename"];
-		sendLatestLog(page, xfileName, client);
+		//int page = root["page"];
+		//const char *xfileName = root["filename"];
+		//sendLatestLog(page, xfileName, client);
 	}
 	else if (strcmp(command, "listfiles") == 0)
 	{
-		int page = root["page"];
-		sendFileList(page, client);
+		//int page = root["page"];
+		//sendFileList(page, client);
 	}
 	else if (strcmp(command, "logMaintenance") == 0)
 	{
-		logMaintenance(root["action"],root["filename"], client);
+		//logMaintenance(root["action"],root["filename"], client);
 	}
 	else if (strcmp(command, "clearevent") == 0)
 	{
 		SPIFFS.remove("/eventlog.json");
-		writeEvent("WARN", "sys", "Event log cleared!", "");
+		//writeEvent("WARN", "sys", "Event log cleared!", "");
 	}
 	else if (strcmp(command, "clearlatest") == 0)
 	{
 		SPIFFS.remove("/latestlog.json");
-		writeEvent("WARN", "sys", "Latest Access log cleared!", "");
+		//writeEvent("WARN", "sys", "Latest Access log cleared!", "");
 	}
 	else if (strcmp(command, "userfile") == 0)
 	{
