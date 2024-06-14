@@ -34,8 +34,6 @@ var config = {
         "readertype": 1,
         "wgd0pin": 4,
         "wgd1pin": 5,
-        "sspin": 0,
-        "rfidgain": 32,
         "wifipin": 255,
         "rtype": 1,
         "ltype": 0,
@@ -197,8 +195,6 @@ function listhardware() {
   document.getElementById("readertype").value = config.hardware.readertype;
   document.getElementById("wg0pin").value = config.hardware.wgd0pin;
   document.getElementById("wg1pin").value = config.hardware.wgd1pin;
-  document.getElementById("gpioss").value = config.hardware.sspin;
-  document.getElementById("gain").value = config.hardware.rfidgain;
   document.getElementById("gpiorly").value = config.hardware.rpin;
   document.getElementById("doorname").value = config.hardware.doorname || "";
   document.getElementById("numrlys").value = numRelays;

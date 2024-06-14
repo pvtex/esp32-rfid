@@ -43,7 +43,7 @@ struct Config {
     bool pinCodeOnly = false;
     bool wiegandReadHex = true;
     bool present = false;
-    int readertype;
+    int readertype = 1;
     int relayType[MAX_NUM_RELAYS];
     bool removeParityBits = true;
     IPAddress subnetIp;
