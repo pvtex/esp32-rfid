@@ -1,6 +1,7 @@
 /*
 MIT License
 
+Copyright (c) 2024 pvtex
 Copyright (c) 2018 esp-rfid Community
 Copyright (c) 2017 Ömer Şiar Baysal
 
@@ -172,16 +173,13 @@ void ICACHE_FLASH_ATTR setup()
 	uint32_t realSize = spi_flash_get_chip_size();
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
-	/*
-	char* chipID;
-	uint64_t macAddress = ESP.getEfuseMac();
-	uint64_t macAddressTrunc = macAddress << 40;	
-	char str[32];
-	numberToHexStr(str, (unsigned char*) &macAddressTrunc, sizeof(macAddressTrunc));
-	sprintf(chipID, "%s", str);
 	
+	char chipID[15];
+  	uint64_t chipid = ESP.getEfuseMac(); // The chip ID is essentially its MAC address(length: 6 bytes).
+  	uint16_t chip = (uint16_t)(chipid >> 32);
+  	snprintf(chipID, 15, "%04X%08X", chip, (uint32_t)chipid);
 	Serial.printf("Flash real id:   %s\n", chipID);
-	*/
+
 	Serial.printf("Flash real size: %u\n\n", realSize);
 	Serial.printf("Flash ide  size: %u\n", ideSize);
 	Serial.printf("Flash ide speed: %u\n", ESP.getFlashChipSpeed());
@@ -202,7 +200,7 @@ void ICACHE_FLASH_ATTR setup()
 	{
 		if (SPIFFS.format())
 		{
-			//writeEvent("WARN", "sys", "Filesystem formatted", "");
+			writeEvent("WARN", "sys", "Filesystem formatted", "");
 			Serial.println(F("[ WARN ] Filesystem formatted!"));
 		}
 		else
@@ -219,7 +217,7 @@ void ICACHE_FLASH_ATTR setup()
 	setupWifi(configured);
 	setupWebServer();
 	setupMqtt();
-	//writeEvent("INFO", "sys", "System setup completed, running", "");
+	writeEvent("INFO", "sys", "System setup completed, running", "");
 	Serial.println(F("[ INFO ] System setup completed, running"));
 }
 
@@ -235,7 +233,7 @@ void ICACHE_RAM_ATTR loop()
 	openLockButton.update();
 	if (config.openlockpin != 255 && openLockButton.fell())
 	{
-		//writeLatest(" ", "Button", 1);
+		writeLatest(" ", "Button", 1);
 		mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
 		activateRelay[0] = true;
 		beeperValidAccess();
@@ -244,13 +242,13 @@ void ICACHE_RAM_ATTR loop()
 
 	ledWifiStatus();
 	ledAccessDeniedOff();
-	//beeperBeep();
-	//tatus();
-	//doorbellStatus();
+	beeperBeep();
+	doorStatus();
+	doorbellStatus();
 
 	if (currentMillis >= cooldown)
 	{
-		//rfidLoop();
+		rfidLoop();
 	}
 
 	for (int currentRelay = 0; currentRelay < config.numRelays; currentRelay++)
@@ -327,7 +325,7 @@ void ICACHE_RAM_ATTR loop()
 
 	if (config.autoRestartIntervalSeconds > 0 && uptimeSeconds > config.autoRestartIntervalSeconds)
 	{
-		//writeEvent("WARN", "sys", "Auto restarting...", "");
+		writeEvent("WARN", "sys", "Auto restarting...", "");
 #ifdef DEBUG
 		Serial.println(F("[ WARN ] Auto retarting..."));
 #endif
@@ -336,7 +334,7 @@ void ICACHE_RAM_ATTR loop()
 
 	if (shouldReboot)
 	{
-		//writeEvent("INFO", "sys", "System is going to reboot", "");
+		writeEvent("INFO", "sys", "System is going to reboot", "");
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] System is going to reboot..."));
 #endif
@@ -351,11 +349,11 @@ void ICACHE_RAM_ATTR loop()
 
 	if (config.wifiTimeout > 0 && wiFiUptimeMillis > (config.wifiTimeout * 1000) && WiFi.isConnected())
 	{
-		//writeEvent("INFO", "wifi", "WiFi is going to be disabled", "");
+		writeEvent("INFO", "wifi", "WiFi is going to be disabled", "");
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] WiFi is going to be disabled..."));
 #endif
-		//disableWifi();
+		disableWifi();
 
 	}
 
@@ -365,8 +363,8 @@ void ICACHE_RAM_ATTR loop()
 		if (!WiFi.isConnected())
 		{
 			enableWifi();
-			//writeEvent("INFO", "wifi", "Enabling WiFi", "");
-			//doEnableWifi = false;
+			writeEvent("INFO", "wifi", "Enabling WiFi", "");
+			doEnableWifi = false;
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] Enabling WiFi..."));
 #endif

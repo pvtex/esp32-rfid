@@ -4,11 +4,15 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 	root["command"] = "userlist";
 	root["page"] = page;
 	JsonArray users = root.createNestedArray("list");
+	
 	File dir = SPIFFS.open("/P/");
+	File file = dir.openNextFile();
+
 	int first = (page - 1) * 10;
 	int last = page * 10;
 	int i = 0;
-	while (dir)
+
+	while (file)
 	{
 		if (i >= first && i < last)
 		{
@@ -16,7 +20,7 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 			String uid = dir.name();
 			uid.remove(0, 3);
 			item["uid"] = uid;
-			File f = SPIFFS.open(dir.name(), "r");
+			File f = SPIFFS.open(file.name(), "r");
 			size_t size = f.size();
 			std::unique_ptr<char[]> buf(new char[size]);
 			f.readBytes(buf.get(), size);
@@ -49,10 +53,11 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 			}
 		}
 		i++;
+		file = dir.openNextFile();
 		yield();
-		dir.openNextFile();
 	}
-	float pages = i / 10.0;
+
+	float pages = (i-1) / 10.0;
 	root["haspages"] = ceil(pages);
 	size_t len = measureJson(root);
 	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
@@ -73,50 +78,6 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 	}
 }
 
-void ICACHE_FLASH_ATTR sendSpiffbrowser(int page, AsyncWebSocketClient *client)
-{
-	DynamicJsonDocument root(2048);
-	root["command"] = "spiffbrowser";
-	root["page"] = page;
-	JsonArray users = root.createNestedArray("list");
-	File dir = SPIFFS.open("/");
-	int first = (page - 1) * 10;
-	int last = page * 10;
-	int i = 0;
-	while (dir)
-	{
-		if (i >= first && i < last)
-		{
-			JsonObject item = users.createNestedObject();
-			item["filename"] = dir.name();
-			item["filetype"] = dir.name();
-			item["filesize"] = dir.size();
-		}
-		i++;
-		yield();
-		dir.openNextFile();
-	}
-	float pages = i / 10.0;
-	root["haspages"] = ceil(pages);
-	size_t len = measureJson(root);
-	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
-	if (buffer)
-	{
-		serializeJson(root, (char *)buffer->get(), len + 1);
-		if (client)
-		{
-			//wsMessageTicker.once_ms_scheduled(50, [client, buffer]() {
-				client->text(buffer);
-				client->text("{\"command\":\"result\",\"resultof\":\"spiffbrowser\",\"result\": true}");
-			//});
-		}
-		else
-		{
-			ws.textAll("{\"command\":\"result\",\"resultof\":\"spiffbrowser\",\"result\": false}");
-		}
-	}
-}
-
 void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 {
 	//struct ip_info info;
@@ -129,10 +90,10 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	DynamicJsonDocument root(512);
 	root["command"] = "status";
 	root["heap"] = ESP.getFreeHeap();
-	String chipID = "";
-	uint64_t macAddress = ESP.getEfuseMac();
-	uint64_t macAddressTrunc = macAddress << 40;
-	//chipID = macAddressTrunc >> 40;
+	char chipID[15];
+  	uint64_t chipid = ESP.getEfuseMac(); // The chip ID is essentially its MAC address(length: 6 bytes).
+  	uint16_t chip = (uint16_t)(chipid >> 32);
+  	snprintf(chipID, 15, "%04X%08X", chip, (uint32_t)chipid);
 	root["chipid"] = chipID;
 	root["cpu"] = ESP.getCpuFreqMHz();
 	root["sketchsize"] = ESP.getSketchSize();
@@ -159,7 +120,7 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	}
 	else
 	{
-		//root["ssid"] = String(reinterpret_cast<char *>(config.ssid));
+		root["ssid"] = WiFi.SSID();
 		char rssibuffer[9];
 		sprintf(rssibuffer, "%d dBm",WiFi.RSSI());
 		root["rssi"] = rssibuffer;
@@ -213,7 +174,7 @@ void ICACHE_FLASH_ATTR printScanResult(int networksFound)
 		}
 	}
 	DynamicJsonDocument root(512);
-	root["command"] = "ssidlist";
+	root["command"] = "ssid(list)";
 	JsonArray scan = root.createNestedArray("list");
 	for (int i = 0; i < 5 && i < networksFound; ++i)
 	{

@@ -48,7 +48,7 @@ void onWifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 bool ICACHE_FLASH_ATTR startAP(IPAddress apip, IPAddress apsubnet, bool hidden, const char *ssid, const char *password = NULL)
 {
 #ifdef DEBUG
-	Serial.println(F("[ INFO ] ESP-RFID is running in AP Mode "));
+	Serial.println(F("[ INFO ] ESP32-RFID is running in AP Mode "));
 #endif
 	WiFi.mode(WIFI_AP);
 #ifdef DEBUG
@@ -90,13 +90,13 @@ void ICACHE_FLASH_ATTR fallbacktoAPMode()
 {
 	config.accessPointMode = true;
 #ifdef DEBUG
-	Serial.println(F("[ INFO ] ESP-RFID is running in Fallback AP Mode"));
+	Serial.println(F("[ INFO ] ESP32-RFID is running in Fallback AP Mode"));
 #endif
 	WiFi.mode(WIFI_AP);
 	uint8_t macAddr[6];
 	WiFi.softAPmacAddress(macAddr);
 	char ssid[18];
-	sprintf(ssid, "ESP-RFID-%02x%02x%02x", macAddr[3], macAddr[4], macAddr[5]);
+	sprintf(ssid, "ESP32-RFID-%02x%02x%02x", macAddr[3], macAddr[4], macAddr[5]);
 	if (WiFi.softAP(ssid))
 	{
 		ledWifiOn();
@@ -226,7 +226,7 @@ void setupWifi(bool configured)
 {
 	if (!configured)
 	{
-		WiFi.hostname("esp-rfid");
+		WiFi.hostname("esp32-rfid");
 		fallbacktoAPMode();
 	} else
 	{

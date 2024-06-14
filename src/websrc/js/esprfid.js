@@ -767,6 +767,7 @@ function listStats() {
   document.getElementById("sver").innerText = version;
   $("#mainver").text(version);
   document.getElementById("systemname").innerHTML = ajaxobj.hostname;
+  document.getElementById("systemnamedevice").innerHTML = ajaxobj.hostname;
 }
 
 function getContent(contentname) {
@@ -2147,7 +2148,7 @@ function login() {
 
 function getLatestReleaseInfo() {
 
-  $.getJSON("https://api.github.com/repos/pvtex/esp-rfid/releases/latest").done(function(release) {
+  $.getJSON("https://api.github.com/repos/pvtex/esp32-rfid/releases/latest").done(function(release) {
     var asset = release.assets[0];
     var downloadCount = 0;
     for (var i = 0; i < release.assets.length; i++) {
