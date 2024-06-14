@@ -53,7 +53,7 @@ The build environment is based on [PlatformIO](http://platformio.org). Follow th
 sudo pip install -U pip setuptools
 sudo pip install -U platformio
 git clone https://github.com/pvtex/esp32-rfid.git
-cd esp-rfid
+cd esp32-rfid
 platformio run
 ```
 
@@ -78,8 +78,8 @@ The following table shows the typical pin layout used for connecting readers har
 
 | ESP32   | Wiegand |
 |--------:|:-------:|
-| GPIO-16 |         | 
-| GPIO-15 |         |
+| GPIO-16 | LED     | 
+| GPIO-15 | Buzzer  |
 | GPIO-13 | D0      |
 | GPIO-12 | D1      |
 | GPIO-14 |         | 
