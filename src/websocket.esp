@@ -101,11 +101,6 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 		int page = root["page"];
 		sendUserList(page, incomingMessage->client);
 	}
-	else if (strcmp(command, "spiffbrowser") == 0)
-	{
-		int page = root["page"];
-		sendSpiffbrowser(page, incomingMessage->client);
-	}
 	else if (strcmp(command, "status") == 0)
 	{
 		sendStatus(client);

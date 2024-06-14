@@ -37,7 +37,7 @@ SOFTWARE.
 #include <TimeLib.h>
 #include <Ticker.h>
 #include <time.h>
-//#include <AsyncMqttClient.h>
+#include <AsyncMqttClient.h>
 #include <Bounce2.h>
 #include <esp_task_wdt.h>
 #include <Update.h>
@@ -66,8 +66,8 @@ bool deactivateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
 #include "webh/esprfid.htm.gz.h"
 #include "webh/index.html.gz.h"
 
-//syncMqttClient mqttClient;
-//Ticker mqttReconnectTimer;
+AsyncMqttClient mqttClient;
+Ticker mqttReconnectTimer;
 Ticker wifiReconnectTimer;
 Ticker wsMessageTicker;
 Bounce openLockButton;
@@ -141,16 +141,16 @@ void handleUpload(AsyncWebServerRequest *request, String filename, size_t index,
 #include "led.esp"
 #include "beeper.esp"
 #include "log.esp"
-//#include "mqtt.esp"
+#include "mqtt.esp"
 #include "helpers.esp"
 #include "wsResponses.esp"
-//#include "rfid.esp"
+#include "rfid.esp"
 #include "wifi.esp"
 #include "config.esp"
 #include "websocket.esp"
 #include "webserver.esp"
-//#include "door.esp"
-//#include "doorbell.esp"
+#include "door.esp"
+#include "doorbell.esp"
 
 char* numberToHexStr(char* out, unsigned char* in, size_t length)
 {
@@ -169,12 +169,11 @@ void ICACHE_FLASH_ATTR setup()
 	Serial.print(F("[ INFO ] ESP RFID v"));
 	Serial.println(VERSION);
 
-/*
 	uint32_t realSize = spi_flash_get_chip_size();
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
+	/*
 	char* chipID;
-
 	uint64_t macAddress = ESP.getEfuseMac();
 	uint64_t macAddressTrunc = macAddress << 40;	
 	char str[32];
@@ -182,6 +181,7 @@ void ICACHE_FLASH_ATTR setup()
 	sprintf(chipID, "%s", str);
 	
 	Serial.printf("Flash real id:   %s\n", chipID);
+	*/
 	Serial.printf("Flash real size: %u\n\n", realSize);
 	Serial.printf("Flash ide  size: %u\n", ideSize);
 	Serial.printf("Flash ide speed: %u\n", ESP.getFlashChipSpeed());
@@ -197,7 +197,6 @@ void ICACHE_FLASH_ATTR setup()
 	{
 		Serial.println(F("Flash Chip configuration ok.\n"));
 	}
-*/
 #endif
 	if (!SPIFFS.begin())
 	{
@@ -219,7 +218,7 @@ void ICACHE_FLASH_ATTR setup()
 	configured = loadConfiguration(config);
 	setupWifi(configured);
 	setupWebServer();
-	//setupMqtt();
+	setupMqtt();
 	//writeEvent("INFO", "sys", "System setup completed, running", "");
 	Serial.println(F("[ INFO ] System setup completed, running"));
 }
@@ -232,18 +231,16 @@ void ICACHE_RAM_ATTR loop()
 	previousLoopMillis = currentMillis;
 	
 	trySyncNTPtime(10);
-
-	/*
+	
 	openLockButton.update();
 	if (config.openlockpin != 255 && openLockButton.fell())
 	{
 		//writeLatest(" ", "Button", 1);
-		//mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
+		mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
 		activateRelay[0] = true;
-		//beeperValidAccess();
+		beeperValidAccess();
 		// TODO: handle other relays
 	}
-	*/
 
 	ledWifiStatus();
 	ledAccessDeniedOff();
@@ -264,7 +261,7 @@ void ICACHE_RAM_ATTR loop()
 			{
 				if (digitalRead(config.relayPin[currentRelay]) == !config.relayType[currentRelay]) // currently OFF, need to switch ON
 				{
-					//mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
+					mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
 #ifdef DEBUG
 					Serial.print(F("mili : "));
 					Serial.println(millis());
@@ -274,7 +271,7 @@ void ICACHE_RAM_ATTR loop()
 				}
 				else // currently ON, need to switch OFF
 				{
-					//mqttPublishIo("lock" + String(currentRelay), "LOCKED");
+					mqttPublishIo("lock" + String(currentRelay), "LOCKED");
 #ifdef DEBUG
 					Serial.print(F("mili : "));
 					Serial.println(millis());
@@ -289,7 +286,7 @@ void ICACHE_RAM_ATTR loop()
 		{
 			if (activateRelay[currentRelay])
 			{
-				//mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
+				mqttPublishIo("lock" + String(currentRelay), "UNLOCKED");
 #ifdef DEBUG
 				Serial.print(F("mili : "));
 				Serial.println(millis());
@@ -302,7 +299,7 @@ void ICACHE_RAM_ATTR loop()
 			}
 			else if ((currentMillis - previousMillis >= config.activateTime[currentRelay]) && (deactivateRelay[currentRelay]))
 			{
-				//mqttPublishIo("lock" + String(currentRelay), "LOCKED");
+				mqttPublishIo("lock" + String(currentRelay), "LOCKED");
 #ifdef DEBUG
 				Serial.println(F(currentMillis));
 				Serial.println(F(previousMillis));
@@ -376,7 +373,6 @@ void ICACHE_RAM_ATTR loop()
 		}
 	}
 
-	/*
 	if (config.mqttEnabled && mqttClient.connected())
 	{
 		if ((unsigned)epoch > nextbeat)
@@ -390,7 +386,6 @@ void ICACHE_RAM_ATTR loop()
 		}
 		processMqttQueue();
 	}
-	*/
 
 	processWsQueue();
 

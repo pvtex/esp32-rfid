@@ -172,6 +172,9 @@ bool ICACHE_FLASH_ATTR connectSTA(const char *ssid, const char *password, byte b
 		String data = ssid;
 		data += " " + WiFi.localIP().toString();
 		//writeEvent("INFO", "wifi", "WiFi is connected", data);
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] WiFi is connected"));
+#endif
 		return true;
 	}
 	else

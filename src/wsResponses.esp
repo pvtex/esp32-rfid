@@ -153,19 +153,13 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 
 	if (config.accessPointMode)
 	{
-		//wifi_get_ip_info(SOFTAP_IF, &info);
-		//struct softap_config conf;
-		//wifi_softap_get_config(&conf);
-		//root["ssid"] = String(reinterpret_cast<char *>(conf.ssid));
+		root["ssid"] = WiFi.softAPSSID();
 		root["dns"] = printIP(WiFi.softAPIP());
 		root["mac"] = WiFi.softAPmacAddress();
 	}
 	else
 	{
-		//wifi_get_ip_info(STATION_IF, &info);
-		//struct station_config conf;
-		//wifi_station_get_config(&conf);
-		//root["ssid"] = String(reinterpret_cast<char *>(conf.ssid));
+		//root["ssid"] = String(reinterpret_cast<char *>(config.ssid));
 		char rssibuffer[9];
 		sprintf(rssibuffer, "%d dBm",WiFi.RSSI());
 		root["rssi"] = rssibuffer;
@@ -173,12 +167,13 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 		root["mac"] = WiFi.macAddress();
 	}
 
-	//IPAddress ipaddr = IPAddress(info.ip.addr);
-	//IPAddress gwaddr = IPAddress(info.gw.addr);
-	//IPAddress nmaddr = IPAddress(info.netmask.addr);
-	//root["ip"] = printIP(ipaddr);
-	//root["gateway"] = printIP(gwaddr);
-	//root["netmask"] = printIP(nmaddr);
+	IPAddress ipaddr = WiFi.localIP();
+	IPAddress gwaddr = WiFi.gatewayIP();
+	IPAddress nmaddr = WiFi.subnetMask();
+
+	root["ip"] = printIP(ipaddr);
+	root["gateway"] = printIP(gwaddr);
+	root["netmask"] = printIP(nmaddr);
 
 	size_t len = measureJson(root);
 	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);

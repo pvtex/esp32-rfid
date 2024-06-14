@@ -101,14 +101,14 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	if (hardware.containsKey("openlockpin"))
 	{
 		config.openlockpin = hardware["openlockpin"];
-		/*
+		
 		if (config.openlockpin != 255)
 		{
 			openLockButton = Bounce();
 			openLockButton.attach(config.openlockpin, INPUT_PULLUP);
 			openLockButton.interval(30);
 		}
-		*/
+		
 	}
 
 	if (hardware.containsKey("numrelays"))
@@ -140,7 +140,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	{
 		config.wiegandReadHex = hardware["useridstoragemode"] == "hexadecimal";
 	}
-	//setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits); // also some other settings like weather to use keypad or not, LED pin, BUZZER pin, Wiegand 26/34 version
+	setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits); // also some other settings like weather to use keypad or not, LED pin, BUZZER pin, Wiegand 26/34 version
 
 	if (network.containsKey("fallbackmode"))
 	{
