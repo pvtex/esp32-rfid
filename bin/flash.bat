@@ -12,7 +12,7 @@ IF ERRORLEVEL 1 CALL :DEFAULT_CASE
 
 :1
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe --chip auto --port COM19 write_flash 0x00000 generic.bin
+  esptool.exe --chip auto --port COM19 write_flash 0x00010000 generic.bin
   GOTO EXIT_CASE   
 :2
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
@@ -20,7 +20,7 @@ IF ERRORLEVEL 1 CALL :DEFAULT_CASE
   GOTO EXIT_CASE
 :3
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe --chip auto --port COM19 write_flash 0x00000 debug.bin
+  esptool.exe --chip auto --port COM19 write_flash 0x00010000 debug.bin
   GOTO EXIT_CASE
 :DEFAULT_CASE
   ECHO Unknown option "%opt%"
