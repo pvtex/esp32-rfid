@@ -5,7 +5,7 @@
 
 Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microcontroller. 
 
-![Showcase Gif](https://raw.githubusercontent.com/esprfid/esp-rfid/stable/demo/showcase.gif)
+![Showcase Gif](https://raw.githubusercontent.com/pvtex/esp32-rfid/stable/demo/showcase.gif)
 
 ## Features
 ### For Users
@@ -25,7 +25,7 @@ Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microco
 ## Getting Started
 This project still in its development phase. New features (and also bugs) are introduced often and some functions may become deprecated. Please feel free to comment or give feedback.
 
-* Get the latest release from [here](https://github.com/espvtexprfid/esp32-rfid/releases).
+* Get the latest release from [here](https://github.com/pvtex/esp32-rfid/releases).
 * See [Known Issues](https://github.com/pvtex/esp32-rfid#known-issues) before starting right away.
 * See [Security](https://github.com/pvtex/esp32-rfid#security) for your safety.
 * See [ChangeLog](https://github.com/pvtex/esp32-rfid/blob/dev/CHANGELOG.md)
@@ -67,11 +67,6 @@ When you run ```platformio run``` for the first time, it will download the toolc
 
 The resulting (built) image(s) can be found in the directory ```/bin``` created during the build process.
 
-##### How to modify the project
-
-If you want to modify the code, you can read more info in the [CONTRIBUTING](./CONTRIBUTING.md) file.
-
-
 ### Pin Layout
 
 The following table shows the typical pin layout used for connecting readers hardware to ESP:
@@ -82,10 +77,7 @@ The following table shows the typical pin layout used for connecting readers har
 | GPIO-15 | Buzzer  |
 | GPIO-13 | D0      |
 | GPIO-12 | D1      |
-| GPIO-14 |         | 
-| GPIO-04 |         | 
-| GPIO-05 |         | 
-| GPIO-03 |         |
+
 
 For Wiegand based readers, you can configure D0 and D1 pins via settings page. By default, D0 is GPIO-4 and D1 is GPIO-5
 
@@ -94,10 +86,10 @@ For Wiegand based readers, you can configure D0 and D1 pins via settings page. B
 * (optional) Fire up your serial monitor to get informed
 * Search for Wireless Network "esp32-rfid-xxxxxx" and connect to it (It should be an open network and does not require password)
 * Open your browser and visit either "http://192.168.4.1" or "http://esp32-rfid.local" (.local needs Bonjour installed on your computer).
-* Log on to ESP, default password is "admin"
+* Log on to ESP32, default password is "admin"
 * Go to "Settings" page
 * Configure your amazing access control device. Push "Scan" button to join your wireless network, configure RFID hardware, Relay Module.
-* Save settings, when rebooted your ESP will try to join your wireless network.
+* Save settings, when rebooted your ESP32 will try to join your wireless network.
 * Check your new IP address from serial monitor and connect to your ESP again. (You can also connect to "http://esp32-rfid.local")
 * Go to "Users" page
 * Scan a PICC (RFID Tag) then it should glimpse on your Browser's screen.
@@ -107,7 +99,7 @@ For Wiegand based readers, you can configure D0 and D1 pins via settings page. B
 * Congratulations, everything went well, if you encounter any issue feel free to ask help on GitHub.
 
 ### MQTT
-You can integrate ESP-RFID with other systems using MQTT. Read the [additional documentation](./README-MQTT.md) for all the details.
+You can integrate ESP32-RFID with other systems using MQTT. Read the [additional documentation](./README-MQTT.md) for all the details.
 
 ### Known Issues
 * Please also check [GitHub issues](https://github.com/pvtex/esp32-rfid/issues).
@@ -128,31 +120,10 @@ What can be done to increase security? (by you and by us)
 * You can disable wireless network to reduce attack surface. (This can be configured in Web UI Settings page)
 * Choose a strong password for the Web UI
 
-## Scalability
-Since we are limited on both flash and ram size things may get ugly at some point in the future. You can find out some test results below.
-
-### Tests
-
-#### 1) How many RFID Tag can be handled?
-Restore some randomly generated user data on File System worth:
-
-* 1000 separate "userfile"
-* random 4 Bytes long UID and
-* random User Names and
-* 4 bytes random Unix Time Stamp
-* each have "access type" 1 byte integer "1" or "0".
-
-Total 122,880 Bytes
-
-At least 1000 unique User (RFID Tag) can be handled, the test were performed on WeMos D1 mini.
-
-#### Additional testing is needed:
-
-* Logging needs testing. How long should it need to log access? What if a Boss needs whole year log?
-* Reliability on Flash (these NOR Flash have limited write cycle on their cells). It depends on manufacturer choice of Flash Chip and usage.
-
 ### Projects that are based on esp-rfid
 
+* [ESP-RFID](https://github.com/pvtex/esp-rfid) ESP-RFID - Access Control with ESP8266 and Wiegand
+* [ESP32-RFID](https://github.com/pvtex/esp32-rfid) ESP32-RFID - Access Control with ESP32 and Wiegand
 * [ESP-IO](https://github.com/Pako2/EventGhostPlugins/tree/master/ESP-IO) Project to manipulate GPIOs with EventGhost
 * [ESP-RCM](https://github.com/Pako2/esp-rcm) Room Climate Monitor with ESP8266, HTU21D, Si7021, AM2320
 * [ESP-RFID-PY](https://github.com/esprfid/esp-rfid-py) Micro-Python implementation of esp-rfid is also made available by @iBobik
@@ -170,20 +141,6 @@ At least 1000 unique User (RFID Tag) can be handled, the test were performed on 
 - @pvtex
 
 See [ChangeLog](./CHANGELOG.md)
-
-## Donations
-[![OC](https://opencollective.com/esp-rfid/tiers/esp-rfid-user.svg?avatarHeight=56)](https://opencollective.com/esp-rfid)
-
-Developing fully open, extensively tested embedded software is hard and time consuming work. Please consider making donations to support developers behind this beautiful software.
-
-Donations **transparently** processed by **[Open Collective](https://opencollective.com/how-it-works)** and expenses are being made public by OC's open ledger.
-
-* 2017-10-03 [steinar-t](https://github.com/steinar-t)
-* 2017-12-10 [saschaludwig](https://github.com/saschaludwig)
-* 2018-10-02 Dennis Parsch
-* 2019-01-12 Chris-topher Slater
-* 2019-04-23 Klaus Blum
-* 2019-04-25 Andre Dieteich
 
 ## Contributors
 
