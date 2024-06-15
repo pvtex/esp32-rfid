@@ -742,12 +742,10 @@ function listStats() {
   removeModal();
   version = ajaxobj.version;
   document.getElementById("chip").innerHTML = ajaxobj.chipid;
-  document.getElementById("chipmodel").innerHTML = ajaxobj.chipmodel;
-  document.getElementById("chipcores").innerHTML = ajaxobj.chipcores;
   document.getElementById("cpu").innerHTML = ajaxobj.cpu + " Mhz";
   document.getElementById("uptime").innerHTML = ajaxobj.uptime;
   document.getElementById("heap").innerHTML = ajaxobj.heap + " Bytes";
-  document.getElementById("heap").style.width = (ajaxobj.heap * 100) / ajaxobj.heapsize + "%";
+  document.getElementById("heap").style.width = ((ajaxobj.heap * 100) / ajaxobj.heapsize) + "%";
   colorStatusbar(document.getElementById("heap"));
   document.getElementById("flash").innerHTML = ajaxobj.availsize + " Bytes";
   document.getElementById("flash").style.width = (ajaxobj.availsize * 100) / (ajaxobj.availsize + ajaxobj.sketchsize) + "%";

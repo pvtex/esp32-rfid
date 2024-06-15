@@ -118,8 +118,6 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
     	chipID |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
   	}
 	root["chipid"] = chipID;
-	root["chipmodel"] = ESP.getChipModel();
-	root["chipcores"] = ESP.getChipCores();
 	root["cpu"] = ESP.getCpuFreqMHz();
 	root["sketchsize"] = ESP.getSketchSize();
 	root["availsize"] = ESP.getFreeSketchSpace();
