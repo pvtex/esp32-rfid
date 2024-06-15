@@ -124,6 +124,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 
 	int wgd0pin = hardware["wgd0pin"];
 	int wgd1pin = hardware["wgd1pin"];
+	int wiegandbits = hardware["wiegandbits"];
 	if (hardware.containsKey("requirepincodeafterrfid"))
 	{
 		config.pinCodeRequested = hardware["requirepincodeafterrfid"];
@@ -140,7 +141,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	{
 		config.wiegandReadHex = hardware["useridstoragemode"] == "hexadecimal";
 	}
-	setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits); // also some other settings like weather to use keypad or not, LED pin, BUZZER pin, Wiegand 26/34 version
+	setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits, wiegandbits);
 
 	if (network.containsKey("fallbackmode"))
 	{

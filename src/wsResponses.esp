@@ -34,6 +34,11 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 				{
 					pincode = String((const char*)json["pincode"]);
 				}
+				int picctype = config.wiegandbits;
+				if(json.containsKey("picctype"))
+				{
+					picctype = json["picctype"];
+				}
 				for (int x = 1; x <= MAX_NUM_RELAYS; x++)
 				{
 					String theKey = String();
@@ -50,6 +55,7 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 				item["validsince"] = validsince;
 				item["validuntil"] = validuntil;
 				item["pincode"] = pincode;
+				item["picctype"] = picctype;
 			}
 		}
 		i++;

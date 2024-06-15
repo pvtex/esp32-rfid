@@ -193,6 +193,7 @@ function listhardware() {
   document.getElementById("ledwaitingpin").value = config.hardware.ledwaitingpin;
   document.getElementById("beeperpin").value = config.hardware.beeperpin;
   document.getElementById("readertype").value = config.hardware.readertype;
+  document.getElementById("wiegandbits").value = config.hardware.wiegandbits;
   document.getElementById("wg0pin").value = config.hardware.wgd0pin;
   document.getElementById("wg1pin").value = config.hardware.wgd1pin;
   document.getElementById("gpiorly").value = config.hardware.rpin;
@@ -243,6 +244,7 @@ function uncommited() {
 
 function savehardware() {
   config.hardware.readertype = parseInt(document.getElementById("readertype").value);
+  config.hardware.wiegandbits = parseInt(document.getElementById("wiegandbits").value);
   config.hardware.wgd0pin = parseInt(document.getElementById("wg0pin").value);
   config.hardware.wgd1pin = parseInt(document.getElementById("wg1pin").value);
   config.hardware.useridstoragemode = document.getElementById("useridstoragemode").value;
@@ -682,7 +684,7 @@ function listSCAN(obj) {
     } else {
       $(".footable-add").click();
       document.getElementById("uid").value = obj.uid;
-      document.getElementById("picctype").value = obj.type;
+      document.getElementById("picctype").value = obj.picctype;
       document.getElementById("username").value = obj.user;
       document.getElementById("acctype").value = obj.acctype;
     }
@@ -879,6 +881,7 @@ function restore1by1(i, len, data) {
   var datatosend = {};
   datatosend.command = "userfile";
   datatosend.uid = data[i].uid;
+  datatosend.picctype = data[i].picctype;
   datatosend.pincode = data[i].pincode;
   datatosend.user = data[i].username;
   datatosend.acctype = data[i].acctype;
@@ -1324,6 +1327,12 @@ function initUserTable() {
             "style": "font-family:monospace"
           },
           {
+            "name": "picctype",
+            "title": "PICC Type",
+            "type": "text",
+            "visible": false
+          },
+          {
             "name": "pincode",
             "title": "Pin code",
             "type": "text",
@@ -1454,6 +1463,7 @@ function initUserTable() {
               if (xval === "Disabled") return 0;
             }
             $editor.find("#uid").val(values.uid);
+            $editor.find("#picctype").val(values.picctype);
             $editor.find("#pincode").val(values.pincode);
             $editor.find("#username").val(values.username);
             $editor.find("#acctype").val(giveAccType(1));
@@ -1492,6 +1502,7 @@ function initUserTable() {
       var row = $modal.data("row"),
         values = {
           uid: $editor.find("#uid").val(),
+          picctype: parseInt($editor.find("#picctype").val()),
           pincode: $editor.find("#pincode").val(),
           username: $editor.find("#username").val(),
           acctype: parseInt($editor.find("#acctype").val()),

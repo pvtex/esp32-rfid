@@ -54,4 +54,5 @@ struct Config {
 	uint8_t wifipin = 255;
     const char *wifiPassword = NULL;
     unsigned long wifiTimeout = 0;
+    int wiegandbits = 58;
 };

@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#define VERSION "1.0.0"
+#define VERSION "1.1.0"
 
 #include "Arduino.h"
 #include <WiFi.h>
@@ -47,11 +47,11 @@ SOFTWARE.
 
 Config config;
 
-#include <Wiegand.h>
+#include <WiegandNG.h>
 
 File fsUploadFile;                      //Hält den aktuellen Upload
 
-WIEGAND wg;
+WiegandNG wg;
 
 // relay specific variables
 bool activateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
@@ -105,38 +105,6 @@ tm timeinfo;
 unsigned long uptimeSeconds = 0;
 unsigned long wifiPinBlink = millis();
 unsigned long wiFiUptimeMillis = 0;
-
-
-
-void handleUpload(AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
-  String logmessage = "[ INFO ] Client:" + request->client()->remoteIP().toString() + " " + request->url();
-  Serial.println(logmessage);
-
-  if (!index) {
-    logmessage = "[ INFO ] Upload Start: " + request->getParam("dir", true)->value() + String(filename);
-    // open the file on first call and store the file handle in the request object
-    if(request->hasArg("dir")) 
-	{
-		request->_tempFile = SPIFFS.open(request->getParam("dir", true)->value() + filename, "w");
-	}
-	Serial.println(logmessage);
-  }
-
-  if (len) {
-    // stream the incoming chunk to the opened file
-    request->_tempFile.write(data, len);
-    logmessage = "[ INFO ] Writing file: " + String(filename) + " index=" + String(index) + " len=" + String(len);
-    Serial.println(logmessage);
-  }
-
-  if (final) {
-    logmessage = "[ INFO ] Upload Complete: " + String(filename) + ",size: " + String(index + len);
-    // close the file handle as the upload is now done
-    request->_tempFile.close();
-    Serial.println(logmessage);
-    request->redirect("/#filebrowser");
-  }
-}
 
 
 #include "led.esp"
@@ -201,7 +169,9 @@ void ICACHE_FLASH_ATTR setup()
 		if (SPIFFS.format())
 		{
 			writeEvent("WARN", "sys", "Filesystem formatted", "");
+#ifdef DEBUG
 			Serial.println(F("[ WARN ] Filesystem formatted!"));
+#endif
 		}
 		else
 		{
@@ -218,7 +188,9 @@ void ICACHE_FLASH_ATTR setup()
 	setupWebServer();
 	setupMqtt();
 	writeEvent("INFO", "sys", "System setup completed, running", "");
+#ifdef DEBUG
 	Serial.println(F("[ INFO ] System setup completed, running"));
+#endif
 }
 
 void ICACHE_RAM_ATTR loop()
