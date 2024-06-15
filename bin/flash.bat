@@ -2,9 +2,8 @@
 cls
 
 echo - [1] Flash Generic Firmware
-echo - [2] Flash Firmware for Official Hardware (v2)
-echo - [3] Erase the Firmware on ESP8266 by flashing empty file
-echo - [4] Flash Generic DEBUG Firmware
+echo - [2] Erase the Flash on ESP32
+echo - [3] Flash Generic DEBUG Firmware
 
 set /p opt=Please choose an option eg. 1: 
 
@@ -13,19 +12,15 @@ IF ERRORLEVEL 1 CALL :DEFAULT_CASE
 
 :1
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe -vv -cd nodemcu -cb 921600 -cp %com% -ca 0x00000 -cf generic.bin
+  esptool.exe --chip auto --port COM19 write_flash 0x00000 generic.bin
   GOTO EXIT_CASE   
 :2
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe -vv -cd nodemcu -cb 921600 -cp %com% -ca 0x00000 -cf forV2Board.bin
+  esptool.exe --chip auto --port COM19 erase_flash
   GOTO EXIT_CASE
 :3
   set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe -vv -cd nodemcu -cb 921600 -cp %com% -ca 0x00000 -cf blank4mb.bin
-  GOTO EXIT_CASE
-:4
-  set /p com=Enter which COM Port your ESP is connected eg. COM1 COM2 COM7: 
-  esptool.exe -vv -cd nodemcu -cb 921600 -cp %com% -ca 0x00000 -cf debug.bin
+  esptool.exe --chip auto --port COM19 write_flash 0x00000 debug.bin
   GOTO EXIT_CASE
 :DEFAULT_CASE
   ECHO Unknown option "%opt%"
