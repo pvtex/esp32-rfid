@@ -184,9 +184,9 @@ void ICACHE_FLASH_ATTR setup()
 
 	bool configured = false;
 	configured = loadConfiguration(config);
+	setupMqtt();
 	setupWifi(configured);
 	setupWebServer();
-	setupMqtt();
 	writeEvent("INFO", "sys", "System setup completed, running", "");
 #ifdef DEBUG
 	Serial.println(F("[ INFO ] System setup completed, running"));

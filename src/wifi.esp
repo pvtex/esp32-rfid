@@ -8,7 +8,7 @@ void onWifiConnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 #ifdef DEBUG
 	Serial.println(F("[ INFO ] WiFi STA Connected"));
 #endif
-	//mqttReconnectTimer.detach();
+	mqttReconnectTimer.detach();
 	if (!wifiReconnectTimer.active() && !config.fallbackMode)
 	{
 		wifiReconnectTimer.once(300, setEnableWifi);
@@ -25,8 +25,8 @@ void onWifiDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 #ifdef DEBUG
 	Serial.println(F("[ INFO ] WiFi STA Disconnected"));
 #endif
-	//mqttReconnectTimer.detach();
-	//disconnectMqtt();
+	mqttReconnectTimer.detach();
+	disconnectMqtt();
 	if (!wifiReconnectTimer.active() && !config.fallbackMode)
 	{
 		wifiReconnectTimer.once(300, setEnableWifi);
@@ -42,7 +42,7 @@ void onWifiGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 #endif
 	wifiReconnectTimer.detach();
 	ledWifiOn();
-	//connectToMqtt();
+	connectToMqtt();
 }
 
 bool ICACHE_FLASH_ATTR startAP(IPAddress apip, IPAddress apsubnet, bool hidden, const char *ssid, const char *password = NULL)
@@ -171,7 +171,7 @@ bool ICACHE_FLASH_ATTR connectSTA(const char *ssid, const char *password, byte b
 	{
 		String data = ssid;
 		data += " " + WiFi.localIP().toString();
-		//writeEvent("INFO", "wifi", "WiFi is connected", data);
+		writeEvent("INFO", "wifi", "WiFi is connected", data);
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] WiFi is connected"));
 #endif

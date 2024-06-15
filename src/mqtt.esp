@@ -445,7 +445,7 @@ void deleteAllUserFiles()
 {
 	File dir = SPIFFS.open("/P/");
 	File file = file.openNextFile();
-	
+
 	while (file)
 	{
 		String uid = file.name();
@@ -795,20 +795,34 @@ void setupMqtt()
 #endif
 	if (config.mqttHA)
 	{
-#ifdef DEBUG
-	Serial.println("[ INFO ] MQTT HA Discovery Start");
-#endif
 		String stopic(config.mqttTopic);
 		String topicString = stopic + "/avty";
 		String payloadString = "offline";
 		char *topicLWT = strdup(topicString.c_str());
 		char *payloadLWT = strdup(payloadString.c_str());
 		mqttClient.setWill(topicLWT, 2, true, payloadLWT);
-#ifdef DEBUG
-	Serial.println("[ INFO ] MQTT HA Discovery Finish");
-#endif
 	}
-	mqttClient.setServer(config.mqttHost, config.mqttPort);
+	String mhsString = config.mqttHost;
+	
+	//IPAddress mqttip;
+	//mqttip.fromString(mhsString.c_str());
+
+	int Parts[4] = {0,0,0,0};
+	int Part = 0;
+	for ( int i=0; i<mhsString.length(); i++ )
+	{
+		char c = mhsString[i];
+		if ( c == '.' )
+		{
+			Part++;
+			continue;
+		}
+		Parts[Part] *= 10;
+		Parts[Part] += c - '0';
+	}
+	IPAddress mqttip( Parts[0], Parts[1], Parts[2], Parts[3] );
+
+	mqttClient.setServer(mqttip, config.mqttPort);
 	mqttClient.setCredentials(config.mqttUser, config.mqttPass);
 	mqttClient.onDisconnect(onMqttDisconnect);
 	mqttClient.onPublish(onMqttPublish);
