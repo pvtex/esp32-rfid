@@ -144,9 +144,13 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	else
 	{
 		root["ssid"] = WiFi.SSID();
+		float RssI = WiFi.RSSI();
+  		RssI = isnan(RssI) ? -100.0 : RssI;
+  		RssI = min(max(2 * (RssI + 100.0), 0.0), 100.0);
 		char rssibuffer[9];
-		sprintf(rssibuffer, "%d dBm",WiFi.RSSI());
-		root["rssi"] = rssibuffer;
+		sprintf(rssibuffer, "%.0f", RssI);
+		root["rssi"] = String(WiFi.RSSI()) + "dBm" + " (" + rssibuffer + "%)";
+		root["rssiperc"] = String(RssI);
 		root["dns"] = printIP(WiFi.dnsIP());
 		root["mac"] = WiFi.macAddress();
 	}

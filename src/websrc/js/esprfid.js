@@ -754,7 +754,9 @@ function listStats() {
   document.getElementById("spiffs").style.width = (ajaxobj.availspiffs * 100) / ajaxobj.spiffssize + "%";
   colorStatusbar(document.getElementById("spiffs"));
   document.getElementById("ssidstat").innerHTML = ajaxobj.ssid;
-  document.getElementById("rssi").innerHTML = ajaxobj.rssi;
+  document.getElementById("rssiperc").innerHTML = ajaxobj.rssi;
+  document.getElementById("rssiperc").style.width = ajaxobj.rssiperc + "%";
+  colorStatusbar(document.getElementById("rssiperc"));
   document.getElementById("ip").innerHTML = ajaxobj.ip;
   document.getElementById("gate").innerHTML = ajaxobj.gateway;
   document.getElementById("mask").innerHTML = ajaxobj.netmask;
