@@ -420,13 +420,14 @@ void getUserList()
 #ifdef DEBUG
 	Serial.println("[ INFO ] getUserList");
 #endif
-	while (dir)
+	File file = file.openNextFile();
+	while (file)
 	{
 		JsonObject item = users.createNestedObject();
 		String uid = dir.name();
 		uid.remove(0, 3);
 		item["uid"] = uid;
-		File f = SPIFFS.open(dir.name(), "r");
+		File f = SPIFFS.open(file.name(), "r");
 		size_t size = f.size();
 		std::unique_ptr<char[]> buf(new char[size]);
 		f.readBytes(buf.get(), size);
@@ -436,18 +437,22 @@ void getUserList()
 		{
 			mqttPublishEvent(&json);
 		}
-		dir.openNextFile();
+		file.openNextFile();
 	}
 }
 
 void deleteAllUserFiles()
 {
 	File dir = SPIFFS.open("/P/");
-	while (dir.openNextFile())
+	File file = file.openNextFile();
+	
+	while (file)
 	{
-		String uid = dir.name();
+		String uid = file.name();
 		uid.remove(0, 3);
-		SPIFFS.remove(dir.name());
+		SPIFFS.remove(file.name());
+
+		file.openNextFile();
 	}
 }
 
@@ -457,16 +462,18 @@ void deleteUserID(const char *uid)
 	if (uid)
 	{
 		File dir = SPIFFS.open("/P/");
-		while (dir)
+		File file = file.openNextFile();
+
+		while (file)
 		{
-			String user_id = dir.name();
+			String user_id = file.name();
 			String myuid = uid;
 			user_id.remove(0, 3);
 			if (myuid == user_id)
 			{
-				SPIFFS.remove(dir.name());
+				SPIFFS.remove(file.name());
 			}
-			dir.openNextFile();
+			file.openNextFile();
 		}
 	}
 }
@@ -788,12 +795,18 @@ void setupMqtt()
 #endif
 	if (config.mqttHA)
 	{
+#ifdef DEBUG
+	Serial.println("[ INFO ] MQTT HA Discovery Start");
+#endif
 		String stopic(config.mqttTopic);
 		String topicString = stopic + "/avty";
 		String payloadString = "offline";
 		char *topicLWT = strdup(topicString.c_str());
 		char *payloadLWT = strdup(payloadString.c_str());
 		mqttClient.setWill(topicLWT, 2, true, payloadLWT);
+#ifdef DEBUG
+	Serial.println("[ INFO ] MQTT HA Discovery Finish");
+#endif
 	}
 	mqttClient.setServer(config.mqttHost, config.mqttPort);
 	mqttClient.setCredentials(config.mqttUser, config.mqttPass);
@@ -802,4 +815,7 @@ void setupMqtt()
 	mqttClient.onSubscribe(onMqttSubscribe);
 	mqttClient.onConnect(onMqttConnect);
 	mqttClient.onMessage(onMqttMessage);
+#ifdef DEBUG
+	Serial.println("[ INFO ] MQTT Setup Finish");
+#endif
 }

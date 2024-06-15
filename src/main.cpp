@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#define VERSION "1.1.0"
+#define VERSION "1.1.1"
 
 #include "Arduino.h"
 #include <WiFi.h>
@@ -266,18 +266,21 @@ void ICACHE_RAM_ATTR loop()
 				previousMillis = millis();
 				activateRelay[currentRelay] = false;
 				deactivateRelay[currentRelay] = true;
+#ifdef DEBUG
+				Serial.printf("relay %d active\n", currentRelay);
+#endif
 			}
-			else if ((currentMillis - previousMillis >= config.activateTime[currentRelay]) && (deactivateRelay[currentRelay]))
+			else if (((currentMillis - previousMillis) >= config.activateTime[currentRelay]) && (deactivateRelay[currentRelay]))
 			{
 				mqttPublishIo("lock" + String(currentRelay), "LOCKED");
 #ifdef DEBUG
-				Serial.println(F(currentMillis));
-				Serial.println(F(previousMillis));
-				Serial.println(F(config.activateTime[currentRelay]));
-				Serial.println(F(activateRelay[currentRelay]));
+				Serial.println(currentMillis);
+				Serial.println(previousMillis);
+				Serial.println(config.activateTime[currentRelay]);
+				Serial.println(activateRelay[currentRelay]);
 				Serial.println(F("deactivate relay after this"));
-				Serial.print(F("mili : "));
-				Serial.println(F(millis()));
+				Serial.print("mili : ");
+				Serial.println(millis());
 #endif
 				digitalWrite(config.relayPin[currentRelay], !config.relayType[currentRelay]);
 				deactivateRelay[currentRelay] = false;

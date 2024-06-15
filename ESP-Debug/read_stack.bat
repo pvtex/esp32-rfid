@@ -1,1 +1,0 @@
-java -jar EspStackTraceDecoder.jar C:\Users\raystream\Documents\ESP-RFID\ESP-Debug\xtensa-lx106-elf-addr2line C:\Users\raystream\Documents\ESP-RFID\.pio\build\debug\firmware.elf C:\Users\raystream\Documents\ESP-RFID\ESP-Debug\stack_trace.txt > trace.txt
