@@ -150,7 +150,7 @@ void ICACHE_FLASH_ATTR setup()
 	for (int i = 0; i < 17; i = i + 8) {
     	chipID |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
   	}
-	Serial.printf("ESP32 Chip ID:   %s\n", chipID);
+	Serial.printf("ESP32 Chip ID:   %d\n", chipID);
 
 	Serial.printf("Flash real size: %u\n\n", realSize);
 	Serial.printf("Flash ide  size: %u\n", ideSize);
