@@ -391,9 +391,9 @@ void rfidOutsideMessaging()
 #endif
 		writeLatest(uid, username, accountType, ACCESS_GRANTED);
 		if (config.numRelays == 1) {
-			//mqttPublishAccess(epoch, "true", "Always", username, uid, pinCode);
+			mqttPublishAccess(epoch, "true", "Always", username, uid, pinCode);
 		} else {
-			//mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
+			mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
 		}
 		beeperValidAccess();
 	}
@@ -402,9 +402,9 @@ void rfidOutsideMessaging()
 		ws.textAll("{\"command\":\"giveAccess\"}");
 		writeLatest(uid, username, accountType, ACCESS_GRANTED);
 		if (config.numRelays == 1) {
-			//mqttPublishAccess(epoch, "true", "Admin", username, uid, pinCode);
+			mqttPublishAccess(epoch, "true", "Admin", username, uid, pinCode);
 		} else {
-			//mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
+			mqttPublishAccess(epoch, "true", accountTypes, username, uid, pinCode);
 		}
 		beeperAdminAccess();
 	}
@@ -414,14 +414,14 @@ void rfidOutsideMessaging()
 		Serial.println(" expired");
 #endif
 		writeLatest(uid, username, accountType, ACCESS_DENIED);
-		//mqttPublishAccess(epoch, "true", "Expired", username, uid, pinCode);
+		mqttPublishAccess(epoch, "true", "Expired", username, uid, pinCode);
 		ledAccessDeniedOn();
 		beeperAccessDenied();
 	}
 	if (processingState == wrongPincode)
 	{
 		writeLatest(uid, username, accountType, ACCESS_DENIED);
-		//mqttPublishAccess(epoch, "true", "Wrong pin code", username, uid, pinCode);
+		mqttPublishAccess(epoch, "true", "Wrong pin code", username, uid, pinCode);
 		ledAccessDeniedOn();
 		beeperAccessDenied();
 	}
@@ -431,7 +431,7 @@ void rfidOutsideMessaging()
 		Serial.println(" does not have access");
 #endif
 		writeLatest(uid, username, accountType, ACCESS_DENIED);
-		//mqttPublishAccess(epoch, "true", "Disabled", username, uid, pinCode);
+		mqttPublishAccess(epoch, "true", "Disabled", username, uid, pinCode);
 		ledAccessDeniedOn();
 		beeperAccessDenied();
 	}
@@ -452,7 +452,7 @@ void rfidOutsideMessaging()
 			serializeJson(root, (char *)buffer->get(), len + 1);
 			ws.textAll(buffer);
 		}
-		//mqttPublishAccess(epoch, "false", "Denied", "Unknown", uid, " ");
+		mqttPublishAccess(epoch, "false", "Denied", "Unknown", uid, " ");
 		ledAccessDeniedOn();
 		beeperAccessDenied();
 	} else if (uid != "" && processingState != waitingProcessing)
