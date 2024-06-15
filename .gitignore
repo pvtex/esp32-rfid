@@ -83,8 +83,7 @@ typings/
 .vscode/launch.json
 .vscode/*
 bin/37dc11e
-bin/esp-rfid-settings-haustuer.json
-bin/esp-rfid-settings-terrassentuer.json
+bin/esp-rfid-settings.json
 bin/users.png
 bin/esp-rfid-users.json
 ESP-Debug

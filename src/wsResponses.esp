@@ -112,11 +112,17 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	DynamicJsonDocument root(512);
 	root["command"] = "status";
 	root["heap"] = ESP.getFreeHeap();
-	char chipID[15];
-  	uint64_t chipid = ESP.getEfuseMac(); // The chip ID is essentially its MAC address(length: 6 bytes).
-  	uint16_t chip = (uint16_t)(chipid >> 32);
-  	snprintf(chipID, 15, "%04X%08X", chip, (uint32_t)chipid);
+	//char chipID[15];
+  	//uint64_t chipid = ESP.getEfuseMac(); // The chip ID is essentially its MAC address(length: 6 bytes).
+  	//uint16_t chip = (uint16_t)(chipid >> 32);
+  	//snprintf(chipID, 15, "%04X%08X", chip, (uint32_t)chipid);
+	uint32_t chipID = 0;
+	for (int i = 0; i < 17; i = i + 8) {
+    	chipID |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
+  	}
 	root["chipid"] = chipID;
+	root["chipmodel"] = "ESP32";
+	root["chipcores"] = "2";
 	root["cpu"] = ESP.getCpuFreqMHz();
 	root["sketchsize"] = ESP.getSketchSize();
 	root["availsize"] = ESP.getFreeSketchSpace();
