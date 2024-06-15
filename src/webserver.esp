@@ -81,10 +81,6 @@ void ICACHE_FLASH_ATTR setupWebServer() {
 		request->send(response);
 	});
 
-	server.on("/upload", HTTP_POST, [](AsyncWebServerRequest *request) {
-        request->send(200);
-    }, handleUpload);
-
 	if (config.httpPass == NULL) {
 		config.httpPass = strdup("admin");
 	}

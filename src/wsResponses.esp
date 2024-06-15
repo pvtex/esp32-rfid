@@ -5,19 +5,27 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 	root["page"] = page;
 	JsonArray users = root.createNestedArray("list");
 	
-	File dir = SPIFFS.open("/P/");
+	File dir = SPIFFS.open("/P");
 	File file = dir.openNextFile();
 
 	int first = (page - 1) * 10;
 	int last = page * 10;
 	int i = 0;
 
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] Getting Userlist..."));
+#endif
+
 	while (file)
 	{
 		if (i >= first && i < last)
 		{
+#ifdef DEBUG
+		Serial.print(F("[ INFO ] User File: "));
+		Serial.print(file.name());
+#endif
 			JsonObject item = users.createNestedObject();
-			String uid = dir.name();
+			String uid = file.name();
 			uid.remove(0, 3);
 			item["uid"] = uid;
 			File f = SPIFFS.open(file.name(), "r");
@@ -56,6 +64,14 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 				item["validuntil"] = validuntil;
 				item["pincode"] = pincode;
 				item["picctype"] = picctype;
+#ifdef DEBUG
+		Serial.println(F(" OK"));
+#endif
+			} else 
+			{
+#ifdef DEBUG
+		Serial.println(F(" FAIL"));
+#endif
 			}
 		}
 		i++;
@@ -63,7 +79,7 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 		yield();
 	}
 
-	float pages = (i-1) / 10.0;
+	float pages = i / 10.0;
 	root["haspages"] = ceil(pages);
 	size_t len = measureJson(root);
 	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
