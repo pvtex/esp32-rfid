@@ -135,6 +135,12 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["version"] = VERSION;
 	root["hostname"] = WiFi.getHostname();
 
+	String debugver = "";
+#ifdef DEBUG
+	debugver = "debug";
+#endif
+	root["debugver"] = debugver;
+
 	if (config.accessPointMode)
 	{
 		root["ssid"] = WiFi.softAPSSID();

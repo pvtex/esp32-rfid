@@ -763,6 +763,8 @@ function listStats() {
   document.getElementById("dns").innerHTML = ajaxobj.dns;
   document.getElementById("mac").innerHTML = ajaxobj.mac;
   document.getElementById("sver").innerText = version;
+  document.getElementById("debugver").innerText = ajaxobj.debugver;
+  document.getElementById("maindebug").innerText = ajaxobj.debugver;
   document.getElementById("systemname").innerHTML = ajaxobj.hostname;
   document.getElementById("systemnamedevice").innerHTML = ajaxobj.hostname;
   $("#mainver").text(version);
