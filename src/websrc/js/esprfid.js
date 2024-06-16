@@ -470,7 +470,7 @@ function inProgress(callback) {
           document.getElementById("updateprog").className = "progress-bar progress-bar-success";
           document.getElementById("updateprog").innerHTML = "Completed";
         }
-      }, 500);
+      }, 50);
       switch (callback) {
         case "upload":
           $.ajax({
