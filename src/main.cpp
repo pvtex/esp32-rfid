@@ -168,23 +168,18 @@ void ICACHE_FLASH_ATTR setup()
 		Serial.println(F("Flash Chip configuration ok.\n"));
 	}
 #endif
-	if (!SPIFFS.begin())
+	if (!SPIFFS.begin(true))
 	{
-		if (SPIFFS.format())
-		{
-			writeEvent("WARN", "sys", "Filesystem formatted", "");
 #ifdef DEBUG
-			Serial.println(F("[ WARN ] Filesystem formatted!"));
+		Serial.println(F("[ ERROR ] Filesystem ERROR!"));
 #endif
-		}
-		else
-		{
+	} else
+	{
 #ifdef DEBUG
-			Serial.println(F(" failed!"));
-			Serial.println(F("[ WARN ] Could not format filesystem!"));
+			Serial.println(F("[ INFO ] Filesystem OK"));
 #endif
-		}
 	}
+
 
 	bool configured = false;
 	configured = loadConfiguration(config);
