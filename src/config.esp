@@ -289,6 +289,14 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		{
 			config.openingHours[d] = strdup("111111111111111111111111");
 		}
+		if (general.containsKey("openinghours2"))
+		{
+			config.openingHours2[d] = strdup(general["openinghours2"][d].as<const char *>());
+		}
+		else
+		{
+			config.openingHours2[d] = strdup("111111111111111111111111");
+		}
 	}
 
 	config.mqttEnabled = mqtt["enabled"] == 1;

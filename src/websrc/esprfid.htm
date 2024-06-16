@@ -114,6 +114,14 @@
         <label class="col-xs-3">Opening hours<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="When non-admin users can open the door."></i></label>
         <span class="col-xs-9 col-md-5">
             <table id="openinghours"></table>
+        </span>
+        <br>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3">Opening hours 2<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="When non-admin users can open the door."></i></label>
+        <span class="col-xs-9 col-md-5">
+            <table id="openinghours2"></table>
+        </span>
         <br>
         <br>
         <div class="col-xs-9 col-md-8">
@@ -149,8 +157,8 @@
                   <select class="form-control input-sm" id="wiegandbits">
                     <option value="24">24</option>
                     <option value="26">26</option>
-                    <option value="34">34</option>
-                    <option selected="selected" value="37">37</option>
+                    <option selected="selected" value="34">34</option>
+                    <option value="37">37</option>
                     <option value="44">44</option>
                     <option value="56">56</option>
                     <option value="58">58</option>
@@ -1121,7 +1129,8 @@
                         <label for="acctype" class="col-sm-3 control-label">Access Type</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="acctype" required>
-                                <option selected="selected" value="1">Always</option>
+                                <option selected="selected" value="1">Within opening hours</option>
+                                <option value="2">Within opening hours 2</option>
                                 <!--
                                 <option value="2">Within Selected Hours</option>
                                 <option value="3">Within Selected Days</option>
@@ -1130,7 +1139,7 @@
                                 <option value="6">On Weekdays</option>
                                 -->
                                 <option value="0">Disabled</option>
-                                <option value="99">Admin</option>
+                                <option value="99">Admin 24/7</option>
                             </select>
                         </div>
                     </div>

@@ -317,7 +317,7 @@ void rfidProcess()
 	Serial.print("'");
 #endif
 
-	if (accountType == ACCESS_GRANTED)
+	if (accountType >= ACCESS_GRANTED && accountType < ACCESS_ADMIN)
 	{
 		/*
 		 *  Normal user - relay but no admin access
@@ -326,11 +326,13 @@ void rfidProcess()
 		unsigned long validUntilL = json["validuntil"];
 		unsigned long nowL = epoch;
 		int hourTz = timeinfo.tm_hour;
+		char **openingHours = NULL;
+		openingHours = accountType == ACCESS_GRANTED ? config.openingHours : config.openingHours2;
 
 		if (validUntilL < nowL || validSinceL > nowL)
 		{
 			processingState = expired;
-		} else if (config.openingHours[weekdayFromMonday(weekday(epoch))][hourTz] != '1')
+		} else if (openingHours[weekdayFromMonday(weekday(epoch))][hourTz] != '1')
 		{
 			processingState = notValid;
 		} else
@@ -370,7 +372,7 @@ void rfidProcess()
 			}
 
 			// Enable activation if permissions are correct
-			activateRelay[currentRelay] = (accountTypes[currentRelay] == ACCESS_GRANTED);
+			activateRelay[currentRelay] = (accountTypes[currentRelay] >= ACCESS_GRANTED);
 
 			// ...except Admin, which always activates everything
 			if (processingState == validAdmin)

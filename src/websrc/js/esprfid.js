@@ -64,6 +64,15 @@ var config = {
           "111111111111111111111111",
           "111111111111111111111111",
           "111111111111111111111111",
+        ],
+        "openinghours2": [
+          "111111111111111111111111",
+          "111111111111111111111111",
+          "111111111111111111111111",
+          "111111111111111111111111",
+          "111111111111111111111111",
+          "111111111111111111111111",
+          "111111111111111111111111",
         ]
     },
     "mqtt": {
@@ -300,6 +309,21 @@ function extractOpeningHours() {
   return openingHours;
 }
 
+function extractOpeningHours2() {
+  // removing header row
+  var days = Array.from(document.getElementById("openinghours2").getElementsByTagName("tr")).slice(1);
+  var openingHours = []
+  for(var d=0; d<7; d++) {
+    var hours = days[d].getElementsByTagName("input");
+    var dayFlags = "";
+    for(var h=0; h<24; h++) {
+      dayFlags += hours[h].checked ? "1" : "0";
+    }
+    openingHours.push(dayFlags);
+  }
+  return openingHours;
+}
+
 function savegeneral() {
   var a = document.getElementById("adminpwd").value;
   if (a === null || a === "") {
@@ -314,6 +338,7 @@ function savegeneral() {
     config.general.restart = parseInt(document.getElementById("autorestart").value);
   }
   config.general.openinghours = extractOpeningHours();
+  config.general.openinghours2 = extractOpeningHours2();
   uncommited();
 }
 
@@ -578,6 +603,44 @@ function populateOpeningHours() {
   }
 }
 
+function populateOpeningHours2() {
+  var openingHours = Array(7);
+  for(var d=0; d<7; d++) {
+    openingHours[d] = "111111111111111111111111";
+  }
+  var table = document.getElementById("openinghours2");
+  if (config.general.openinghours2) {
+    openingHours = config.general.openinghours2.map(function(day) { return day.split("") });
+  }
+
+  var firstRow = document.createElement("tr");
+  var spacerTh = document.createElement("th");
+  firstRow.appendChild(spacerTh);
+  for(hour = 0; hour<24; hour++) {
+    var th = document.createElement("th");
+    th.innerText = hour;
+    firstRow.appendChild(th);
+  }
+  table.appendChild(firstRow);
+  var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  for(var day=0; day<7; day++) {
+    var tr = document.createElement("tr");
+    var firstCol = document.createElement("td");
+    firstCol.innerHTML = "<b>" + weekDays[day] + "</b>";
+    tr.appendChild(firstCol);
+    for(var hour=0; hour<24; hour++) {
+      var td = document.createElement("td");
+      var checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = openingHours[day][hour] == 1;
+      td.appendChild(checkbox);
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+}
+
 function listgeneral() {
   document.getElementById("adminpwd").value = config.general.pswd;
   document.getElementById("hostname").value = config.general.hostnm;
@@ -597,6 +660,7 @@ function listgeneral() {
     }
   });
   populateOpeningHours();
+  populateOpeningHours2();
 }
 
 function listmqtt() {
@@ -1287,9 +1351,11 @@ function initLatestLogTable() {
           "breakpoints": "xs sm",
           "parser": function(value) {
             if (value === 1) {
-              return "Always";
+              return "Within opening hours";
+            } else if (value === 2) {
+              return "Within opening hours 2";
             } else if (value === 99) {
-              return "Admin";
+              return "Admin 24/7";
             } else if (value === 0) {
               return "Disabled";
             } else if (value === 98) {
@@ -1354,9 +1420,11 @@ function initUserTable() {
             "breakpoints": "xs",
             "parser": function(value) {
               if (value === 1) {
-                return "Always";
+                return "Within opening hours";
+              } else if (value === 2) {
+                return "Within opening hours 2";
               } else if (value === 99) {
-                return "Admin";
+                return "Admin 24/7";
               } else if (value === 0) {
                 return "Disabled";
               }
@@ -1370,9 +1438,11 @@ function initUserTable() {
             "visible": false,
             "parser": function(value) {
               if (value === 1) {
-                return "Always";
+                return "Within opening hours";
+              } else if (value === 2) {
+                return "Within opening hours 2";
               } else if (value === 99) {
-                return "Admin";
+                return "Admin 24/7";
               } else if (value === 0) {
                 return "Disabled";
               }
@@ -1386,9 +1456,11 @@ function initUserTable() {
             "visible": false,
             "parser": function(value) {
               if (value === 1) {
-                return "Always";
+                return "Within opening hours";
+              } else if (value === 2) {
+                return "Within opening hours 2";
               } else if (value === 99) {
-                return "Admin";
+                return "Admin 24/7";
               } else if (value === 0) {
                 return "Disabled";
               }
@@ -1402,9 +1474,11 @@ function initUserTable() {
             "visible": false,
             "parser": function(value) {
               if (value === 1) {
-                return "Always";
+                return "Within opening hours";
+              } else if (value === 2) {
+                return "Within opening hours 2";
               } else if (value === 99) {
-                return "Admin";
+                return "Admin 24/7";
               } else if (value === 0) {
                 return "Disabled";
               }
@@ -1464,8 +1538,9 @@ function initUserTable() {
               if (xnum===2) xval = values.acctype2;
               if (xnum===3) xval = values.acctype3;
               if (xnum===4) xval = values.acctype4;
-              if (xval === "Always")  return 1;
-              if (xval === "Admin")  return 99;
+              if (xval === "Within opening hours")  return 1;
+              if (xval === "Within opening hours 2")  return 2;
+              if (xval === "Admin 24/7")  return 99;
               if (xval === "Disabled") return 0;
             }
             $editor.find("#uid").val(values.uid);
@@ -1870,7 +1945,7 @@ function updateUserModalForm(){
         var str = cloneObj.innerHTML;
         str=str.replace(/acctype/g, "acctype"+i);
         str=str.replace("Access Type Relay 1", "Access Type Relay "+i);
-        str=str.replace ("<option value=\"99\">Admin</option>", "");
+        str=str.replace ("<option value=\"99\">Admin 24/7</option>", "");
         cloneObj.innerHTML=str;
         accParent[0].appendChild(cloneObj);
         var rname = config.hardware["relay"+i]?.doorname || "Relay "+i;
@@ -1971,8 +2046,8 @@ $("#spiffbrowser").click(function() {
 window.FooTable.MyFiltering = window.FooTable.Filtering.extend({
   construct: function(instance) {
     this._super(instance);
-    this.acctypes = ["1", "99", "0"];
-    this.acctypesstr = ["Always", "Admin", "Disabled"];
+    this.acctypes = ["1", "2", "99", "0"];
+    this.acctypesstr = ["Within opening hours", "Within opening hours 2", "Admin 24/7", "Disabled"];
     this.def = config.hardware.doorname ? "Access to " + config.hardware.doorname : "Access Type";
     this.$acctype = null;
   },
