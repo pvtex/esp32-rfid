@@ -119,6 +119,9 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
   	}
 	root["chipid"] = chipID;
 	root["cpu"] = ESP.getCpuFreqMHz();
+	root["cpumodel"] = ESP.getChipModel();
+	root["cpurev"] = ESP.getChipCores();
+	root["cpucores"] = ESP.getChipCores();
 	root["sketchsize"] = ESP.getSketchSize();
 	root["availsize"] = ESP.getFreeSketchSpace();
 	root["availspiffs"] = SPIFFS.totalBytes() - SPIFFS.usedBytes();

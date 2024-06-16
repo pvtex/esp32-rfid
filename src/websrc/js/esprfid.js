@@ -743,6 +743,8 @@ function listStats() {
   version = ajaxobj.version;
   document.getElementById("chip").innerHTML = ajaxobj.chipid;
   document.getElementById("cpu").innerHTML = ajaxobj.cpu + " Mhz";
+  document.getElementById("cpumodel").innerHTML = ajaxobj.cpumodel + " rev" + ajaxobj.cpurev;
+  document.getElementById("cpucores").innerHTML = ajaxobj.cpucores;
   document.getElementById("uptime").innerHTML = ajaxobj.uptime;
   document.getElementById("heap").innerHTML = ajaxobj.heap + " Bytes";
   document.getElementById("heap").style.width = ((ajaxobj.heap * 100) / ajaxobj.heapsize) + "%";

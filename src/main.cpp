@@ -142,10 +142,12 @@ void ICACHE_FLASH_ATTR setup()
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
 	
-	//char chipID[15];
-  	//uint64_t chipid = ESP.getEfuseMac(); // The chip ID is essentially its MAC address(length: 6 bytes).
-  	//uint16_t chip = (uint16_t)(chipid >> 32);
-  	//snprintf(chipID, 15, "%04X%08X", chip, (uint32_t)chipid);
+	Serial.print("ESP32 Model:      ");
+	Serial.print(ESP.getChipModel());
+	Serial.print(" rev");
+	Serial.println(ESP.getChipCores());
+	Serial.print("ESP32 Cores:       ");
+	Serial.println(ESP.getChipCores());
 	uint32_t chipID = 0;
 	for (int i = 0; i < 17; i = i + 8) {
     	chipID |= ((ESP.getEfuseMac() >> (40 - i)) & 0xff) << i;
