@@ -46,9 +46,11 @@ void rfidPrepareRead()
 }
 
 void PrintBinary(WiegandNG &tempwg) {
-	volatile unsigned char *buffer=tempwg.getRawData();
-	unsigned int bufferSize = tempwg.getBufferSize();
-	unsigned int countedBits = tempwg.getBitCounted();
+	volatile unsigned char *buffer = buffer = tempwg.getRawData();
+	unsigned int bufferSize = 0;
+	bufferSize = tempwg.getBufferSize();
+	unsigned int countedBits = 0;
+	countedBits = tempwg.getBitCounted();
 
 	unsigned int countedBytes = (countedBits/8);
 	if ((countedBits % 8)>0) countedBytes++;

@@ -700,7 +700,7 @@ function listSSID(obj) {
     var opt = document.createElement("option");
     opt.value = obj.list[i].ssid;
     opt.bssidvalue = obj.list[i].bssid;
-    opt.innerHTML = "BSSID: " + obj.list[i].bssid + ", Signal Strength: %" + percentage + ", Network: " + obj.list[i].ssid;
+    opt.innerHTML =  obj.list[i].ssid + ", Signal: " + percentage + "% , BSSID: " + obj.list[i].bssid;
     select.appendChild(opt);
   }
   document.getElementById("scanb").innerHTML = "Re-Scan";
@@ -909,11 +909,11 @@ function backupuser() {
 }
 
 function backupset() {
-  saveLogfile(config,"downloadSet","esp-rfid-settings.json")
+  saveLogfile(config,"downloadSet","esp32-rfid-settings.json")
 }
 
 function piccBackup(obj) {
-  saveLogfile(obj,"downloadUser","esp-rfid-users.json")
+  saveLogfile(obj,"downloadUser","esp32-rfid-users.json")
   backupstarted = false;
 }
 

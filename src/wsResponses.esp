@@ -209,8 +209,9 @@ void ICACHE_FLASH_ATTR printScanResult(int networksFound)
 			}
 		}
 	}
-	DynamicJsonDocument root(512);
-	root["command"] = "ssid(list)";
+
+	DynamicJsonDocument root(1024);
+	root["command"] = "ssidlist";
 	JsonArray scan = root.createNestedArray("list");
 	for (int i = 0; i < 5 && i < networksFound; ++i)
 	{
@@ -219,7 +220,7 @@ void ICACHE_FLASH_ATTR printScanResult(int networksFound)
 		item["bssid"] = WiFi.BSSIDstr(indices[i]);
 		item["rssi"] = WiFi.RSSI(indices[i]);
 		item["channel"] = WiFi.channel(indices[i]);
-		item["enctype"] = WiFi.encryptionType(indices[i]);
+		item["enctype"] = WiFi.encryptionType(i);
 		item["hidden"] = false; //WiFi.isHidden(indices[i]) ? true : false;
 	}
 	size_t len = measureJson(root);

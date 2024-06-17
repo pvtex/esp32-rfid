@@ -190,7 +190,21 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "scan") == 0)
 	{
-		WiFi.scanNetworks(printScanResult, true);
+#ifdef DEBUG
+	Serial.println("[ WIFI ] starting Scan");
+#endif
+		int networksfound = 0;	
+		WiFi.scanNetworks(true);
+		while (WiFi.scanComplete() == WIFI_SCAN_RUNNING)
+		{
+			delay(100);
+		}
+		networksfound = WiFi.scanComplete();
+#ifdef DEBUG
+		Serial.print("[ WIFI ] Scan found: ");
+		Serial.println(networksfound);
+#endif
+		printScanResult(networksfound);
 	}
 	else if (strcmp(command, "gettime") == 0)
 	{
