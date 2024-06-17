@@ -1679,15 +1679,6 @@ function socketMessageListener(evt) {
         }
         builddata(obj);
         break;
-      case "spiffbrowser":
-        haspages = obj.haspages;
-        if (haspages === 0) {
-          document.getElementById("loading-img").style.display = "none";
-          initSpiffbrowserTable();
-          break;
-        }
-        builddata(obj);
-        break;
       case "listfiles":
         haspages = obj.haspages;
         if (haspages === 0) {
@@ -1769,17 +1760,6 @@ function socketMessageListener(evt) {
             document.getElementById("cleareventlogbtn").disabled=false;
           }
           document.getElementById("loading-img").style.display = "none";
-        }
-        break;
-      case "spiffbrowser":
-        if (page < haspages && obj.result === true) {
-          getnextpage("spiffbrowser");
-        } else if (page === haspages) {
-          initSpiffbrowserTable();
-          document.getElementById("loading-img").style.display = "none";
-          $(".footable-show").click();
-          $(".fooicon-remove").click();
-          break;
         }
         break;
       case "latestlist":
