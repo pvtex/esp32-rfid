@@ -1,5 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+
+## [1.1.2] - 2024-06-17
+- [firmware] handling of unknown tags fixed
 ## [1.1.1] - 2024-06-17
 - [firmware] fixed momentary relay bug
 - [firmware] MQTT full working
