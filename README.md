@@ -122,7 +122,7 @@ What can be done to increase security? (by you and by us)
 
 ### Projects that are based on esp-rfid
 
-* [ESP-RFID](https://github.com/pvtex/esp-rfid) ESP-RFID - Access Control with ESP8266 and Wiegand
+* [ESP-RFID](https://github.com/pvtex/esp-rfid) ESP-RFID - Access Control with ESP8266 and Wiegand (v2)
 * [ESP32-RFID](https://github.com/pvtex/esp32-rfid) ESP32-RFID - Access Control with ESP32 and Wiegand
 * [ESP-IO](https://github.com/Pako2/EventGhostPlugins/tree/master/ESP-IO) Project to manipulate GPIOs with EventGhost
 * [ESP-RCM](https://github.com/Pako2/esp-rcm) Room Climate Monitor with ESP8266, HTU21D, Si7021, AM2320
@@ -141,11 +141,6 @@ What can be done to increase security? (by you and by us)
 - @pvtex
 
 See [ChangeLog](./CHANGELOG.md)
-
-## Contributors
-
-This project exists thanks to all the people who contribute. 
-<a href="https://github.com/pvtex/esp32-rfid/graphs/contributors"><img src="https://opencollective.com/esp-rfid/contributors.svg?width=890&button=false" /></a>
 
 ## License
 The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.
