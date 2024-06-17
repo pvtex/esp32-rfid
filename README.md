@@ -5,7 +5,7 @@
 
 Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microcontroller. 
 
-![Showcase Gif](https://raw.githubusercontent.com/pvtex/esp32-rfid/stable/demo/showcase.gif)
+![Screenshot Status](https://raw.githubusercontent.com/pvtex/esp32-rfid/stable/demo/screenshot_status.png)
 
 ## Features
 ### For Users

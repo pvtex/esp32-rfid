@@ -17,7 +17,7 @@ This has been added so far:
 ## Broker settings
 You can add all the broker details in the web UI:
 
-![MQTT settings](./demo/mqtt-settings.png) <- to update
+![MQTT settings](./demo/mqtt_settings.png) <- to update
 
 ## Using MQTT Topics
 For the MQTT communication some additional TOPICs have been added internally. The default Topic is configured in the web UI. If you use more then one device, every device should have the same `TOPIC` name configured. All MQTT communication is done with JSON Payload as MQTT Message.
