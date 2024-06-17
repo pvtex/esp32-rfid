@@ -90,10 +90,10 @@ void wiegandRead()
 			Serial.println(uid);
 #endif
 
-			File f = SPIFFS.open("/P/" + uid, "r");
 			// user exists, we should wait for pincode
-			if (f)
+			if (SPIFFS.exists("/P/" + uid))
 			{
+				File f = SPIFFS.open("/P/" + uid, "r");
 				size_t size = f.size();
 				std::unique_ptr<char[]> buf(new char[size]);
 				f.readBytes(buf.get(), size);
@@ -243,35 +243,23 @@ void rfidProcess()
 		return;
 	}
 
-	/* Each user has a file named after the RFID UID */
-	File f = SPIFFS.open("/P/" + uid, "r");
-
 	/*
 	 *  If the file was not found then this is an unknown user, so no more
 	 *  processing to be done. However, for backwards compatibility we do a
 	 *  secondary check here to see if an old esp-rfid v1 uid exists and if
 	 *  so use that.
 	 */
-	if (!f)
+	if (!SPIFFS.exists("/P/" + uid))
 	{
-		/* Test to see if there was a uid in v1 format */
-		f = SPIFFS.open("/P/" + v1uid, "r");
-		if (!f)
-		{
 			processingState = unknown;
 			return;
-		}
-		uid = v1uid;
-#ifdef DEBUG
-		Serial.print(" (found uid in v1 format: ");
-		Serial.print(v1uid);
-		Serial.print(")");
-#endif
 	}
 
 	/*
 	 *  Read the user's settings
 	 */
+	 /* Each user has a file named after the RFID UID */
+	File f = SPIFFS.open("/P/" + uid, "r");
 	size_t size = f.size();
 	std::unique_ptr<char[]> buf(new char[size]);
 	f.readBytes(buf.get(), size);
@@ -439,7 +427,7 @@ void rfidOutsideMessaging()
 		ledAccessDeniedOn();
 		beeperAccessDenied();
 	}
-	if (processingState == unknown)
+	if (processingState == unknown) // <-- PICCSCAN should open new user dialog
 	{
 		String data = String(uid) += " " + String(type);
 		writeEvent("WARN", "rfid", "Unknown rfid tag is scanned", data);

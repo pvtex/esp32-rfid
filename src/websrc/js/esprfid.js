@@ -748,7 +748,7 @@ function listSCAN(obj) {
     } else {
       $(".footable-add").click();
       document.getElementById("uid").value = obj.uid;
-      document.getElementById("picctype").value = obj.picctype;
+      document.getElementById("picctype").value = obj.type;
       document.getElementById("username").value = obj.user;
       document.getElementById("acctype").value = obj.acctype;
     }
