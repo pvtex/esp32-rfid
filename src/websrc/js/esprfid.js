@@ -986,7 +986,7 @@ function restoreUser() {
           alert("Not a valid backup file");
           return;
         }
-        if (json.type === "esp-rfid-userbackup") {
+        if (json.type === "esp32-rfid-userbackup") {
           var x = confirm("File seems to be valid, do you wish to continue?");
           if (x) {
             recordstorestore = json.list.length;
@@ -1747,7 +1747,7 @@ function socketMessageListener(evt) {
             $(".footable-show").click();
             $(".fooicon-remove").click();
           } else {
-            file.type = "esp-rfid-userbackup";
+            file.type = "esp32-rfid-userbackup";
             file.version = "v0.6";
             file.list = data;
             piccBackup(file);
