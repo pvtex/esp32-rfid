@@ -187,6 +187,19 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["gateway"] = printIP(gwaddr);
 	root["netmask"] = printIP(nmaddr);
 
+
+	IPAddress ipaddreth = config.ipAddressEth;
+	IPAddress gwaddreth = config.gatewayIpEth;
+	IPAddress nmaddreth = config.subnetIpEth;
+	IPAddress dnseth = config.dnsIpEth;
+
+	root["ipeth"] = printIP(ipaddreth);
+	root["gatewayeth"] = printIP(gwaddreth);
+	root["netmasketh"] = printIP(nmaddreth);
+	root["dnseth"] = printIP(dnseth);
+	//root["maceth"] = config.macAddressEth;
+
+
 	size_t len = measureJson(root);
 	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
 	if (buffer)

@@ -880,6 +880,13 @@ function listStats() {
   document.getElementById("systemnamedevice").innerHTML = ajaxobj.hostname;
   $("#mainver").text(version);
   document.getElementById("ethernet").style.display = (ajaxobj.ethernet ? "block" : "none");
+  document.getElementById("ethernetnetwork").style.display = (ajaxobj.ethernet ? "inline-flex" : "none");
+  document.getElementById("wifinetwork").style.width = (ajaxobj.ethernet ? "50%" : "100%");
+  document.getElementById("ipeth").innerHTML = ajaxobj.ipeth;
+  document.getElementById("gateeth").innerHTML = ajaxobj.gatewayeth;
+  document.getElementById("masketh").innerHTML = ajaxobj.netmasketh;
+  document.getElementById("dnseth").innerHTML = ajaxobj.dnseth;
+  document.getElementById("maceth").innerHTML = ajaxobj.maceth;
 }
 
 function getContent(contentname) {
