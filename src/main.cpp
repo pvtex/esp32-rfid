@@ -23,8 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#define VERSION "1.1.2"
-
+#define VERSION "1.1.3"
 
 #include "Arduino.h"
 #include <WiFi.h>
@@ -33,15 +32,13 @@ SOFTWARE.
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
 #include <FS.h>
-//#include <SPIFFS.h>
 #include <LittleFS.h>
-#define SPIFFS LittleFS
 #include "esp_flash.h" 
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <TimeLib.h>
 #include <Ticker.h>
-#include <time.h>
+//#include <time.h>
 #include <AsyncMqttClient.h>
 #include <Bounce2.h>
 #include <esp_task_wdt.h>
@@ -175,7 +172,7 @@ void ICACHE_FLASH_ATTR setup()
 		Serial.println(F("Flash Chip configuration ok.\n"));
 	}
 #endif
-	if (!SPIFFS.begin(true))
+	if (!LittleFS.begin(true))
 	{
 #ifdef DEBUG
 		Serial.println(F("[ ERROR ] Filesystem ERROR!"));
@@ -187,10 +184,10 @@ void ICACHE_FLASH_ATTR setup()
 #endif
 	}
 
-	File root = SPIFFS.open("/P");
+	File root = LittleFS.open("/P");
 	if(!root.isDirectory())
 	{
-        SPIFFS.mkdir("/P");
+        LittleFS.mkdir("/P");
     }
 	
 	bool configured = false;
@@ -213,14 +210,18 @@ void ICACHE_RAM_ATTR loop()
 	
 	trySyncNTPtime(10);
 	
-	openLockButton.update();
-	if (config.openlockpin != 255 && openLockButton.fell())
+	
+	if (config.openlockpin != 255)
 	{
-		writeLatest(" ", "Button", 1);
-		mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
-		activateRelay[0] = true;
-		beeperValidAccess();
-		// TODO: handle other relays
+		openLockButton.update();
+		if (openLockButton.fell())
+		{
+			writeLatest(" ", "Button", 1);
+			mqttPublishAccess(epoch, "true", "Always", "Button", " ", " ");
+			activateRelay[0] = true;
+			beeperValidAccess();
+			// TODO: handle other relays
+		}
 	}
 
 	ledWifiStatus();
@@ -303,9 +304,9 @@ void ICACHE_RAM_ATTR loop()
 #ifdef DEBUG
 		Serial.println(F("[ WARN ] Factory reset initiated..."));
 #endif
-		SPIFFS.end();
+		LittleFS.end();
 		ws.enable(false);
-		SPIFFS.format();
+		LittleFS.format();
 		ESP.restart();
 	}
 
@@ -324,7 +325,7 @@ void ICACHE_RAM_ATTR loop()
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] System is going to reboot..."));
 #endif
-		SPIFFS.end();
+		LittleFS.end();
 		ESP.restart();
 	}
 

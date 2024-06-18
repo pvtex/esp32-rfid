@@ -38,10 +38,11 @@
 
 #ifndef MAIN_WIFIEVENTHANDLER_H_
 #define MAIN_WIFIEVENTHANDLER_H_
-//#include <esp_event.h>
-#include <esp_event_loop.h>
+#include <esp_event.h>
+#include <esp_event_base.h>
 #include "esp_event_legacy.h"
-
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 /**
  * @brief %WiFi state event handler.

@@ -16,7 +16,7 @@ var config = {
     "command": "configfile",
     "network": {
         "bssid": "",
-        "ssid": "esp-rfid",
+        "ssid": "esp32-rfid",
         "wmode": 1,
         "hide": 0,
         "pswd": "",
@@ -53,7 +53,7 @@ var config = {
         "maxOpenDoorTime": 0
     },
     "general": {
-        "hostnm": "esp-rfid",
+        "hostnm": "esp32-rfid",
         "restart": 0,
         "pswd": "admin",
         "openinghours": [
@@ -722,12 +722,8 @@ function getUsers() {
   sendWebsocketWithRetry("{\"command\":\"userlist\", \"page\":" + page + "}");
 }
 
-function getSpiff() {
-  sendWebsocketWithRetry("{\"command\":\"spiff\", \"page\":" + page + "}");
-}
-
-function getSpiffbrowser() {
-  sendWebsocketWithRetry("{\"command\":\"spiffbrowser\", \"page\":" + page + "}");
+function getLittleFS() {
+  sendWebsocketWithRetry("{\"command\":\"littlefs\", \"page\":" + page + "}");
 }
 
 function getEvents() {
@@ -816,9 +812,9 @@ function listStats() {
   document.getElementById("flash").innerHTML = ajaxobj.availsize + " Bytes";
   document.getElementById("flash").style.width = (ajaxobj.availsize * 100) / (ajaxobj.availsize + ajaxobj.sketchsize) + "%";
   colorStatusbar(document.getElementById("flash"));
-  document.getElementById("spiffs").innerHTML = ajaxobj.availspiffs + " Bytes";
-  document.getElementById("spiffs").style.width = (ajaxobj.availspiffs * 100) / ajaxobj.spiffssize + "%";
-  colorStatusbar(document.getElementById("spiffs"));
+  document.getElementById("littlefs").innerHTML = ajaxobj.availlittlefs + " Bytes";
+  document.getElementById("littlefs").style.width = (ajaxobj.availlittlefs * 100) / ajaxobj.littlefssize + "%";
+  colorStatusbar(document.getElementById("littlefs"));
   document.getElementById("ssidstat").innerHTML = ajaxobj.ssid;
   document.getElementById("rssiperc").innerHTML = ajaxobj.rssi;
   document.getElementById("rssiperc").style.width = ajaxobj.rssiperc + "%";
@@ -881,11 +877,6 @@ function getContent(contentname) {
           page = 1;
           data = [];
           getEvents();
-          break;
-        case "#spiffbrowsercontent":
-          page = 1;
-          data = [];
-          getSpiffbrowser();
           break;
         default:
           break;
@@ -1013,84 +1004,9 @@ function twoDigits(value) {
   return value;
 }
 
-function initSpiffbrowserTable() {
-  jQuery(function($) {
-    ft = window.FooTable.init("#spiffbrowsertable", {
-      columns: [{
-          "name": "filename",
-          "title": "File Name",
-          "type": "text",
-          "sorted": true,
-          "direction": "ASC"
-        },
-        {
-          "name": "filetype",
-          "title": "File Type",
-          "parser": function(value) 
-          {
-            if (value === "/config.json") 
-              {
-                return("Main Config File");
-              }
-            if (value === "/latestlog.json") 
-            {
-              return("Main Access Log");
-            }
-            if (value === "/eventlog.json") 
-            {
-              return("Main Event Log");
-            }
-            if (value.substring(0,2) == "/P")
-            {
-              return("User File");
-            }
-            return("Other Filetype");
-          }
-        },
-        {
-          "name": "filesize",
-          "title": "Size",
-          "breakpoints": "xs sm",
-          "parser": function(value) {
-              value = value / 1024;
-              return (
-                value
-                  .toFixed(2) // always two decimal digits
-                  .replace('.', ',') // replace decimal point character with ,
-                  .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ' KB'
-              ) // use . as a separator
-
-            }
-        },
-      ],
-      rows: data
-    });
-    function viewfile(e)
-    { 
-      theCurrentLogFile = this.getAttribute('filename');
-      if (theCurrentLogFile.indexOf("latestlog") >= 0)
-      {
-        getContent("#logcontent");
-      }
-      if (theCurrentLogFile.indexOf("eventlog") >= 0)
-      {
-        getContent("#eventcontent");
-      }
-
-    }
-    function deletefile(e)
-    { 
-      if (confirm("Really delete " + this.getAttribute('filename') + " ? This can not be undone!"))
-      {
-        sendWebsocket("{\"command\":\"spiffbrowser\" , \"action\":\"delete\", \"filename\":\"" + this.getAttribute('filename') + "\"}");
-      }
-    }
-  });
-}
-
 function initFileListTable() {
   jQuery(function($) {
-    ft = window.FooTable.init("#spifftable", {
+    ft = window.FooTable.init("#littlefstable", {
       columns: [{
           "name": "filename",
           "title": "File Name",
@@ -1829,15 +1745,15 @@ function saveLogfile(obj,anchorElement,filename) {
 }
 
 function saveevent() {
-  file.type = "esp-rfid-eventlog";
+  file.type = "esp32-rfid-eventlog";
   file.list = data;
-  saveLogfile(file,"downloadEvent","esp-rfid-eventlog.json");
+  saveLogfile(file,"downloadEvent","esp32-rfid-eventlog.json");
 }
 
 function savelatest() {
-  file.type = "esp-rfid-accesslog";
+  file.type = "esp32-rfid-accesslog";
   file.list = data;
-  saveLogfile(file,"downloadLatest","esp-rfid-accesslog.json");
+  saveLogfile(file,"downloadLatest","esp32-rfid-accesslog.json");
 }
 
 function clearlatest() {
@@ -2017,10 +1933,6 @@ $("#logmaintenance").click(function() {
 });
 $(".noimp").on("click", function() {
   $("#noimp").modal("show");
-});
-$("#spiffbrowser").click(function() {
-  getContent("#spiffbrowsercontent");
-  return false;
 });
 
 window.FooTable.MyFiltering = window.FooTable.Filtering.extend({

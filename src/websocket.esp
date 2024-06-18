@@ -67,7 +67,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 		const char *uid = root["uid"];
 		String filename = "/P/";
 		filename += uid;
-		SPIFFS.remove(filename);
+		LittleFS.remove(filename);
 		ws.textAll("{\"command\":\"result\",\"resultof\":\"remove\",\"result\": true}");
 	}
 	else if (strcmp(command, "configfile") == 0)
@@ -75,7 +75,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 #ifdef DEBUG
 		Serial.println(F("[ INFO ] Opening config file"));
 #endif
-		File f = SPIFFS.open("/config.json", "w");
+		File f = LittleFS.open("/config.json", "w");
 		if (f)
 		{
 #ifdef DEBUG
@@ -92,7 +92,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 #ifdef DEBUG
 			Serial.println(F("[ INFO ] Config stored"));
 #endif
-			writeEvent("INFO", "sys", "Config stored in the SPIFFS", String(len) + " bytes");
+			writeEvent("INFO", "sys", "Config stored in the LittleFS", String(len) + " bytes");
 		}
 	}
 	else if (strcmp(command, "userlist") == 0)
@@ -135,12 +135,12 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "clearevent") == 0)
 	{
-		SPIFFS.remove("/eventlog.json");
+		LittleFS.remove("/eventlog.json");
 		writeEvent("WARN", "sys", "Event log cleared!", "");
 	}
 	else if (strcmp(command, "clearlatest") == 0)
 	{
-		SPIFFS.remove("/latestlog.json");
+		LittleFS.remove("/latestlog.json");
 		writeEvent("WARN", "sys", "Latest Access log cleared!", "");
 	}
 	else if (strcmp(command, "userfile") == 0)
@@ -148,11 +148,12 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 #ifdef DEBUG
 		Serial.println(F("[ DEBUG ] userfile received"));
 		serializeJson(root, Serial);
+		Serial.println("");
 #endif
 		const char *uid = root["uid"];
 		String filename = "/P/";
 		filename += uid;
-		File f = SPIFFS.open(filename, "w"); //+
+		File f = LittleFS.open(filename, "w"); //+
 		// Check if we created the file
 		if (f)
 		{
@@ -219,7 +220,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 	}
 	else if (strcmp(command, "getconf") == 0)
 	{
-		File configFile = SPIFFS.open("/config.json", "r");
+		File configFile = LittleFS.open("/config.json", "r");
 		if (configFile)
 		{
 			size_t len = configFile.size();

@@ -501,12 +501,12 @@ On a FS format:
 }
 ```
 
-When saving the configuration on SPIFFS:
+When saving the configuration on LittleFS:
 ```
 {
   "type":"INFO",
   "src":"sys",
-  "desc":"Config stored in the SPIFFS",
+  "desc":"Config stored in the LittleFS",
   "data":"xxx bytes",
   "time":1605991375,
   "cmd":"event",

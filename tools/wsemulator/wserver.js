@@ -1,4 +1,4 @@
-console.log("[ INFO ] Starting ESP-RFID WebSocket Emulation Server");
+console.log("[ INFO ] Starting ESP32-RFID WebSocket Emulation Server");
 
 const WebSocket = require("ws");
 
@@ -377,7 +377,7 @@ var configfile = {
         "allowpincodeonly": 0,
     },
     "general": {
-        "hostnm": "esp-rfid",
+        "hostnm": "esp32-rfid",
         "restart": "86400",
         "pswd": "admin",
         "version": "v0.6",
@@ -509,8 +509,8 @@ function sendStatus() {
         "chipid": "emu413",
         "cpu": "80/160",
         "availsize": 555555,
-        "availspiffs": 445555,
-        "spiffssize": 888888,
+        "availlittlefs": 445555,
+        "littlefssize": 888888,
         "uptime": "1 Day 6 Hours",
         "ssid": "emuSSID",
         "dns": "8.8.8.8",

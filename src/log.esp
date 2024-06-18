@@ -16,7 +16,7 @@ void ICACHE_FLASH_ATTR writeEvent(String type, String src, String desc, String d
 	}
 	else // log to file
 	{
-		File eventlog = SPIFFS.open("/eventlog.json", "a");
+		File eventlog = LittleFS.open("/eventlog.json", "a");
 		serializeJson(root, eventlog);
 		eventlog.print("\n");
 		eventlog.close();
@@ -34,7 +34,7 @@ void ICACHE_FLASH_ATTR writeLatest(String uid, String username, int acctype, int
 	root["acctype"] = acctype;
 	root["access"] = access;
 	root["timestamp"] = epoch;
-	File latestlog = SPIFFS.open("/latestlog.json", "a");
+	File latestlog = LittleFS.open("/latestlog.json", "a");
 	serializeJson(root, latestlog);
 	latestlog.print("\n");
 	latestlog.close();
@@ -45,7 +45,7 @@ size_t lastPos; // position counter for fast seek
 #define LOGTYPE_EVENTLOG 1
 #define ITEMS_PER_PAGE 10
 #define FILES_PER_PAGE 10.0
-#define MIN_SPIFF_BYTES 4096
+#define MIN_LITTLEFS_BYTES 4096
 
 void ICACHE_FLASH_ATTR sendLogFile(int page, String fileName, int logFileType, AsyncWebSocketClient *client)
 {
@@ -66,13 +66,13 @@ void ICACHE_FLASH_ATTR sendLogFile(int page, String fileName, int logFileType, A
 
 	File logFile;
 
-	if (!SPIFFS.exists(fileName))
+	if (!LittleFS.exists(fileName))
 	{
-		logFile = SPIFFS.open(fileName, "w");
+		logFile = LittleFS.open(fileName, "w");
 		logFile.close();
 	}
 
-	logFile = SPIFFS.open(fileName, "r");
+	logFile = LittleFS.open(fileName, "r");
 
 	// move the file pointer to the last known position
 
@@ -129,7 +129,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 
 	if (action == "delete")
 	{
-		SPIFFS.remove(filename);
+		LittleFS.remove(filename);
 	}
 
 	// rollover a file, i.e. rename
@@ -137,26 +137,26 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 	if (action == "rollover")
 	{
 		size_t rolloverExtension = 1;
-		while (SPIFFS.exists(filename + "." + rolloverExtension))
+		while (LittleFS.exists(filename + "." + rolloverExtension))
 			rolloverExtension++;
-		SPIFFS.rename(filename, filename + "." + rolloverExtension);
+		LittleFS.rename(filename, filename + "." + rolloverExtension);
 	}
 
 	// split a file, i.e. create two new files of roughly the same size
-	// or at least as big as SPIFFS free space allows
+	// or at least as big as LittleFS free space allows
 
 	if (action == "split")
 	{
 		size_t rolloverExtension1 = 1;
-		while (SPIFFS.exists(filename + ".split." + rolloverExtension1))
+		while (LittleFS.exists(filename + ".split." + rolloverExtension1))
 			rolloverExtension1++;
 		size_t rolloverExtension2 = rolloverExtension1 + 1;
-		while (SPIFFS.exists(filename + ".split." + rolloverExtension2))
+		while (LittleFS.exists(filename + ".split." + rolloverExtension2))
 			rolloverExtension2++;
 
-		File logFile = SPIFFS.open(filename, "r");
-		File newFile1 = SPIFFS.open(filename + ".split." + rolloverExtension1, "w");
-		File newFile2 = SPIFFS.open(filename + ".split." + rolloverExtension2, "w");
+		File logFile = LittleFS.open(filename, "r");
+		File newFile1 = LittleFS.open(filename + ".split." + rolloverExtension1, "w");
+		File newFile2 = LittleFS.open(filename + ".split." + rolloverExtension2, "w");
 
 		size_t truncatePosition = logFile.size() / 2;
 		logFile.seek(truncatePosition);
@@ -166,11 +166,11 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 
 		// check if we have enough space for the split operation
 
-		if ((SPIFFS.totalBytes() - SPIFFS.usedBytes()) < (logFile.size() + MIN_SPIFF_BYTES))
+		if ((LittleFS.totalBytes() - LittleFS.usedBytes()) < (logFile.size() + MIN_LITTLEFS_BYTES))
 		{
 			if (client)
 			{
-				client->text("{\"command\":\"result\",\"resultof\":\"logfileMaintenance\",\"result\": false,\"message\":\"Not enough space on SPIFF Filesystem\"}");
+				client->text("{\"command\":\"result\",\"resultof\":\"logfileMaintenance\",\"result\": false,\"message\":\"Not enough space on LittleFS Filesystem\"}");
 			}
 		}
 		else
@@ -211,13 +211,14 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 			newFile2.close();
 		}
 	}
-
+/*
 	esp_task_wdt_config_t twdt_config2 = {
         .timeout_ms = 5000,
         .idle_core_mask = uint32_t((1 << ESP.getChipCores()) - 1),    // Bitmask of all cores
         .trigger_panic = true,
     };
 	esp_task_wdt_init(&twdt_config2); //5, true
+*/
 	if (client)
 	{
 		client->text("{\"command\":\"result\",\"resultof\":\"logfileMaintenance\",\"result\": true}");
@@ -235,7 +236,7 @@ void ICACHE_FLASH_ATTR sendFileList(int page, AsyncWebSocketClient *client)
 	size_t last = page * FILES_PER_PAGE;
 	size_t numFiles = 0;
 
-  	File dir = SPIFFS.open("/");
+  	File dir = LittleFS.open("/");
 	File file = dir.openNextFile();
 
 	while (file)

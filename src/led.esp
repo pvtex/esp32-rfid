@@ -59,20 +59,25 @@ void ledWifiStatus()
 		}
 		else
 		{
-			if (!(digitalRead(config.wifipin) == LEDon))
+			//if (!(digitalRead(config.wifipin) == LEDon))
+			//{
 				digitalWrite(config.wifipin, LEDon);
+			//}
 		}
 	}
 }
 
 void ledAccessDeniedOff()
 {
-	if (config.accessdeniedpin != 255 && currentMillis > accessdeniedOffTime && digitalRead(config.accessdeniedpin) == LEDon)
+	if (config.accessdeniedpin != 255 && currentMillis > accessdeniedOffTime)
 	{
-		digitalWrite(config.accessdeniedpin, LEDoff);
+		//if (digitalRead(config.accessdeniedpin) == LEDon)
+		//{
+			digitalWrite(config.accessdeniedpin, LEDoff);
 #ifdef DEBUG
-		Serial.println("LED access denied OFF");
+			Serial.println("LED access denied OFF");
 #endif
+		//}
 	}
 }
 

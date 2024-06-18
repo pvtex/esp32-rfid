@@ -25,7 +25,7 @@ struct Config {
     uint8_t maxOpenDoorTime = 0;
     bool mqttAutoTopic = false;
     bool mqttEnabled = false;
-    bool mqttEvents = false;	  // Sends events over MQTT disables SPIFFS file logging
+    bool mqttEvents = false;	  // Sends events over MQTT disables LittleFS file logging
     bool mqttHA = false; // Sends events over simple MQTT topics and AutoDiscovery
     char *mqttHost = NULL;
     unsigned long mqttInterval = 180; // Add to GUI & json config

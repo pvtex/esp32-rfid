@@ -143,7 +143,7 @@ void mqttPublishDiscovery()
 	DynamicJsonDocument dev(512);
 	dev["ids"] = WiFi.macAddress();
 	dev["name"] = config.deviceHostname;
-	dev["mf"] = "esp-rfid";
+	dev["mf"] = "esp32-rfid";
 	dev["sw"] = VERSION;
 	String num;
 	for (int n = 0; n < config.numRelays; n++)
@@ -416,7 +416,7 @@ void getUserList()
 {
 	DynamicJsonDocument root(512);
 	JsonArray users = root.createNestedArray("list");
-	File dir = SPIFFS.open("/P/");
+	File dir = LittleFS.open("/P/");
 #ifdef DEBUG
 	Serial.println("[ INFO ] getUserList");
 #endif
@@ -427,7 +427,7 @@ void getUserList()
 		String uid = dir.name();
 		uid.remove(0, 3);
 		item["uid"] = uid;
-		File f = SPIFFS.open(file.name(), "r");
+		File f = LittleFS.open(file.name(), "r");
 		size_t size = f.size();
 		std::unique_ptr<char[]> buf(new char[size]);
 		f.readBytes(buf.get(), size);
@@ -443,14 +443,14 @@ void getUserList()
 
 void deleteAllUserFiles()
 {
-	File dir = SPIFFS.open("/P/");
+	File dir = LittleFS.open("/P/");
 	File file = file.openNextFile();
 
 	while (file)
 	{
 		String uid = file.name();
 		uid.remove(0, 3);
-		SPIFFS.remove(file.name());
+		LittleFS.remove(file.name());
 
 		file.openNextFile();
 	}
@@ -461,7 +461,7 @@ void deleteUserID(const char *uid)
 	// only do this if a user id has been provided
 	if (uid)
 	{
-		File dir = SPIFFS.open("/P/");
+		File dir = LittleFS.open("/P/");
 		File file = file.openNextFile();
 
 		while (file)
@@ -471,7 +471,7 @@ void deleteUserID(const char *uid)
 			user_id.remove(0, 3);
 			if (myuid == user_id)
 			{
-				SPIFFS.remove(file.name());
+				LittleFS.remove(file.name());
 			}
 			file.openNextFile();
 		}
@@ -654,7 +654,7 @@ void processMqttMessage(MqttMessage *incomingMessage)
 		const char *uid = incomingMessage->uid;
 		String filename = "/P/";
 		filename += uid;
-		File f = SPIFFS.open(filename, "w+");
+		File f = LittleFS.open(filename, "w+");
 		// Check if we created the file
 		if (f)
 		{
@@ -675,7 +675,7 @@ void processMqttMessage(MqttMessage *incomingMessage)
 #ifdef DEBUG
 		Serial.println("[ INFO ] Get configuration");
 #endif
-		File f = SPIFFS.open("/config.json", "r");
+		File f = LittleFS.open("/config.json", "r");
 		char *buf;
 		if (f)
 		{
@@ -710,7 +710,7 @@ void processMqttMessage(MqttMessage *incomingMessage)
 #endif
 			return;
 		}
-		File f = SPIFFS.open("/config.json", "w");
+		File f = LittleFS.open("/config.json", "w");
 		if (f)
 		{
 			serializeJsonPretty(mqttIncomingJson["configfile"], f);
@@ -759,14 +759,24 @@ void onMqttConnect(bool sessionPresent)
 		mqttPublishAvty();
 		if (config.doorstatpin != 255)
 		{
+#ifdef DEBUG
+			Serial.println("[ MQTT ] DoorStatus");
+#endif
 			mqttPublishIo("door", digitalRead(config.doorstatpin) == HIGH ? "OFF" : "ON");
 		}
 		if (config.doorbellpin != 255)
 		{
+#ifdef DEBUG
+			Serial.println("[ MQTT ] Doorbell");
+#endif
 			mqttPublishIo("doorbell", digitalRead(config.doorbellpin) == HIGH ? "ON" : "OFF");
 		}
 		for (int i = 0; i < config.numRelays; i++)
 		{
+#ifdef DEBUG
+			Serial.print("[ MQTT ] Relay Pin: ");
+			Serial.println(config.relayPin[i]);
+#endif
 			mqttPublishIo("lock" + String(i), digitalRead(config.relayPin[i]) == config.relayType[i] ? "UNLOCKED" : "LOCKED");
 		}
 		mqttPublishIo("tamper", "OFF");

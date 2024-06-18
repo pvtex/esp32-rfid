@@ -5,7 +5,7 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 	root["page"] = page;
 	JsonArray users = root.createNestedArray("list");
 	
-	File dir = SPIFFS.open("/P");
+	File dir = LittleFS.open("/P");
 	File file = dir.openNextFile();
 
 	int first = (page - 1) * 10;
@@ -24,7 +24,7 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 			String uid = file.name();
 			//uid.remove(0, 3);
 			item["uid"] = uid;
-			File f = SPIFFS.open("/P/"+uid, "r");
+			File f = LittleFS.open("/P/"+uid, "r");
 			size_t size = f.size();
 			std::unique_ptr<char[]> buf(new char[size]);
 			f.readBytes(buf.get(), size);
@@ -106,10 +106,10 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 {
 	//struct ip_info info;
-	if (!SPIFFS.totalBytes())
+	if (!LittleFS.totalBytes())
 	{
 #ifdef DEBUG
-		Serial.print(F("[ WARN ] Error getting info on SPIFFS"));
+		Serial.print(F("[ WARN ] Error getting info on LittleFS"));
 #endif
 	}
 	DynamicJsonDocument root(512);
@@ -127,8 +127,8 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["cpucores"] = ESP.getChipCores();
 	root["sketchsize"] = ESP.getSketchSize();
 	root["availsize"] = ESP.getFreeSketchSpace();
-	root["availspiffs"] = SPIFFS.totalBytes() - SPIFFS.usedBytes();
-	root["spiffssize"] = SPIFFS.totalBytes();
+	root["availlittlefs"] = LittleFS.totalBytes() - LittleFS.usedBytes();
+	root["littlefssize"] = LittleFS.totalBytes();
 	
   	int h = uptimeSeconds / 3600;
   	int rem = uptimeSeconds % 3600;

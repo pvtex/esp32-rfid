@@ -89,7 +89,7 @@
     <div class="row form-group">
         <label class="col-xs-3">Host Name<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Hostname for your ESP, When Bonjour is installed on your computer you can access your ESP via http://hostname.local"></i></label>
         <span class="col-xs-9 col-md-5">
-              <input class="form-control input-sm" placeholder="Hostname" value="esp-rfid" id="hostname" type="text">
+              <input class="form-control input-sm" placeholder="Hostname" value="esp32-rfid" id="hostname" type="text">
               </span>
         <br>
     </div>
@@ -643,7 +643,7 @@
         <legend>Log Maintenance</legend>
         <div class="panel panel-default">
             <div>
-                <table id="spifftable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="false" data-state="true"></table>
+                <table id="littlefstable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="false" data-state="true"></table>
             </div>
         </div>
         <div style="clear:both;">
@@ -1006,10 +1006,10 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Free SPIFFS</th>
+                        <th>Free LittleFS</th>
                         <td>
                             <div class='progress' style="margin-bottom: 0 !important;">
-                                <div id="spiffs" class="progress-bar progress-bar-primary" role="progressbar">
+                                <div id="littlefs" class="progress-bar progress-bar-primary" role="progressbar">
                                     Progress
                                 </div>
                             </div>

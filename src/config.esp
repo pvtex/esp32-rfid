@@ -1,6 +1,6 @@
 bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 {
-	File configFile = SPIFFS.open("/config.json", "r");
+	File configFile = LittleFS.open("/config.json", "r");
 	if (!configFile)
 	{
 #ifdef DEBUG

@@ -75,7 +75,7 @@ void PrintBinary(WiegandNG &tempwg) {
 #endif
 }
 
-void wiegandRead()
+void ICACHE_FLASH_ATTR wiegandRead()
 {
 	if (wiegandAvailable && rfidState == waitingRfid)
 	{
@@ -85,15 +85,39 @@ void wiegandRead()
 		{
 			uid = String(wg.getUID(bool(config.removeParityBits), config.wiegandReadHex));
 			type = String(wg.getBitCounted(), DEC);
+
 #ifdef DEBUG
 			Serial.print(F("[ INFO ] PICC's UID: "));
 			Serial.println(uid);
 #endif
-
 			// user exists, we should wait for pincode
-			if (SPIFFS.exists("/P/" + uid))
+			String filename = "/P/";
+			filename += uid;
+
+			File dir = LittleFS.open("/P", "r");
+
+			bool usrfound = false;
+			File file = dir.openNextFile();
+			while (file)
 			{
-				File f = SPIFFS.open("/P/" + uid, "r");
+				if (file.name() == uid)
+				{
+					usrfound = true;
+#ifdef DEBUG
+					Serial.println(F("[ DEBUG ] UserFile found"));
+#endif
+					break;
+				}
+				file = dir.openNextFile();
+				yield();
+			}
+
+			if (usrfound)
+			{	
+				File f = LittleFS.open(filename, "r");
+#ifdef DEBUG
+				Serial.println(F("[ DEBUG ] UserFile opened"));
+#endif
 				size_t size = f.size();
 				std::unique_ptr<char[]> buf(new char[size]);
 				f.readBytes(buf.get(), size);
@@ -123,6 +147,9 @@ void wiegandRead()
 				}
 			} else
 			{
+#ifdef DEBUG
+			Serial.println(F("[ DEBUG ] UserFile not found"));
+#endif
 				cooldown = millis() + COOLDOWN_MILIS;
 				rfidState = waitingRfid;
 				processingState = unknown;
@@ -143,11 +170,11 @@ void rfidRead()
 	/*
 	 *  Do not try and read if we are already processing a card
 	 */
+
 	if (rfidState == cardSwiped)
 	{
 		return;
 	}
-
 	/*
 	 *  Call the appropriate function based on the configured
 	 *  hardware
@@ -245,11 +272,12 @@ void rfidProcess()
 
 	/*
 	 *  If the file was not found then this is an unknown user, so no more
-	 *  processing to be done. However, for backwards compatibility we do a
-	 *  secondary check here to see if an old esp-rfid v1 uid exists and if
-	 *  so use that.
+	 *  processing to be done. 
 	 */
-	if (!SPIFFS.exists("/P/" + uid))
+	String filename = "/P/";
+	filename += uid;
+	File f = LittleFS.open(filename, "r");
+	if (!f)
 	{
 			processingState = unknown;
 			return;
@@ -259,7 +287,7 @@ void rfidProcess()
 	 *  Read the user's settings
 	 */
 	 /* Each user has a file named after the RFID UID */
-	File f = SPIFFS.open("/P/" + uid, "r");
+	
 	size_t size = f.size();
 	std::unique_ptr<char[]> buf(new char[size]);
 	f.readBytes(buf.get(), size);
