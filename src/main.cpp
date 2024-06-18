@@ -25,6 +25,7 @@ SOFTWARE.
  */
 #define VERSION "1.1.2"
 
+
 #include "Arduino.h"
 #include <WiFi.h>
 #include "WiFiEventHandler.h"
@@ -32,7 +33,10 @@ SOFTWARE.
 #include <ESPmDNS.h>
 #include <ArduinoJson.h>
 #include <FS.h>
-#include <SPIFFS.h>
+//#include <SPIFFS.h>
+#include <LittleFS.h>
+#define SPIFFS LittleFS
+#include "esp_flash.h" 
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <TimeLib.h>
@@ -138,7 +142,8 @@ void ICACHE_FLASH_ATTR setup()
 	Serial.print(F("[ INFO ] ESP RFID v"));
 	Serial.println(VERSION);
 
-	uint32_t realSize = spi_flash_get_chip_size();
+	uint32_t realSize;
+    esp_flash_get_size(NULL, &realSize);
 	uint32_t ideSize = ESP.getFlashChipSize();
 	FlashMode_t ideMode = ESP.getFlashChipMode();
 	
