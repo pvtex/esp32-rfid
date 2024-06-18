@@ -38,7 +38,6 @@ SOFTWARE.
 #include <ESPAsyncWebServer.h>
 #include <TimeLib.h>
 #include <Ticker.h>
-//#include <time.h>
 #include <AsyncMqttClient.h>
 #include <Bounce2.h>
 #include <esp_task_wdt.h>
@@ -88,6 +87,7 @@ unsigned long cooldown = 0;
 unsigned long currentMillis = 0;
 unsigned long deltaTime = 0;
 bool doEnableWifi = false;
+bool doEnableEth = false;
 bool formatreq = false;
 const char *httpUsername = "admin";
 unsigned long keyTimer = 0;
@@ -116,6 +116,9 @@ unsigned long wiFiUptimeMillis = 0;
 #include "wsResponses.esp"
 #include "rfid.esp"
 #include "wifi.esp"
+#ifdef ETHERNET
+#include "ethernet.esp"
+#endif
 #include "config.esp"
 #include "websocket.esp"
 #include "webserver.esp"
@@ -194,6 +197,9 @@ void ICACHE_FLASH_ATTR setup()
 	configured = loadConfiguration(config);
 	setupMqtt();
 	setupWifi(configured);
+#ifdef ETHERNET
+	setupEth(configured);
+#endif
 	setupWebServer();
 	writeEvent("INFO", "sys", "System setup completed, running", "");
 #ifdef DEBUG

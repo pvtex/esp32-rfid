@@ -28,7 +28,12 @@ var config = {
         "dns": "",
         "apip": "192.168.4.1",
         "apsubnet": "255.255.255.0",
-        "fallbackmode": 0
+        "fallbackmode": 0,
+        "dhcpeth": 1,
+        "ipeth": "",
+        "subneteth": "",
+        "gatewayeth": "",
+        "dnseth": ""
     },
     "hardware": {
         "readertype": 1,
@@ -449,6 +454,36 @@ function savenetwork() {
   uncommited();
 }
 
+function savenetworketh() {
+  var wmode = 0;
+  config.network.dhcpeth = 0;
+  if (parseInt(document.querySelector("input[name=\"dhcpenabledeth\"]:checked").value) === 1) {
+    config.network.dhcpeth = 1;
+  } else {
+
+    config.network.dhcpeth = 0;
+
+    if (!checkOctects("ipaddresseth")) {
+      return;
+    }
+    if (!checkOctects("subneteth")) {
+      return;
+    }
+    if (!checkOctects("dnsaddeth")) {
+      return;
+    }
+    if (!checkOctects("gatewayeth")) {
+      return;
+    }
+    config.network.ipeth = document.getElementById("ipaddresseth").value;
+    config.network.dnseth = document.getElementById("dnsaddeth").value;
+    config.network.subneteth = document.getElementById("subneteth").value;
+    config.network.gatewayeth = document.getElementById("gatewayeth").value;
+  }
+
+  uncommited();
+}
+
 var formData = new FormData();
 
 function inProgress(callback) {
@@ -529,6 +564,20 @@ function handleDHCP() {
     $("#staticip1").show();
     $("#staticip2").slideDown();
     $("#staticip2").show();
+  }
+}
+
+function handleDHCPEth() {
+  if (document.querySelector("input[name=\"dhcpenabledeth\"]:checked").value === "1") {
+    $("#staticipeth2").slideUp();
+    $("#staticipeth1").slideUp();
+  } else {
+    document.getElementById("ipaddresseth").value = config.network.ipeth;
+    document.getElementById("subneteth").value = config.network.subneteth;
+    $("#staticipeth1").slideDown();
+    $("#staticipeth1").show();
+    $("#staticipeth2").slideDown();
+    $("#staticipeth2").show();
   }
 }
 
@@ -830,6 +879,14 @@ function listStats() {
   document.getElementById("systemname").innerHTML = ajaxobj.hostname;
   document.getElementById("systemnamedevice").innerHTML = ajaxobj.hostname;
   $("#mainver").text(version);
+  document.getElementById("ethernet").style.display = (ajaxobj.ethernet ? "block" : "none");
+  document.getElementById("ethernetnetwork").style.display = (ajaxobj.ethernet ? "inline-flex" : "none");
+  document.getElementById("wifinetwork").style.width = (ajaxobj.ethernet ? "50%" : "100%");
+  document.getElementById("ipeth").innerHTML = ajaxobj.ipeth;
+  document.getElementById("gateeth").innerHTML = ajaxobj.gatewayeth;
+  document.getElementById("masketh").innerHTML = ajaxobj.netmasketh;
+  document.getElementById("dnseth").innerHTML = ajaxobj.dnseth;
+  document.getElementById("maceth").innerHTML = ajaxobj.maceth;
 }
 
 function getContent(contentname) {
@@ -863,6 +920,8 @@ function getContent(contentname) {
         case "#networkcontent":
           listnetwork();
           break;
+        case "#networkcontenteth":
+            break;
         case "#logcontent":
           page = 1;
           data = [];
@@ -1888,6 +1947,10 @@ $("#status").click(function() {
 
 $("#network").on("click", (function() {
   getContent("#networkcontent");
+  return false;
+}));
+$("#networketh").on("click", (function() {
+  getContent("#networkcontenteth");
   return false;
 }));
 $("#hardware").click(function() {

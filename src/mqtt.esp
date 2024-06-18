@@ -137,10 +137,12 @@ void mqttPublishDiscovery()
 	String topic;
 	String deviceName = config.deviceHostname;
 	String deviceIP = WiFi.localIP().toString();
-	DynamicJsonDocument via(512);
+	//DynamicJsonDocument via(512);
+	JsonDocument via;
 	via["ids"] = WiFi.macAddress();
 
-	DynamicJsonDocument dev(512);
+	//DynamicJsonDocument dev(512);
+	JsonDocument dev;
 	dev["ids"] = WiFi.macAddress();
 	dev["name"] = config.deviceHostname;
 	dev["mf"] = "esp32-rfid";
@@ -148,7 +150,8 @@ void mqttPublishDiscovery()
 	String num;
 	for (int n = 0; n < config.numRelays; n++)
 	{
-		DynamicJsonDocument root(512);
+		//DynamicJsonDocument root(512);
+		JsonDocument root;
 		num = String(n);
 		topic = "lock/" + deviceName + "/lock" + num + "/config";
 		root["name"] = deviceName + " Lock" + num;
@@ -171,7 +174,8 @@ void mqttPublishDiscovery()
 
 	if (config.doorstatpin != 255)
 	{
-		DynamicJsonDocument door(512);
+		//DynamicJsonDocument door(512);
+		JsonDocument door;
 		topic = "binary_sensor/" + deviceName + "/door/config";
 		door["name"] = "Door";
 		door["uniq_id"] = deviceName + "/door";
@@ -181,7 +185,8 @@ void mqttPublishDiscovery()
 		door["dev"] = via;
 		mqttPublishEventHA(&door, topic);
 
-		DynamicJsonDocument tamper(512);
+		//DynamicJsonDocument tamper(512);
+		JsonDocument tamper;
 		topic = "binary_sensor/" + deviceName + "/tamper/config";
 		tamper["name"] = "Door tamper";
 		tamper["uniq_id"] = deviceName + "/tamper";
@@ -194,7 +199,8 @@ void mqttPublishDiscovery()
 
 	if (config.doorbellpin != 255)
 	{
-		DynamicJsonDocument doorbell(512);
+		//DynamicJsonDocument doorbell(512);
+		JsonDocument doorbell;
 		topic = "binary_sensor/" + deviceName + "/doorbell/config";
 		doorbell["name"] = "Doorbell";
 		doorbell["uniq_id"] = deviceName + "/doorbell";
@@ -206,7 +212,8 @@ void mqttPublishDiscovery()
 		mqttPublishEventHA(&doorbell, topic);
 	}
 
-	DynamicJsonDocument tag(512);
+	//DynamicJsonDocument tag(512);
+	JsonDocument tag;
 	topic = "sensor/" + deviceName + "/tag/config";
 	tag["name"] = "Tag";
 	tag["uniq_id"] = deviceName + "/tag";
@@ -218,7 +225,8 @@ void mqttPublishDiscovery()
 	tag["dev"] = via;
 	mqttPublishEventHA(&tag, topic);
 
-	DynamicJsonDocument user(512);
+	//DynamicJsonDocument user(512);
+	JsonDocument user;
 	topic = "sensor/" + deviceName + "/user/config";
 	user["name"] = "User";
 	user["uniq_id"] = deviceName + "/name";
@@ -230,7 +238,8 @@ void mqttPublishDiscovery()
 	user["dev"] = via;
 	mqttPublishEventHA(&user, topic);
 
-	DynamicJsonDocument pincode(512);
+	//DynamicJsonDocument pincode(512);
+	JsonDocument pincode;
 	topic = "sensor/" + deviceName + "/pincode/config";
 	pincode["name"] = "PinCode";
 	pincode["uniq_id"] = deviceName + "/pincode";
@@ -242,7 +251,8 @@ void mqttPublishDiscovery()
 	pincode["dev"] = via;
 	mqttPublishEventHA(&pincode, topic);
 
-	DynamicJsonDocument accessquestion(512);
+	//DynamicJsonDocument accessquestion(512);
+	JsonDocument accessquestion;
 	topic = "sensor/" + deviceName + "/access/config";
 	accessquestion["name"] = "Access";
 	accessquestion["uniq_id"] = deviceName + "/access";
@@ -254,7 +264,8 @@ void mqttPublishDiscovery()
 	accessquestion["dev"] = via;
 	mqttPublishEventHA(&accessquestion, topic);
 
-	DynamicJsonDocument doorname(512);
+	//DynamicJsonDocument doorname(512);
+	JsonDocument doorname;
 	topic = "sensor/" + deviceName + "/doorname/config";
 	doorname["name"] = "DoorName";
 	doorname["uniq_id"] = deviceName + "/doorname";
@@ -266,7 +277,8 @@ void mqttPublishDiscovery()
 	doorname["dev"] = via;
 	mqttPublishEventHA(&doorname, topic);
 
-	DynamicJsonDocument timestamp(512);
+	//DynamicJsonDocument timestamp(512);
+	JsonDocument timestamp;
 	topic = "sensor/" + deviceName + "/time/config";
 	timestamp["name"] = "Time";
 	timestamp["uniq_id"] = deviceName + "/time";
@@ -278,7 +290,8 @@ void mqttPublishDiscovery()
 	timestamp["dev"] = via;
 	mqttPublishEventHA(&timestamp, topic);
 
-	DynamicJsonDocument dellog(512);
+	//DynamicJsonDocument dellog(512);
+	JsonDocument dellog;
 	topic = "button/" + deviceName + "/dellog/config";
 	dellog["name"] = deviceName + " Delete Log";
 	dellog["uniq_id"] = deviceName + "/deletlog";
@@ -302,7 +315,8 @@ void mqttPublishAvty()
 
 void mqttPublishHeartbeat(time_t heartbeat, time_t uptime)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	root["type"] = "heartbeat";
 	root["time"] = heartbeat;
 	root["uptime"] = uptime;
@@ -313,7 +327,8 @@ void mqttPublishHeartbeat(time_t heartbeat, time_t uptime)
 
 void mqttPublishAccess(time_t accesstime, String const &isknown, String const &type, String const &user, String const &uid, String const &pincode)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	if (config.mqttEvents)
 	{
 		root["cmd"] = "log";
@@ -349,7 +364,8 @@ void mqttPublishAccess(time_t accesstime, String const &isknown, String const &t
 
 void mqttPublishAccess(time_t accesstime, String const &isknown, int types[MAX_NUM_RELAYS], String const &user, String const &uid, String const &pincode)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	JsonArray access = root.createNestedArray("access");
 	JsonArray doorNames = root.createNestedArray("doorName");
 	if (config.mqttEvents)
@@ -414,7 +430,8 @@ void onMqttPublish(uint16_t packetId)
 
 void getUserList()
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	JsonArray users = root.createNestedArray("list");
 	File dir = LittleFS.open("/P/");
 #ifdef DEBUG
@@ -431,7 +448,8 @@ void getUserList()
 		size_t size = f.size();
 		std::unique_ptr<char[]> buf(new char[size]);
 		f.readBytes(buf.get(), size);
-		DynamicJsonDocument json(512);
+		//DynamicJsonDocument json(512);
+		JsonDocument json;
 		auto error = deserializeJson(json, buf.get(), size);
 		if (!error)
 		{
@@ -497,7 +515,8 @@ void onMqttMessage(char *topic, char *payload, AsyncMqttClientMessageProperties 
 	Serial.println(mqttBuffer);
 #endif
 
-	DynamicJsonDocument mqttIncomingJson(2048);
+	//DynamicJsonDocument mqttIncomingJson(2048);
+	JsonDocument mqttIncomingJson;
 	// cast to const char to avoid modification in place of mqttBuffer
 	auto error = deserializeJson(mqttIncomingJson, (const char *)mqttBuffer);
 	if (error)
@@ -685,11 +704,13 @@ void processMqttMessage(MqttMessage *incomingMessage)
 			f.close();
 			buf[fileSize] = '\0';
 
-			DynamicJsonDocument root(2048);
+			//DynamicJsonDocument root(2048);
+			JsonDocument root;
 			root["type"] = "getconf";
 			root["ip"] = WiFi.localIP().toString();
 			root["hostname"] = config.deviceHostname;
-			DynamicJsonDocument configFile(2048);
+			//DynamicJsonDocument configFile(2048);
+			JsonDocument configFile;
 			deserializeJson(configFile, buf, fileSize + 1);
 			root["configfile"] = configFile;
 			mqttPublishEvent(&root);
@@ -701,7 +722,8 @@ void processMqttMessage(MqttMessage *incomingMessage)
 #ifdef DEBUG
 		Serial.println("[ INFO ] Update configuration");
 #endif
-		DynamicJsonDocument mqttIncomingJson(2048);
+		//DynamicJsonDocument mqttIncomingJson(2048);
+		JsonDocument mqttIncomingJson;
 		auto error = deserializeJson(mqttIncomingJson, incomingMessage->serializedMessage);
 		if (error)
 		{

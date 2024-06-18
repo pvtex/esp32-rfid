@@ -871,6 +871,59 @@
     <br>
     <br>
 </div>
+<div id="networkcontenteth">
+    <br>
+    <br>
+    <legend>Ethernet Settings</legend>
+    <h6 class="text-muted">Type in your Ethernet configuration.</h6>
+    <br>
+    <div class="row form-group" id="dhcpeth">
+        <label class="col-xs-3">Use DHCP<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Choose if you want to get an IP address from DHCP server or not."></i></label>
+        <div class="col-xs-9">
+            <form>
+                <label class="radio-inline">
+                    <input type="radio" value="1" name="dhcpenabledeth" onclick="handleDHCPEth();" checked>Yes</label>
+                <label class="radio-inline">
+                    <input type="radio" value="0" name="dhcpenabledeth" onclick="handleDHCPEth();">No</label>
+            </form>
+        </div>
+    </div>
+    <div id="staticipeth1" style="display:none">
+        <div class="row form-group">
+            <label class="col-xs-3">IP Address<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-html="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Enter IP Address<BR>(for example 192.168.4.1)"></i></label>
+            <span class="col-xs-9 col-md-5">
+              <input id="ipaddresseth" class="form-control input-sm">
+              </span>
+        </div>
+        <div class="row form-group">
+            <label class="col-xs-3">Subnet Mask<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-html="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Enter Subnet Mask<BR>(for example 255.255.255.0)"></i></label>
+            <span class="col-xs-9 col-md-5">
+              <input id="subneteth" class="form-control input-sm">
+              </span>
+        </div>
+    </div>
+    <div id="staticipeth2" style="display:none">
+        <div class="row form-group">
+            <label class="col-xs-3">DNS Server</label>
+            <span class="col-xs-9 col-md-5">
+              <input id="dnsaddeth" class="form-control input-sm">
+              </span>
+        </div>
+        <div class="row form-group">
+            <label class="col-xs-3">Gateway</label>
+            <span class="col-xs-9 col-md-5">
+              <input id="gatewayeth" class="form-control input-sm">
+              </span>
+        </div>
+    </div>
+    <br>
+    <div class="row form-group">
+        <div class="col-xs-9 col-md-8">
+            <button onclick="savenetworketh()" class="btn btn-primary btn-sm pull-right">Save</button>
+        </div>
+    </div>
+    <br>
+</div>
 <div id="ntpcontent">
     <br>
     <br>
@@ -953,7 +1006,7 @@
             <p>Here you can find some information about your device status.</p>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <span>esp32-rfid Access Control</span>&nbsp; <small><strong><span id="sver"></span> &nbsp; <span id="debugver"></span></strong></small>
+                    <span>esp32-rfid Access Control</span>&nbsp; <small><strong><span id="sver"></span> <span id="debugver"></span></strong></small>
                 </div>
             </div>
         </div>
@@ -1018,8 +1071,9 @@
                 </table>
             </div>
             <div class="panel panel-default table-responsive">
+            <div id="wifinetwork" class="panel panel-default table-responsive" style="display:inline-flex;width:100%;">
                 <table class="table table-hover table-striped table-condensed">
-                    <caption>Network</caption>
+                    <caption>WiFi-Network</caption>
                     <tr>
                         <th style="width:50%;">SSID</th>
                         <td id="ssidstat" style="width:50%;"></td>
@@ -1056,6 +1110,40 @@
                     </tr>
                 </table>
             </div>
+            <div id="ethernetnetwork" style="display:hidden;width:50%;" class="panel panel-default table-responsive">
+                <table class="table table-hover table-striped table-condensed">
+                    <caption>Ethernet-Network</caption>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>IP</th>
+                        <td id="ipeth"></td>
+                    </tr>
+                    <tr>
+                        <th>Gateway</th>
+                        <td id="gateeth"></td>
+                    </tr>
+                    <tr>
+                        <th>Mask</th>
+                        <td id="masketh"></td>
+                    </tr>
+                    <tr>
+                        <th>DNS</th>
+                        <td id="dnseth"></td>
+                    </tr>
+                    <tr>
+                        <th>MAC</th>
+                        <td id="maceth"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
         </div>
         <br>
         <br>

@@ -15,7 +15,8 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	Serial.print(F("[ INFO ] config file: "));
 	Serial.println(configFile);
 #endif
-	DynamicJsonDocument json(2048);
+	//DynamicJsonDocument json(2048);
+	JsonDocument json;
 	auto error = deserializeJson(json, buf.get(), size);
 	if (error)
 	{
@@ -243,17 +244,33 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	{
 		config.ipAddress.fromString(network["ip"].as<const char*>());
 	}
+	if (network.containsKey("ipeth"))
+	{
+		config.ipAddressEth.fromString(network["ipeth"].as<const char*>());
+	}
 	if (network.containsKey("subnet"))
 	{
 		config.subnetIp.fromString(network["subnet"].as<const char*>());
+	}
+	if (network.containsKey("subneteth"))
+	{
+		config.subnetIpEth.fromString(network["subneteth"].as<const char*>());
 	}
 	if (network.containsKey("gateway"))
 	{
 		config.gatewayIp.fromString(network["gateway"].as<const char*>());
 	}
+	if (network.containsKey("gatewayeth"))
+	{
+		config.gatewayIpEth.fromString(network["gatewayeth"].as<const char*>());
+	}
 	if (network.containsKey("dns"))
 	{
 		config.dnsIp.fromString(network["dns"].as<const char*>());
+	}
+	if (network.containsKey("dnseth"))
+	{
+		config.dnsIpEth.fromString(network["dnseth"].as<const char*>());
 	}
 
 	const char *apipch;

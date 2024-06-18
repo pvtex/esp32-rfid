@@ -94,6 +94,27 @@ esp_err_t WiFiEventHandler::eventHandler(void* ctx, system_event_t* event) {
 			break;
 		}
 
+		case SYSTEM_EVENT_ETH_START: {
+			rc = pWiFiEventHandler->EthStart();
+    		break;
+		}
+    	case SYSTEM_EVENT_ETH_CONNECTED: {
+			rc = pWiFiEventHandler->EthConnected();
+    		break;
+		}
+    	case SYSTEM_EVENT_ETH_GOT_IP: {
+      		rc = pWiFiEventHandler->EthGotIp();
+    		break;
+		}
+    	case SYSTEM_EVENT_ETH_DISCONNECTED: {
+      		rc = pWiFiEventHandler->EthDisconnected();
+    		break;
+		}
+    	case SYSTEM_EVENT_ETH_STOP: {
+      		rc = pWiFiEventHandler->EthStop();
+    		break;
+		}
+
 		default:
 			break;
 	}
@@ -139,6 +160,10 @@ esp_err_t WiFiEventHandler::staGotIp(system_event_sta_got_ip_t info) {
 	return ESP_OK;
 } // staGotIp
 
+esp_err_t WiFiEventHandler::EthGotIp() {
+	ESP_LOGD(LOG_TAG, "default EthGotIp");
+	return ESP_OK;
+}
 
 /**
  * @brief Handle the Access Point started event.
@@ -149,7 +174,6 @@ esp_err_t WiFiEventHandler::apStart() {
 	ESP_LOGD(LOG_TAG, "default apStart");
 	return ESP_OK;
 } // apStart
-
 
 /**
  * @brief Handle the Access Point stop event.
@@ -173,12 +197,20 @@ esp_err_t WiFiEventHandler::staStart() {
 	return ESP_OK;
 } // staStart
 
+esp_err_t WiFiEventHandler::EthStart() {
+	ESP_LOGD(LOG_TAG, "default EthStart");
+	return ESP_OK;
+}
 
 esp_err_t WiFiEventHandler::staStop() {
 	ESP_LOGD(LOG_TAG, "default staStop");
 	return ESP_OK;
 } // staStop
 
+esp_err_t WiFiEventHandler::EthStop() {
+	ESP_LOGD(LOG_TAG, "default EthStop");
+	return ESP_OK;
+}
 
 /**
  * @brief Handle the Station Connected event.
@@ -191,6 +223,10 @@ esp_err_t WiFiEventHandler::staConnected(system_event_sta_connected_t info) {
 	return ESP_OK;
 } // staConnected
 
+esp_err_t WiFiEventHandler::EthConnected() {
+	ESP_LOGD(LOG_TAG, "default staConnected");
+	return ESP_OK;
+}
 
 /**
  * @brief Handle the Station Disconnected event.
@@ -203,6 +239,10 @@ esp_err_t WiFiEventHandler::staDisconnected(system_event_sta_disconnected_t info
 	return ESP_OK;
 } // staDisconnected
 
+esp_err_t WiFiEventHandler::EthDisconnected() {
+	ESP_LOGD(LOG_TAG, "default staDisconnected");
+	return ESP_OK;
+}
 
 /**
  * @brief Handle a Station Connected to AP event.
