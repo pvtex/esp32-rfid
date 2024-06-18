@@ -83,10 +83,9 @@ typings/
 .vscode/launch.json
 .vscode/*
 bin/37dc11e
-bin/esp-rfid-settings.json
+bin/esp32-rfid-settings.json
 bin/users.png
-bin/esp-rfid-users.json
+bin/esp32-rfid-users.json
 ESP-Debug
 
-infos
 ethernet
