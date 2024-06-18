@@ -152,7 +152,7 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 		const char *uid = root["uid"];
 		String filename = "/P/";
 		filename += uid;
-		File f = SPIFFS.open(filename, "w+");
+		File f = SPIFFS.open(filename, "w"); //+
 		// Check if we created the file
 		if (f)
 		{

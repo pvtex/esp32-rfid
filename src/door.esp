@@ -9,6 +9,10 @@ void doorStatus(/* arguments */)
     return;
   }
 
+#ifdef DEBUG
+	Serial.println(F("[ INFO ] DoorStatus"));
+#endif
+
   // if this changes and if mqtt and mqtt logging enabled, push the message, also to a web socket!
   if ((digitalRead(config.doorstatpin) == HIGH) && (lastDoorState == 0))
   {

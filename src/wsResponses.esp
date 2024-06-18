@@ -1,6 +1,6 @@
 void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 {
-	DynamicJsonDocument root(2048);
+	DynamicJsonDocument root(1024);
 	root["command"] = "userlist";
 	root["page"] = page;
 	JsonArray users = root.createNestedArray("list");
@@ -20,18 +20,21 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 	{
 		if (i >= first && i < last)
 		{
-#ifdef DEBUG
-		Serial.print(F("[ INFO ] User File: "));
-		Serial.print(file.name());
-#endif
 			JsonObject item = users.createNestedObject();
 			String uid = file.name();
-			uid.remove(0, 3);
+			//uid.remove(0, 3);
 			item["uid"] = uid;
-			File f = SPIFFS.open(file.name(), "r");
+			File f = SPIFFS.open("/P/"+uid, "r");
 			size_t size = f.size();
 			std::unique_ptr<char[]> buf(new char[size]);
 			f.readBytes(buf.get(), size);
+#ifdef DEBUG
+		Serial.print(F("[ INFO ] User File Name: "));
+		Serial.println(uid);
+		Serial.print(F("[ INFO ] User File Size: "));
+		Serial.println(file.size());
+		Serial.print(F("[ INFO ] User File "));
+#endif
 			DynamicJsonDocument json(512);
 			auto error = deserializeJson(json, buf.get(), size);
 			if (!error)

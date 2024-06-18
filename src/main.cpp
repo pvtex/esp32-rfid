@@ -187,7 +187,12 @@ void ICACHE_FLASH_ATTR setup()
 #endif
 	}
 
-
+	File root = SPIFFS.open("/P");
+	if(!root.isDirectory())
+	{
+        SPIFFS.mkdir("/P");
+    }
+	
 	bool configured = false;
 	configured = loadConfiguration(config);
 	setupMqtt();
