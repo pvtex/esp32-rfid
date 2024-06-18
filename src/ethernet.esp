@@ -1,0 +1,133 @@
+#include <ETH.h>
+
+
+/* RMII */
+#define GPIO_RMII_RXD0  25
+#define GPIO_RMII_RXD1  26
+#define GPIO_RMII_CRS   27
+#define GPIO_RMII_TXD1  22
+#define GPIO_RMII_TXD0  19
+#define GPIO_RMII_TXEN  21
+#define GPIO_RMII_CLK   17
+#define GPIO_RMII_MDC   23
+#define GPIO_RMII_MDIO  18
+#define GPIO_RMII_PWR 0
+
+// ethernet pin define
+#define USE_ETHERNET                             // Add support for ethernet (+20k code)
+// Dingtian Ethernet
+#define ETH_PHY_TYPE        ETH_PHY_JL1101
+#define ETH_PHY_ADDR        0
+#define ETH_PHY_MDC         GPIO_RMII_MDC
+#define ETH_PHY_MDIO        GPIO_RMII_MDIO
+#define ETH_PHY_POWER       GPIO_RMII_PWR
+#define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
+
+uint8_t mac[6] = {0xbc, 0x34, 0x00, 0x00, 0x00, 0x01};
+//// eth event callback
+int eth_connected = false;
+
+
+void setEnableEth()
+{
+	doEnableEth = true;
+}
+
+void onEthConnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
+{
+#ifdef DEBUG
+	Serial.println(F("[ INFO ] Ethernet Connected"));
+#endif
+	mqttReconnectTimer.detach();
+}
+
+void onEthDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
+{
+	if ( !ETH.connected() )
+	{
+		return;
+	}
+#ifdef DEBUG
+	Serial.println(F("[ INFO ] ETH Disconnected"));
+#endif
+	mqttReconnectTimer.detach();
+	disconnectMqtt();
+}
+
+void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
+{
+#ifdef DEBUG
+	Serial.print("[ INFO ] Ethernet IP Connected: ");
+	Serial.println(ETH.localIP().toString());
+#endif
+	connectToMqtt();
+}
+
+bool ICACHE_FLASH_ATTR connectETh()
+{
+
+	if (!config.dhcpEnabled)
+	{
+		ETH.config(config.ipAddress, config.gatewayIp, config.subnetIp, config.dnsIp);
+	}
+#ifdef DEBUG
+	Serial.print(F("[ INFO ] Trying to connect Ethernet: "));
+#endif
+	unsigned long now = millis();
+	uint8_t timeout = 15; // define when to time out in seconds
+	do
+	{
+		ledWifiStatus();
+		delay(500);
+#ifdef DEBUG
+		if (!ETH.isConnected())
+			Serial.print(F("."));
+#endif
+		if (ETH.connected())
+			break;
+	} while (millis() - now < timeout * 1000);
+
+	// We now out of the while loop, either time is out or we connected. check what happened
+	if (ETH.connected())
+	{
+		String data = ETH.localIP().toString();
+		writeEvent("INFO", "ETH", "EThernet is connected", data);
+#ifdef DEBUG
+		Serial.println(F("[ INFO ] Ethernet is connected"));
+#endif
+		return true;
+	}
+	else
+	{
+#ifdef DEBUG
+		Serial.println();
+		Serial.println(F("[ WARN ] Couldn't connect in time"));
+#endif
+		return false;
+	}
+}
+
+void ICACHE_FLASH_ATTR disableEth()
+{
+#ifdef DEBUG
+	Serial.println(F("Turn Ethernet off."));
+#endif
+}
+
+void ICACHE_FLASH_ATTR enableEthernet()
+{
+
+}
+
+void setupEth(bool configured)
+{
+	if (!configured)
+	{
+		//ETH.SetHostname(config.hostnm);
+	} else
+	{
+		//enableEth();
+		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
+  		ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
+	}
+}

@@ -115,6 +115,11 @@ public:
 	virtual esp_err_t staStart();
 	virtual esp_err_t staStop();
 	virtual esp_err_t wifiReady();
+	virtual esp_err_t EthConnected();
+	virtual esp_err_t EthDisconnected();
+	virtual esp_err_t EthGotIp();
+	virtual esp_err_t EthStart();
+	virtual esp_err_t EthStop();
 
 	/**
 	 * Get the next WiFi event handler in the chain, if there is one.

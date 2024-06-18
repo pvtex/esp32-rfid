@@ -122,7 +122,8 @@ void ICACHE_FLASH_ATTR wiegandRead()
 				std::unique_ptr<char[]> buf(new char[size]);
 				f.readBytes(buf.get(), size);
 				f.close();
-				DynamicJsonDocument json(512);
+				//DynamicJsonDocument json(512);
+				JsonDocument json;
 				auto error = deserializeJson(json, buf.get(), size);
 				if (error)
 				{
@@ -292,7 +293,8 @@ void rfidProcess()
 	std::unique_ptr<char[]> buf(new char[size]);
 	f.readBytes(buf.get(), size);
 	f.close();
-	DynamicJsonDocument json(512);
+	//DynamicJsonDocument json(512);
+	JsonDocument json;
 	auto error = deserializeJson(json, buf.get(), size);
 
 	/*
@@ -460,7 +462,8 @@ void rfidOutsideMessaging()
 		String data = String(uid) += " " + String(type);
 		writeEvent("WARN", "rfid", "Unknown rfid tag is scanned", data);
 		writeLatest(uid, "Unknown", 98, ACCESS_DENIED);
-		DynamicJsonDocument root(512);
+		//DynamicJsonDocument root(512);
+		JsonDocument root;
 		root["command"] = "piccscan";
 		root["uid"] = uid;
 		root["type"] = type;
@@ -478,7 +481,8 @@ void rfidOutsideMessaging()
 	} else if (uid != "" && processingState != waitingProcessing)
 	{
 		// message to the web UI to tell who has opened the door
-		DynamicJsonDocument root(512);
+		//DynamicJsonDocument root(512);
+		JsonDocument root;
 		root["command"] = "piccscan";
 		root["uid"] = uid;
 		root["type"] = type;

@@ -1,6 +1,7 @@
 void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 {
-	DynamicJsonDocument root(1024);
+	//DynamicJsonDocument root(1024);
+	JsonDocument root;
 	root["command"] = "userlist";
 	root["page"] = page;
 	JsonArray users = root.createNestedArray("list");
@@ -35,7 +36,8 @@ void ICACHE_FLASH_ATTR sendUserList(int page, AsyncWebSocketClient *client)
 		Serial.println(file.size());
 		Serial.print(F("[ INFO ] User File "));
 #endif
-			DynamicJsonDocument json(512);
+			//DynamicJsonDocument json(512);
+			JsonDocument json;
 			auto error = deserializeJson(json, buf.get(), size);
 			if (!error)
 			{
@@ -112,8 +114,15 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 		Serial.print(F("[ WARN ] Error getting info on LittleFS"));
 #endif
 	}
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	root["command"] = "status";
+
+	bool ethernet = false;
+#ifdef ETHERNET
+	ethernet = true;
+#endif
+	root["ethernet"] = ethernet;
 	root["heap"] = ESP.getFreeHeap();
 	root["heapsize"] = ESP.getHeapSize();
 	uint32_t chipID = 0;
@@ -144,6 +153,9 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	String debugver = "";
 #ifdef DEBUG
 	debugver = "debug";
+#endif
+#ifdef ETHERNET
+	debugver = "eth";
 #endif
 	root["debugver"] = debugver;
 
@@ -213,12 +225,14 @@ void ICACHE_FLASH_ATTR printScanResult(int networksFound)
 		}
 	}
 
-	DynamicJsonDocument root(1024);
+	//DynamicJsonDocument root(1024);
+	JsonDocument root;
 	root["command"] = "ssidlist";
 	JsonArray scan = root.createNestedArray("list");
 	for (int i = 0; i < 5 && i < networksFound; ++i)
 	{
 		JsonObject item = scan.createNestedObject();
+
 		item["ssid"] = WiFi.SSID(indices[i]);
 		item["bssid"] = WiFi.BSSIDstr(indices[i]);
 		item["rssi"] = WiFi.RSSI(indices[i]);
@@ -238,7 +252,8 @@ void ICACHE_FLASH_ATTR printScanResult(int networksFound)
 
 void ICACHE_FLASH_ATTR sendTime(AsyncWebSocketClient *client)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	root["command"] = "gettime";
 	root["epoch"] = epoch;
 	size_t len = measureJson(root);

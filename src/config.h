@@ -12,14 +12,18 @@ struct Config {
     byte bssid[6] = {0, 0, 0, 0, 0, 0};
     char *deviceHostname = NULL;
     bool dhcpEnabled = true;
+    bool dhcpEnabledEth = true;
     IPAddress dnsIp;
+    IPAddress dnsIpEth = (0,0,0,0);
     uint8_t doorbellpin = 255;
     char *doorName[MAX_NUM_RELAYS];
     uint8_t doorstatpin = 255;
     bool fallbackMode = false;
     IPAddress gatewayIp;
+    IPAddress gatewayIpEth = (0,0,0,0);
     char *httpPass = NULL;
     IPAddress ipAddress;
+    IPAddress ipAddressEth = (192,168,5,1);
     uint8_t ledwaitingpin = 255;
     int lockType[MAX_NUM_RELAYS];
     uint8_t maxOpenDoorTime = 0;
@@ -48,6 +52,7 @@ struct Config {
     int relayType[MAX_NUM_RELAYS];
     bool removeParityBits = true;
     IPAddress subnetIp;
+    IPAddress subnetIpEth = (255,255,255,0);
     const char *ssid;
     char *tzInfo = (char *)"";
     const char *wifiApIp = NULL;
