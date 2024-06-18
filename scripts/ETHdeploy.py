@@ -11,7 +11,7 @@ import os
 #
 
 def after_build(source, target, env):
-	shutil.copy(firmware_source, 'bin/forV2Board.bin')
+	shutil.copy(firmware_source, 'bin/ethernet.bin')
 
 env.AddPostAction("buildprog", after_build)
 
