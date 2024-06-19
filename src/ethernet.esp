@@ -11,17 +11,26 @@
 #define GPIO_RMII_CLK   17
 #define GPIO_RMII_MDC   23
 #define GPIO_RMII_MDIO  18
-#define GPIO_RMII_PWR 0
 
 // ethernet pin define
 #define USE_ETHERNET                             // Add support for ethernet (+20k code)
-// Dingtian Ethernet
+
+
+// ETH_PHY_JL1101 for DTWONDER
 #define ETH_PHY_TYPE        ETH_PHY_JL1101
+#define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
+#define GPIO_RMII_PWR 		0
+
+
+//ETH_PHY_LAN8720 for lilygo
+//#define ETH_PHY_TYPE		ETH_PHY_LAN8720		
+//#define ETH_CLK_MODE    	ETH_CLOCK_GPIO0_OUT 
+//#define GPIO_RMII_PWR 	4
+
+
 #define ETH_PHY_ADDR        0
 #define ETH_PHY_MDC         GPIO_RMII_MDC
 #define ETH_PHY_MDIO        GPIO_RMII_MDIO
-#define ETH_PHY_POWER       GPIO_RMII_PWR
-#define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
 
 uint8_t mac[6] = {0xbc, 0x34, 0x00, 0x00, 0x00, 0x01};
 //// eth event callback
