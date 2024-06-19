@@ -22,12 +22,12 @@
 #define GPIO_RMII_PWR 		0
 
 
-//ETH_PHY_LAN8720 for lilygo
+// ETH_PHY_LAN8720 for lilygo
 //#define ETH_PHY_TYPE		ETH_PHY_LAN8720		
 //#define ETH_CLK_MODE    	ETH_CLOCK_GPIO0_OUT 
 //#define GPIO_RMII_PWR 	4
 
-
+// Common for both boards
 #define ETH_PHY_ADDR        0
 #define ETH_PHY_MDC         GPIO_RMII_MDC
 #define ETH_PHY_MDIO        GPIO_RMII_MDIO
