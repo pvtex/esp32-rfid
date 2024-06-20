@@ -113,7 +113,8 @@ void mqttPublishEvent(JsonDocument *root)
 
 void mqttPublishAck(String command)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	root["type"] = command;
 	root["ip"] = WiFi.localIP().toString();
 	root["hostname"] = config.deviceHostname;
@@ -122,7 +123,8 @@ void mqttPublishAck(String command)
 
 void mqttPublishBoot(time_t boot_time)
 {
-	DynamicJsonDocument root(512);
+	//DynamicJsonDocument root(512);
+	JsonDocument root;
 	root["type"] = "boot";
 	root["time"] = boot_time;
 	root["uptime"] = "0";
