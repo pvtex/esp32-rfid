@@ -197,7 +197,7 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["gatewayeth"] = printIP(gwaddreth);
 	root["netmasketh"] = printIP(nmaddreth);
 	root["dnseth"] = printIP(dnseth);
-	//root["maceth"] = config.macAddressEth;
+	//root["maceth"] = config.macAdressEth;
 
 
 	size_t len = measureJson(root);

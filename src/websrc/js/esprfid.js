@@ -395,6 +395,7 @@ function checkOctects(input) {
 function savenetwork() {
   var wmode = 0;
   config.network.dhcp = 0;
+  config.network.dhcpeth = 0;
   config.network.hide = 0;
   if (document.getElementById("inputtohide").style.display === "none") {
     var b = document.getElementById("ssid");

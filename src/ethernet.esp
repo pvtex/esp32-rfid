@@ -137,6 +137,13 @@ void setupEth(bool configured)
 	{
 		//enableEth();
 		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
-  		ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
+		if (config.network.dhcpeth) 
+		{
+			
+		} else 
+		{	
+			ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
+		}
+
 	}
 }

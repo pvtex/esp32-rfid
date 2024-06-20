@@ -252,6 +252,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		config.httpPass = strdup(general["pswd"]);
 	}
 	config.dhcpEnabled = network["dhcp"] == 1;
+	config.dhcpEnabledEth = network["dhcpeth"] == 1;
 	if (network.containsKey("ip"))
 	{
 		config.ipAddress.fromString(network["ip"].as<const char*>());
