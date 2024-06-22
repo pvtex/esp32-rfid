@@ -188,16 +188,17 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["netmask"] = printIP(nmaddr);
 
 
-	IPAddress ipaddreth = config.ipAddressEth;
-	IPAddress gwaddreth = config.gatewayIpEth;
-	IPAddress nmaddreth = config.subnetIpEth;
-	IPAddress dnseth = config.dnsIpEth;
+	IPAddress ipaddreth = config.ipAddressEth; //ETH.localIP();
+	IPAddress gwaddreth = config.gatewayIpEth; //ETH.gatewayIP();
+	IPAddress nmaddreth = config.subnetIpEth; //ETH.subnetMask();
+	IPAddress dnseth = config.dnsIpEth; //ETH.dnsIP();
 
 	root["ipeth"] = printIP(ipaddreth);
 	root["gatewayeth"] = printIP(gwaddreth);
 	root["netmasketh"] = printIP(nmaddreth);
 	root["dnseth"] = printIP(dnseth);
-	//root["maceth"] = config.macAdressEth;
+	root["maceth"] = ""; //ETH.macAddress();
+	root["speedeth"] = ""; //ETH.linkSpeed() + "Mbps " + (ETH.FullDuplex() ? "FD" : "");
 
 
 	size_t len = measureJson(root);

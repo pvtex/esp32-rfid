@@ -87,7 +87,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	{
 		config.beeperpin = hardware["beeperpin"];
 #ifdef ETHDEBUG
-		if (config.beeperpin != 255 && config.beeperpin !=  && config.beeperpin != 1)
+		if (config.beeperpin != 255 && config.beeperpin != 3 && config.beeperpin != 1)
 #else
 		if (config.beeperpin != 255)
 #endif

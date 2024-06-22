@@ -25,6 +25,8 @@ SOFTWARE.
  */
 #define VERSION "1.1.4"
 
+bool eth_connected = false;
+
 #include "Arduino.h"
 #include <WiFi.h>
 #include "WiFiEventHandler.h"
@@ -195,6 +197,7 @@ void ICACHE_FLASH_ATTR setup()
 	
 	bool configured = false;
 	configured = loadConfiguration(config);
+	eth_connected = false;
 	setupMqtt();
 	setupWifi(configured);
 #ifdef ETHERNET

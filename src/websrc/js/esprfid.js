@@ -888,6 +888,7 @@ function listStats() {
   document.getElementById("masketh").innerHTML = ajaxobj.netmasketh;
   document.getElementById("dnseth").innerHTML = ajaxobj.dnseth;
   document.getElementById("maceth").innerHTML = ajaxobj.maceth;
+  document.getElementById("speedeth").innerHTML = ajaxobj.speedeth;
 }
 
 function getContent(contentname) {

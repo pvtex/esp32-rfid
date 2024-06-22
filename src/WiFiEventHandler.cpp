@@ -224,7 +224,7 @@ esp_err_t WiFiEventHandler::staConnected(system_event_sta_connected_t info) {
 } // staConnected
 
 esp_err_t WiFiEventHandler::EthConnected() {
-	ESP_LOGD(LOG_TAG, "default staConnected");
+	ESP_LOGD(LOG_TAG, "default EthConnected");
 	return ESP_OK;
 }
 

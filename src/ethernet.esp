@@ -16,26 +16,29 @@
 #define USE_ETHERNET                             // Add support for ethernet (+20k code)
 
 
+$ifdef DTWONDER
 // ETH_PHY_JL1101 for DTWONDER
 #define ETH_PHY_TYPE        ETH_PHY_JL1101
 #define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
 #define GPIO_RMII_PWR 		0
-
-
+#define ETH_PHY_POWER		0
+#endif
+$ifdef LILYGO
 // ETH_PHY_LAN8720 for lilygo
-//#define ETH_PHY_TYPE		ETH_PHY_LAN8720		
-//#define ETH_CLK_MODE    	ETH_CLOCK_GPIO0_OUT 
-//#define GPIO_RMII_PWR 	4
+#define ETH_PHY_TYPE		ETH_PHY_LAN8720		
+#define ETH_CLK_MODE    	ETH_CLOCK_GPIO0_OUT 
+#define GPIO_RMII_PWR 		4
+#define ETH_PHY_POWER		4
+#endif
 
 // Common for both boards
 #define ETH_PHY_ADDR        0
 #define ETH_PHY_MDC         GPIO_RMII_MDC
 #define ETH_PHY_MDIO        GPIO_RMII_MDIO
 
+
 uint8_t mac[6] = {0xbc, 0x34, 0x00, 0x00, 0x00, 0x01};
 //// eth event callback
-int eth_connected = false;
-
 
 void setEnableEth()
 {
@@ -59,6 +62,7 @@ void onEthDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 #ifdef DEBUG
 	Serial.println(F("[ INFO ] ETH Disconnected"));
 #endif
+	eth_connected = false;
 	mqttReconnectTimer.detach();
 	disconnectMqtt();
 }
@@ -69,6 +73,7 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	Serial.print("[ INFO ] Ethernet IP Connected: ");
 	Serial.println(ETH.localIP().toString());
 #endif
+	eth_connected = true;
 	connectToMqtt();
 }
 
@@ -89,7 +94,7 @@ bool ICACHE_FLASH_ATTR connectETh()
 		ledWifiStatus();
 		delay(500);
 #ifdef DEBUG
-		if (!ETH.isConnected())
+		if (ETH.connected())
 			Serial.print(F("."));
 #endif
 		if (ETH.connected())
@@ -135,15 +140,15 @@ void setupEth(bool configured)
 		//ETH.SetHostname(config.hostnm);
 	} else
 	{
-		//enableEth();
+		
 		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
-		if (config.network.dhcpeth) 
+		if (config.dhcpEnabledEth) 
 		{
 			
 		} else 
 		{	
 			ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
 		}
-
+		//enableEth();
 	}
 }
