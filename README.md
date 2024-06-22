@@ -37,6 +37,18 @@ This project still in its development phase. New features (and also bugs) are in
 * A Relay Module (or you can build your own circuit)
 * n quantity of RFID Tags (for example Mifare Classic 1KB , or any other Tag with a 4 or 7byte ID) equivalent to User Number
 
+### ESP32-Board
+curently ESP32-RFID support 3 boards:
+
+* without Ethernet
+    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1)
+* with Ethernet
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/)
+    * [lilygo t-internet-com](boards/t-internet-com/)
+
+You can find gerber files and pictures for each board in the board subfolder.     
+In each subfolder there is a gerber file for an adapter board to wiegand interface, door status and exit button.      
+
 ### Software
 
 #### Using Compiled Binaries

@@ -1,0 +1,13 @@
+C:\Espressif\frameworks\esp-idf-v5.1\components
+
+I had success copying the driver from ESPHome (https://github.com/esphome/esphome/blob/dev/esphome/components/ethernet/esp_eth_phy_jl1101.c) 
+into esp-idf/components/esp_eth/src, 
+
+adding the source to esp-idf/components/esp_eth/CMakeLists.txt 
+and also adding the prototype of esp_eth_phy_new_jl1101() to esp-idf/components/esp_eth/eclude/sp_eth_phy.h.
+
+Used the ESP-IDF version 5.1.2 and used it to compile MicroPython (where I added a bit more stuff to get access to JL1101 PHY).
+
+The configuration pins were also borrowed from ESPHome and replicated to my MicroPython build:
+
+lan = network.LAN(mdc=Pin(23), mdio=Pin(18), power=Pin(0), phy_addr=1, phy_type=network.PHY_JL1101, ref_clk=Pin(17), ref_clk_mode=Pin.OUT)
