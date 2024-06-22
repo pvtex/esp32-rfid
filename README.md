@@ -43,7 +43,7 @@ curently ESP32-RFID support 3 boards:
 * without Ethernet
     * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1)
 * with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/)
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (no extras like Doorstatus, Exit-Button, ..., only Wiegand)
     * [lilygo t-internet-com](boards/t-internet-com/)
 
 You can find gerber files and pictures for each board in the board subfolder.     
