@@ -41,10 +41,10 @@ This project still in its development phase. New features (and also bugs) are in
 curently ESP32-RFID support 3 boards:
 
 * without Ethernet
-    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1)
+    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) image: generic.bin, debug-image: debug.bin
 * with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (with debug settings: no extras like Doorstatus, Exit-Button, ..., only Wiegand)
-    * [lilygo t-internet-com](boards/t-internet-com/)
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (with debug settings: no extras like Doorstatus, Exit-Button, ..., only Wiegand) image: ethernetdtw.bin, debug-image: ethdtwdebug.bin
+    * [lilygo t-internet-com](boards/t-internet-com/) image: ethernetlil.bin, debug-image: ethlildebug.bin
 
 You can find gerber files and pictures for each board in the board subfolder.     
 In each subfolder there is a gerber file for an adapter board to wiegand interface, door status and exit button.      

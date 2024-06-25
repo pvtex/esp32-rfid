@@ -8,9 +8,6 @@ void beeperBeep()
 		if (currentMillis > beeperOffTime && digitalRead(config.beeperpin) == BEEPERon)
 		{
 			digitalWrite(config.beeperpin, BEEPERoff);
-#ifdef DEBUG
-			Serial.println("Beeper OFF");
-#endif
 			beeperInterval = 0;
 		}
 		else if (beeperInterval != 0)
@@ -21,14 +18,8 @@ void beeperBeep()
     			previousMillis = currentMillis;
 				if (beeperState == BEEPERon) {
 					beeperState = BEEPERoff;
-#ifdef DEBUG
-					Serial.println("Beeper OFF");
-#endif
 				} else {
 					beeperState = BEEPERon;
-#ifdef DEBUG
-					Serial.println("Beeper ON");
-#endif
 				}
 				digitalWrite(config.beeperpin, beeperState);
 			}
@@ -42,9 +33,6 @@ void beeperValidAccess()
 	{
 		beeperOffTime = currentMillis + 2000;
 		digitalWrite(config.beeperpin, BEEPERon);
-#ifdef DEBUG
-		Serial.println("Beeper ON");
-#endif
 	}
 }
 
@@ -53,9 +41,6 @@ void beeperAdminAccess()
 	if (config.beeperpin != 255) {
 		beeperOffTime = currentMillis + 3000;
 		digitalWrite(config.beeperpin, BEEPERon);
-#ifdef DEBUG
-		Serial.println("Beeper ON");
-#endif
 	}
 }
 

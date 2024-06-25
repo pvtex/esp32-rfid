@@ -1,12 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.5] - 2024-06-25
+- [firmware]  JL1101 Ethenet full working and testet.
+- [firmware]  prepared for LAN8720 ethernet, not tested yet
 ## [1.1.4] - 2024-06-18
-- prepared for JL1101 Ethernet (ethernet.bin)
-    - Ethernet infos shown on status page
-    - new Ethernet config menu under Settings
-- removed most deprecated function and used the new ones
-- some design changes
+- [firmware] prepared for JL1101 Ethernet (ethernet.bin)
+                - Ethernet infos shown on status page
+                - new Ethernet config menu under Settings
+- [firmware] removed most deprecated function and used the new ones
+- [firmware] some design changes
 ## [1.1.3] - 2024-06-18
 - [firmware] ESP-IDF v5 now full working
 - [firmware] LittleFS now fully implemented
