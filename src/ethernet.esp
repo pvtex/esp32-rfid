@@ -63,6 +63,7 @@ void onEthDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 	Serial.println(F("[ INFO ] ETH Disconnected"));
 #endif
 	eth_connected = false;
+	config.ethlink = "not connected";
 	mqttReconnectTimer.detach();
 	disconnectMqtt();
 }
@@ -77,17 +78,22 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	config.gatewayIpEth = ETH.gatewayIP();
 	config.subnetIpEth = ETH.subnetMask();
 	config.dnsIpEth = ETH.dnsIP();
-	//config.ethlink = NULL;
-	//char *buffer;
-	//sprintf (buffer, "%sMbps %s", ETH.linkSpeed(), (ETH.fullDuplex() ? "FD" : ""));
-	//config.ethlink = buffer;
+	config.ethmac = ETH.macAddress();
+	String linkduplex = "HD";
+	if (ETH.fullDuplex() == true) 
+	{
+		linkduplex = "FD";
+	}
+	char spd[12]; 
+	sprintf(spd, "%dMbps %s", ETH.linkSpeed(), linkduplex);
+	config.ethlink = (String)spd;
 	eth_connected = true;
 	connectToMqtt();
 }
 
 bool ICACHE_FLASH_ATTR connectETh()
 {
-
+	config.ethlink = "connected";
 	if (!config.dhcpEnabled)
 	{
 		ETH.config(config.ipAddress, config.gatewayIp, config.subnetIp, config.dnsIp);
@@ -131,6 +137,7 @@ bool ICACHE_FLASH_ATTR connectETh()
 
 void ICACHE_FLASH_ATTR disableEth()
 {
+	config.ethlink = "not connected";
 #ifdef DEBUG
 	Serial.println(F("Turn Ethernet off."));
 #endif
@@ -158,9 +165,9 @@ void setupEth(bool configured)
 		{	
 			ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
 		}
-		//ETH.onIpEvent(onEthConnect, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
-		//ETH.onIpEvent(onEthDisconnect, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
-		//ETH.onIpEvent(onEthGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
+		WiFi.onEvent(onEthConnect, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
+		WiFi.onEvent(onEthDisconnect, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
+		WiFi.onEvent(onEthGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
 		ETH.setHostname(config.deviceHostname);
 		//enableEth();
 	}

@@ -851,6 +851,7 @@ function removeModal() {
 function listStats() {
   removeModal();
   version = ajaxobj.version;
+  document.getElementById("title").innerHTML = ajaxobj.hostname;
   document.getElementById("chip").innerHTML = ajaxobj.chipid;
   document.getElementById("cpu").innerHTML = ajaxobj.cpu + " Mhz";
   document.getElementById("cpumodel").innerHTML = ajaxobj.cpumodel + " rev" + ajaxobj.cpurev;

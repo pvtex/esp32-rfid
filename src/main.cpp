@@ -202,6 +202,7 @@ void ICACHE_FLASH_ATTR setup()
 	setupWifi(configured);
 #ifdef ETHERNET
 	setupEth(configured);
+	/*
 	config.ipAddressEth = ETH.localIP();
 	config.gatewayIpEth = ETH.gatewayIP();
 	config.subnetIpEth = ETH.subnetMask();
@@ -216,6 +217,7 @@ void ICACHE_FLASH_ATTR setup()
 	char spd[12]; 
 	sprintf(spd, "%dMbps %s", ETH.linkSpeed(), linkduplex);
 	config.ethlink = (String)spd;
+	*/
 #endif
 	setupWebServer();
 	writeEvent("INFO", "sys", "System setup completed, running", "");
