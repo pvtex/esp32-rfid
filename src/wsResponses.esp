@@ -151,11 +151,11 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["hostname"] = WiFi.getHostname();
 
 	String debugver = "";
-#ifdef DEBUG
-	debugver = "debug";
-#endif
 #ifdef ETHERNET
-	debugver = "eth";
+	debugver = "eth ";
+#endif
+#ifdef DEBUG
+	debugver += "debug";
 #endif
 	root["debugver"] = debugver;
 

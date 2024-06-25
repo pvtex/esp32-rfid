@@ -74,6 +74,7 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	Serial.print("[ INFO ] Ethernet IP Connected: ");
 	Serial.println(ETH.localIP().toString());
 #endif
+	delay(100);
 	config.ipAddressEth = ETH.localIP();
 	config.gatewayIpEth = ETH.gatewayIP();
 	config.subnetIpEth = ETH.subnetMask();
