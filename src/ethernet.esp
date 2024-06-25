@@ -70,10 +70,6 @@ void onEthDisconnect(WiFiEvent_t event, WiFiEventInfo_t inf0)
 
 void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 {
-#ifdef DEBUG
-	Serial.print("[ INFO ] Ethernet IP Connected: ");
-	Serial.println(ETH.localIP().toString());
-#endif
 	delay(100);
 	config.ipAddressEth = ETH.localIP();
 	config.gatewayIpEth = ETH.gatewayIP();
@@ -89,6 +85,14 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	sprintf(spd, "%dMbps %s", ETH.linkSpeed(), linkduplex);
 	config.ethlink = (String)spd;
 	eth_connected = true;
+#ifdef DEBUG
+	Serial.print("[ INFO ] Ethernet IP: ");
+	Serial.println(ETH.localIP().toString());
+	Serial.print("[ INFO ] Ethernet MAC: ");
+	Serial.println(config.ethmac);
+	Serial.print("[ INFO ] Ethernet Link: ");
+	Serial.println((String)spd);
+#endif
 	connectToMqtt();
 }
 
