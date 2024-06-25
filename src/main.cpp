@@ -202,6 +202,20 @@ void ICACHE_FLASH_ATTR setup()
 	setupWifi(configured);
 #ifdef ETHERNET
 	setupEth(configured);
+	config.ipAddressEth = ETH.localIP();
+	config.gatewayIpEth = ETH.gatewayIP();
+	config.subnetIpEth = ETH.subnetMask();
+	config.dnsIpEth = ETH.dnsIP();
+	config.ethmac = ETH.macAddress();
+	config.ethlink = NULL;
+	char *buffer;
+	itoa(ETH.linkSpeed(), buffer, 10);
+	strcpy(config.ethlink, buffer);
+	strcat(config.ethlink, " Mbps ");
+	strcat(config.ethlink, (ETH.fullDuplex() ? "FD" : ""));
+	//char *buffer;
+	//sprintf (buffer, "%sMbps %s", ETH.linkSpeed(), (ETH.fullDuplex() ? "FD" : ""));
+	//config.ethlink = buffer;
 #endif
 	setupWebServer();
 	writeEvent("INFO", "sys", "System setup completed, running", "");

@@ -43,7 +43,7 @@ curently ESP32-RFID support 3 boards:
 * without Ethernet
     * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1)
 * with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (no extras like Doorstatus, Exit-Button, ..., only Wiegand)
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (with debug settings: no extras like Doorstatus, Exit-Button, ..., only Wiegand)
     * [lilygo t-internet-com](boards/t-internet-com/)
 
 You can find gerber files and pictures for each board in the board subfolder.     
@@ -83,12 +83,25 @@ The resulting (built) image(s) can be found in the directory ```/bin``` created 
 
 The following table shows the typical pin layout used for connecting readers hardware to ESP:
 
-| ESP32   | Wiegand |
-|--------:|:-------:|
-| GPIO-16 | LED     | 
-| GPIO-15 | Buzzer  |
-| GPIO-13 | D0      |
-| GPIO-12 | D1      |
+| ESP32   | generic | DTWonder | lilygo | APWIKOGER |
+|--------:|:-------:|:--------:|:------:|:---------:|
+| GPIO-1  |         | LED      |        |           |
+| GPIO-2  |         | Relay 2  |        |           |
+| GPIO-3  |         | Buzzer   |        |           |
+| GPIO-4  | Relay   | D0       |        |           |
+| GPIO-5  |         | D1       |        |           |
+| GPIO-12 | D1      |          |        |           |
+| GPIO-13 | D0      |          |        | Buzzer    |
+| GPIO-14 |         |          |        | LED       |
+| GPIO-15 | Buzzer  |          |        |           |
+| GPIO-16 | LED     | Relay 1  |        | Relay 1   |  
+| GPIO-18 |         |          |        | Exit      |
+| GPIO-26 |         |          |        | D0        |
+| GPIO-33 |         |          |        | D1        |
+| GPIO-36 |         | Door     |        |           |
+| GPIO-39 |         | Exit     |        |           |
+
+
 
 
 For Wiegand based readers, you can configure D0 and D1 pins via settings page. By default, D0 is GPIO-4 and D1 is GPIO-5

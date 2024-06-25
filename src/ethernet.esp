@@ -16,14 +16,14 @@
 #define USE_ETHERNET                             // Add support for ethernet (+20k code)
 
 
-$ifdef DTWONDER
+#ifdef DTWONDER
 // ETH_PHY_JL1101 for DTWONDER
 #define ETH_PHY_TYPE        ETH_PHY_JL1101
 #define ETH_CLK_MODE        ETH_CLOCK_GPIO17_OUT
 #define GPIO_RMII_PWR 		0
 #define ETH_PHY_POWER		0
 #endif
-$ifdef LILYGO
+#ifdef LILYGO
 // ETH_PHY_LAN8720 for lilygo
 #define ETH_PHY_TYPE		ETH_PHY_LAN8720		
 #define ETH_CLK_MODE    	ETH_CLOCK_GPIO0_OUT 
@@ -73,6 +73,14 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	Serial.print("[ INFO ] Ethernet IP Connected: ");
 	Serial.println(ETH.localIP().toString());
 #endif
+	config.ipAddressEth = ETH.localIP();
+	config.gatewayIpEth = ETH.gatewayIP();
+	config.subnetIpEth = ETH.subnetMask();
+	config.dnsIpEth = ETH.dnsIP();
+	config.ethlink = NULL;
+	//char *buffer;
+	//sprintf (buffer, "%sMbps %s", ETH.linkSpeed(), (ETH.fullDuplex() ? "FD" : ""));
+	//config.ethlink = buffer;
 	eth_connected = true;
 	connectToMqtt();
 }
@@ -137,7 +145,8 @@ void setupEth(bool configured)
 {
 	if (!configured)
 	{
-		//ETH.SetHostname(config.hostnm);
+		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
+		ETH.setHostname("ESP32-RFID");
 	} else
 	{
 		
@@ -149,6 +158,10 @@ void setupEth(bool configured)
 		{	
 			ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
 		}
+		//ETH.onIpEvent(onEthConnect, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
+		//ETH.onIpEvent(onEthDisconnect, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
+		//ETH.onIpEvent(onEthGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
+		ETH.setHostname(config.deviceHostname);
 		//enableEth();
 	}
 }

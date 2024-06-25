@@ -197,8 +197,8 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["gatewayeth"] = printIP(gwaddreth);
 	root["netmasketh"] = printIP(nmaddreth);
 	root["dnseth"] = printIP(dnseth);
-	root["maceth"] = ""; //ETH.macAddress();
-	root["speedeth"] = ""; //ETH.linkSpeed() + "Mbps " + (ETH.FullDuplex() ? "FD" : "");
+	root["maceth"] = config.ethmac;
+	root["speedeth"] = config.ethlink;
 
 
 	size_t len = measureJson(root);
