@@ -61,6 +61,6 @@ struct Config {
     const char *wifiPassword = NULL;
     unsigned long wifiTimeout = 0;
     int wiegandbits = 58;
-    char *ethlink = NULL;
+    String ethlink = "";
     String ethmac = "";
 };

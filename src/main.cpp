@@ -207,15 +207,15 @@ void ICACHE_FLASH_ATTR setup()
 	config.subnetIpEth = ETH.subnetMask();
 	config.dnsIpEth = ETH.dnsIP();
 	config.ethmac = ETH.macAddress();
-	config.ethlink = NULL;
-	char *buffer;
-	itoa(ETH.linkSpeed(), buffer, 10);
-	strcpy(config.ethlink, buffer);
-	strcat(config.ethlink, " Mbps ");
-	strcat(config.ethlink, (ETH.fullDuplex() ? "FD" : ""));
-	//char *buffer;
-	//sprintf (buffer, "%sMbps %s", ETH.linkSpeed(), (ETH.fullDuplex() ? "FD" : ""));
-	//config.ethlink = buffer;
+	
+    String linkduplex = "HD";
+	if (ETH.fullDuplex() == true) 
+	{
+		linkduplex = "FD";
+	}
+	char spd[12]; 
+	sprintf(spd, "%dMbps %s", ETH.linkSpeed(), linkduplex);
+	config.ethlink = (String)spd;
 #endif
 	setupWebServer();
 	writeEvent("INFO", "sys", "System setup completed, running", "");

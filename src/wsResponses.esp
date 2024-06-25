@@ -164,6 +164,10 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 		root["ssid"] = WiFi.softAPSSID();
 		root["dns"] = printIP(WiFi.softAPIP());
 		root["mac"] = WiFi.softAPmacAddress();
+
+		root["ip"] = printIP(WiFi.softAPIP());
+		root["gateway"] = printIP(config.gatewayIp);
+		root["netmask"] = printIP(config.wifiApSubnet);
 	}
 	else
 	{
@@ -177,16 +181,11 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 		root["rssiperc"] = String(RssI);
 		root["dns"] = printIP(WiFi.dnsIP());
 		root["mac"] = WiFi.macAddress();
+
+		root["ip"] = printIP(WiFi.localIP());
+		root["gateway"] = printIP(WiFi.gatewayIP());
+		root["netmask"] = printIP(WiFi.subnetMask());
 	}
-
-	IPAddress ipaddr = WiFi.localIP();
-	IPAddress gwaddr = WiFi.gatewayIP();
-	IPAddress nmaddr = WiFi.subnetMask();
-
-	root["ip"] = printIP(ipaddr);
-	root["gateway"] = printIP(gwaddr);
-	root["netmask"] = printIP(nmaddr);
-
 
 	IPAddress ipaddreth = config.ipAddressEth; //ETH.localIP();
 	IPAddress gwaddreth = config.gatewayIpEth; //ETH.gatewayIP();

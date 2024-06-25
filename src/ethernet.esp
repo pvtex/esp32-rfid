@@ -77,7 +77,7 @@ void onEthGotIP(WiFiEvent_t event, WiFiEventInfo_t info)
 	config.gatewayIpEth = ETH.gatewayIP();
 	config.subnetIpEth = ETH.subnetMask();
 	config.dnsIpEth = ETH.dnsIP();
-	config.ethlink = NULL;
+	//config.ethlink = NULL;
 	//char *buffer;
 	//sprintf (buffer, "%sMbps %s", ETH.linkSpeed(), (ETH.fullDuplex() ? "FD" : ""));
 	//config.ethlink = buffer;
