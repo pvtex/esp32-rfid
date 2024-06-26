@@ -821,6 +821,16 @@ function getnextpage(mode) {
   }
 }
 
+function cleanString(input) {
+  var output = "";
+  for (var i=0; i<input.length; i++) {
+      if (input.charCodeAt(i) <= 127 || input.charCodeAt(i) >= 160 && input.charCodeAt(i) <= 255) {
+          output += input.charAt(i);
+      }
+  }
+  return output;
+}
+
 function builddata(obj) {
   data = data.concat(obj.list);
 }

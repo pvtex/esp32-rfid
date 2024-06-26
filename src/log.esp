@@ -229,8 +229,6 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 }
 void ICACHE_FLASH_ATTR sendFileList(int page, AsyncWebSocketClient *client)
 {
-
-	//DynamicJsonDocument root(512);
 	JsonDocument root;
 	root["command"] = "listfiles";
 	root["page"] = page;
@@ -245,21 +243,19 @@ void ICACHE_FLASH_ATTR sendFileList(int page, AsyncWebSocketClient *client)
 
 	while (file)
 	{
-		//	if (dir.isFile()) // isFile is implemented in Arduino Core 2.5.1 - We'll have to wait for the ISR not in IRAM fix
-
 		String thisFileName = file.name();
 		if ((thisFileName.indexOf("latestlog") >= 0) || (thisFileName.indexOf("eventlog") >= 0)) // for the time being we just check filenames
 		{
 			if (numFiles >= first && numFiles < last)
 			{
 				JsonObject item = items.createNestedObject();
-				item["filename"] = file.name();
+				item["filename"] = thisFileName;
 				item["filesize"] = file.size();
 			} // first, last
 			numFiles++;
 		} // isFile
 		file = dir.openNextFile();
-	}	  // dir next
+	}
 
 	float pages = numFiles / FILES_PER_PAGE;
 	root["haspages"] = ceil(pages);

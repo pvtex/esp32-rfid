@@ -34,6 +34,7 @@ bool eth_connected = false;
 #include "WiFiEventHandler.h"
 #include <SPI.h>
 #include <ESPmDNS.h>
+#define ARDUINOJSON_DECODE_UNICODE 0
 #include <ArduinoJson.h>
 #include <FS.h>
 #include <LittleFS.h>
