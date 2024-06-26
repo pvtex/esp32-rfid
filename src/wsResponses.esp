@@ -139,12 +139,14 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["availlittlefs"] = LittleFS.totalBytes() - LittleFS.usedBytes();
 	root["littlefssize"] = LittleFS.totalBytes();
 	
-  	int h = uptimeSeconds / 3600;
-  	int rem = uptimeSeconds % 3600;
-  	int m = rem / 60;
-  	int s = rem % 60;
+	int d = uptimeSeconds / 86400;
+	int rem = uptimeSeconds % 86400;
+  	int h = rem / 3600;
+  	int remh = rem % 3600;
+  	int m = remh / 60;
+  	int s = remh % 60;
 	char uptimebuffer[9];
-	sprintf(uptimebuffer, "%02d:%02d:%02d", h, m, s);
+	sprintf(uptimebuffer, "%02d days %02d:%02d:%02d", d, h, m, s);
 
 	root["uptime"] = uptimebuffer;
 	root["version"] = VERSION;

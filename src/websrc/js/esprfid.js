@@ -867,13 +867,13 @@ function listStats() {
   document.getElementById("cpumodel").innerHTML = ajaxobj.cpumodel + " rev" + ajaxobj.cpurev;
   document.getElementById("cpucores").innerHTML = ajaxobj.cpucores;
   document.getElementById("uptime").innerHTML = ajaxobj.uptime;
-  document.getElementById("heap").innerHTML = ajaxobj.heap + " Bytes";
+  document.getElementById("heap").innerHTML = Math.floor(ajaxobj.heap / 1024) + " KBytes Free / " + Math.floor(ajaxobj.heapsize / 1024) + " KBytes Total";
   document.getElementById("heap").style.width = ((ajaxobj.heap * 100) / ajaxobj.heapsize) + "%";
   colorStatusbar(document.getElementById("heap"));
-  document.getElementById("flash").innerHTML = ajaxobj.availsize + " Bytes";
+  document.getElementById("flash").innerHTML = Math.floor(ajaxobj.availsize / 1024) + " KBytes Free / " + Math.floor((ajaxobj.availsize + ajaxobj.sketchsize) / 1024) + " KBytes Total";
   document.getElementById("flash").style.width = (ajaxobj.availsize * 100) / (ajaxobj.availsize + ajaxobj.sketchsize) + "%";
   colorStatusbar(document.getElementById("flash"));
-  document.getElementById("littlefs").innerHTML = ajaxobj.availlittlefs + " Bytes";
+  document.getElementById("littlefs").innerHTML = Math.floor(ajaxobj.availlittlefs / 1024) + " KBytes Free / " + Math.floor(ajaxobj.littlefssize/ 1024) + " KBytes Total";
   document.getElementById("littlefs").style.width = (ajaxobj.availlittlefs * 100) / ajaxobj.littlefssize + "%";
   colorStatusbar(document.getElementById("littlefs"));
   document.getElementById("ssidstat").innerHTML = ajaxobj.ssid;
