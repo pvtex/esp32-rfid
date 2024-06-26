@@ -83,6 +83,7 @@ WiegandNG wg;
 
 // these are from us which can be updated and changed
 #include "webh/esprfid.js.gz.h"
+#include "webh/boards.js.gz.h"
 #include "webh/esprfid.htm.gz.h"
 #include "webh/index.html.gz.h"
 

@@ -49,6 +49,47 @@ function espRfidJsGzh(cb) {
     cb();
 }
 
+function BoardsJsMinify (cb) {
+    return pump([
+        gulp.src('../../src/websrc/js/boards.js'),
+        uglify(),
+        gulp.dest('../../src/websrc/gzipped/js/'),
+    ] );
+}
+
+function BoardsJsGz() {
+    return gulp.src("../../src/websrc/gzipped/js/boards.js")
+        .pipe(gzip({
+            append: true
+        }))
+    .pipe(gulp.dest('../../src/websrc/gzipped/js/'));
+}
+
+function BoardsJsGzh(cb) {
+    var source = "../../src/websrc/gzipped/js/" + "boards.js.gz";
+    var destination = "../../src/webh/" + "boards.js.gz.h";
+ 
+    var wstream = fs.createWriteStream(destination);
+    wstream.on('error', function (err) {
+        console.log(err);
+    });
+ 
+    var data = fs.readFileSync(source);
+ 
+    wstream.write('#define boards_js_gz_len ' + data.length + '\n');
+    wstream.write('const uint8_t boards_js_gz[] PROGMEM = {')
+ 
+    for (i=0; i<data.length; i++) {
+        if (i % 1000 == 0) wstream.write("\n");
+        wstream.write('0x' + ('00' + data[i].toString(16)).slice(-2));
+        if (i<data.length-1) wstream.write(',');
+    }
+ 
+    wstream.write('\n};')
+    wstream.end();
+    cb();
+}
+
 function scriptsConcat() {
     return gulp.src([
             '../../src/websrc/3rdparty/js/jquery-1.12.4.min.js',
@@ -215,7 +256,7 @@ function htmls() {
 }
 
 async function runner() {
-    const scriptTasks = gulp.series(espRfidJsMinify, espRfidJsGz, espRfidJsGzh, scriptsConcat, scripts);
+    const scriptTasks = gulp.series(espRfidJsMinify, espRfidJsGz, espRfidJsGzh, BoardsJsMinify, BoardsJsGz, BoardsJsGzh, scriptsConcat, scripts);
     const styleTasks = gulp.series(stylesConcat, styles);
     const fontTasks = gulp.series(fontgz, fonts);
     const htmlTasks = gulp.series(htmlsGz, htmlsPrep, htmls);

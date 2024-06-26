@@ -69,6 +69,12 @@ void ICACHE_FLASH_ATTR setupWebServer() {
 		request->send(response);
 	});
 
+	server.on("/js/boards.js", HTTP_GET, [](AsyncWebServerRequest *request) {
+		AsyncWebServerResponse *response = request->beginResponse_P(200, "text/javascript", boards_js_gz, boards_js_gz_len);
+		response->addHeader("Content-Encoding", "gzip");
+		request->send(response);
+	});
+
 	server.on("/index.html", HTTP_GET, [](AsyncWebServerRequest *request) {
 		AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", index_html_gz, index_html_gz_len);
 		response->addHeader("Content-Encoding", "gzip");

@@ -2,54 +2,18 @@ struct Config {
 
 #ifdef GENERIC
     #define MAX_NUM_RELAYS 4
-    int relayPin[MAX_NUM_RELAYS];
-    uint8_t accessdeniedpin = 255;
-    uint8_t beeperpin = 255;
-    uint8_t doorstatpin = 255;
-    uint8_t ledwaitingpin = 255;
-    uint8_t openlockpin = 255;
-    uint8_t wifipin = 255;
-    int wgd0pin = 255;
-    int wgd1pin = 255;
 #endif
 
 #ifdef APWIKOGER
     #define MAX_NUM_RELAYS 1
-    int relayPin[MAX_NUM_RELAYS] = {16};
-    uint8_t accessdeniedpin = 255;
-    uint8_t beeperpin = 13;
-    uint8_t doorstatpin = 255;
-    uint8_t ledwaitingpin = 14;
-    uint8_t openlockpin = 255;
-    uint8_t wifipin = 255;
-    int wgd0pin = 33;
-    int wgd1pin = 26;
 #endif
 
 #ifdef DTWONDER
     #define MAX_NUM_RELAYS 2
-    int relayPin[MAX_NUM_RELAYS] = {16, 2};
-    uint8_t accessdeniedpin = 255;
-    uint8_t beeperpin = 1;
-    uint8_t doorstatpin = 39;
-    uint8_t ledwaitingpin = 3;
-    uint8_t openlockpin = 36;
-    uint8_t wifipin = 255;
-    int wgd0pin = 4;
-    int wgd1pin = 5;
 #endif
 
 #ifdef LILYGO
     #define MAX_NUM_RELAYS 1
-    int relayPin[MAX_NUM_RELAYS] = {32};
-    uint8_t accessdeniedpin = 255;
-    uint8_t beeperpin = 15;
-    uint8_t doorstatpin = 33;
-    uint8_t ledwaitingpin = 13;
-    uint8_t openlockpin = 35;
-    uint8_t wifipin = 255;
-    int wgd0pin = 14;
-    int wgd1pin = 2;
 #endif
 
 #ifdef ETHERNET
@@ -61,6 +25,15 @@ struct Config {
     String ethmac = "";
 #endif
 
+    int relayPin[MAX_NUM_RELAYS];
+    uint8_t accessdeniedpin = 255;
+    uint8_t beeperpin = 255;
+    uint8_t doorstatpin = 255;
+    uint8_t ledwaitingpin = 255;
+    uint8_t openlockpin = 255;
+    uint8_t wifipin = 255;
+    int wgd0pin = 255;
+    int wgd1pin = 255;
     bool accessPointMode = false;
     IPAddress accessPointIp;
     IPAddress accessPointSubnetIp;
