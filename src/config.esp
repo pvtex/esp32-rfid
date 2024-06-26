@@ -252,39 +252,41 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		config.httpPass = strdup(general["pswd"]);
 	}
 	config.dhcpEnabled = network["dhcp"] == 1;
-	config.dhcpEnabledEth = network["dhcpeth"] == 1;
 	if (network.containsKey("ip"))
 	{
 		config.ipAddress.fromString(network["ip"].as<const char*>());
-	}
-	if (network.containsKey("ipeth"))
-	{
-		config.ipAddressEth.fromString(network["ipeth"].as<const char*>());
 	}
 	if (network.containsKey("subnet"))
 	{
 		config.subnetIp.fromString(network["subnet"].as<const char*>());
 	}
-	if (network.containsKey("subneteth"))
-	{
-		config.subnetIpEth.fromString(network["subneteth"].as<const char*>());
-	}
 	if (network.containsKey("gateway"))
 	{
 		config.gatewayIp.fromString(network["gateway"].as<const char*>());
-	}
-	if (network.containsKey("gatewayeth"))
-	{
-		config.gatewayIpEth.fromString(network["gatewayeth"].as<const char*>());
 	}
 	if (network.containsKey("dns"))
 	{
 		config.dnsIp.fromString(network["dns"].as<const char*>());
 	}
+#ifdef ETHERNET
+	config.dhcpEnabledEth = network["dhcpeth"] == 1;
+	if (network.containsKey("ipeth"))
+	{
+		config.ipAddressEth.fromString(network["ipeth"].as<const char*>());
+	}
+	if (network.containsKey("subneteth"))
+	{
+		config.subnetIpEth.fromString(network["subneteth"].as<const char*>());
+	}
+	if (network.containsKey("gatewayeth"))
+	{
+		config.gatewayIpEth.fromString(network["gatewayeth"].as<const char*>());
+	}
 	if (network.containsKey("dnseth"))
 	{
 		config.dnsIpEth.fromString(network["dnseth"].as<const char*>());
 	}
+#endif
 
 	const char *apipch;
 	if (config.wifiApIp)

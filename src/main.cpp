@@ -25,7 +25,9 @@ SOFTWARE.
  */
 #define VERSION "1.1.5"
 
+#ifdef ETHERNET
 bool eth_connected = false;
+#endif
 
 #include "Arduino.h"
 #include <WiFi.h>
@@ -210,14 +212,13 @@ void ICACHE_FLASH_ATTR setup()
     }
 	
 	bool configured = false;
-	bool configuredeth = false;
 	configured = loadConfiguration(config);
-	configuredeth = configured;
-	eth_connected = false;
-	setupMqtt();
 	setupWifi(configured);
 	
 #ifdef ETHERNET
+	bool configuredeth = false;
+	configuredeth = configured;
+	eth_connected = false;
 	setupEth(configuredeth);
 
 	config.ipAddressEth = ETH.localIP();
@@ -236,6 +237,7 @@ void ICACHE_FLASH_ATTR setup()
 	config.ethlink = (String)spd;
 #endif
 
+	setupMqtt();
 	setupWebServer();
 	writeEvent("INFO", "sys", "System setup completed, running", "");
 #ifdef DEBUG
