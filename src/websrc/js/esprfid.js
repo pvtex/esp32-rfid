@@ -803,7 +803,7 @@ function listSCAN(obj) {
 function getnextpage(mode) {
   if (!backupstarted) {
     document.getElementById("loadpages").innerHTML = "Loading " + page + "/" + haspages;
-    document.getElementById("loadpages").style.width = ((page * 100) / haspages) + "%";
+    document.getElementById("loadpages").style.width = (((page+1) * 100) / (haspages-1)) + "%";
   }
 
   // check received previous page
