@@ -56,8 +56,22 @@ File fsUploadFile;                      //Hält den aktuellen Upload
 WiegandNG wg;
 
 // relay specific variables
-bool activateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
-bool deactivateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
+#if MAX_NUM_RELAYS == 4
+	bool activateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
+	bool deactivateRelay[MAX_NUM_RELAYS] = {false, false, false, false};
+#endif
+#if MAX_NUM_RELAYS == 3
+	bool activateRelay[MAX_NUM_RELAYS] = {false, false, false};
+	bool deactivateRelay[MAX_NUM_RELAYS] = {false, false, false};
+#endif
+#if MAX_NUM_RELAYS == 2
+	bool activateRelay[MAX_NUM_RELAYS] = {false, false};
+	bool deactivateRelay[MAX_NUM_RELAYS] = {false, false};
+#endif
+#if MAX_NUM_RELAYS == 1
+	bool activateRelay[MAX_NUM_RELAYS] = {false};
+	bool deactivateRelay[MAX_NUM_RELAYS] = {false};
+#endif
 
 // these are from vendors
 #include "webh/glyphicons-halflings-regular.woff.gz.h"

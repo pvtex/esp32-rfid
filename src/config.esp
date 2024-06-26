@@ -135,9 +135,9 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	config.pinCodeRequested = false;
 	config.pinCodeOnly = false;
 
-	int wgd0pin = hardware["wgd0pin"];
-	int wgd1pin = hardware["wgd1pin"];
-	int wiegandbits = hardware["wiegandbits"];
+	config.wgd0pin = hardware["wgd0pin"];
+	config.wgd1pin = hardware["wgd1pin"];
+	config.wiegandbits = hardware["wiegandbits"];
 	if (hardware.containsKey("requirepincodeafterrfid"))
 	{
 		config.pinCodeRequested = hardware["requirepincodeafterrfid"];
@@ -154,7 +154,7 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 	{
 		config.wiegandReadHex = hardware["useridstoragemode"] == "hexadecimal";
 	}
-	setupWiegandReader(wgd0pin, wgd1pin, config.removeParityBits, wiegandbits);
+	setupWiegandReader(config.wgd0pin, config.wgd1pin, config.removeParityBits, config.wiegandbits);
 
 	if (network.containsKey("fallbackmode"))
 	{
