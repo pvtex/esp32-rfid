@@ -7,7 +7,7 @@ struct Config {
     uint8_t beeperpin = 255;
     uint8_t doorstatpin = 255;
     uint8_t ledwaitingpin = 255;
-    uint8_t openlockpin = 255
+    uint8_t openlockpin = 255;
     uint8_t wifipin = 255;
     int wgd0pin = 255;
     int wgd1pin = 255;
@@ -20,7 +20,7 @@ struct Config {
     uint8_t beeperpin = 13;
     uint8_t doorstatpin = 255;
     uint8_t ledwaitingpin = 14;
-    uint8_t openlockpin = 255
+    uint8_t openlockpin = 255;
     uint8_t wifipin = 255;
     int wgd0pin = 33;
     int wgd1pin = 26;
