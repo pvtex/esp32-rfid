@@ -11,7 +11,7 @@ import os
 #
 
 def after_build(source, target, env):
-	shutil.copy(firmware_source, 'bin/debugapw.bin')
+	shutil.copy(firmware_source, 'bin/wifiapwdebug.bin')
 
 env.AddPostAction("buildprog", after_build)
 

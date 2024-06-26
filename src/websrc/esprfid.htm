@@ -610,13 +610,13 @@
 <div id="logcontent">
     <br>
     <br>
-    <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
-        <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
-            Please wait while fetching data...
-        </div>
-    </div>
     <div>
         <legend>Access Log</legend>
+        <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
+            <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
+                Please wait while fetching data...
+            </div>
+        </div>
         <div class="panel panel-default">
             <div>
                 <table id="latestlogtable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="false" data-state="true"></table>
@@ -636,13 +636,13 @@
 <div id="eventcontent">
     <br>
     <br>
-    <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
-        <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
-            Please wait while fetching data...
-        </div>
-    </div>
     <div>
         <legend>Event Log</legend>
+        <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
+            <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
+                Please wait while fetching data...
+            </div>
+        </div>
         <div class="panel panel-default">
             <div>
                 <table id="eventtable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="false" data-state="true"></table>
@@ -660,13 +660,13 @@
 <div id="logmaintenancecontent">
     <br>
     <br>
-    <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
-        <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
-            Please wait while fetching data...
-        </div>
-    </div>
     <div>
         <legend>Log Maintenance</legend>
+        <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
+            <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
+                Please wait while fetching data...
+            </div>
+        </div>
         <div class="panel panel-default">
             <div>
                 <table id="littlefstable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="false" data-state="true"></table>
@@ -1176,95 +1176,99 @@
     </div>
 </div>
 <div id="userscontent">
-    <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
-        <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
-            Please wait while fetching data...
+    <br>
+    <br>
+    <div>
+        <legend>Users</legend>
+        <div id="loading-img" class="progress text-center" style="margin-bottom: 0 !important;">
+            <div id="loadpages" class="progress-bar progress-bar-primary text-center" role="progressbar">
+                Please wait while fetching data...
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="text-center" id="usersbanner">
-        <h5>You can add new users by either scanning a RFID Tag or by clicking on "New User" button.</h5>
-    </div>
-    <br>
-    <div class="panel panel-default">
-        <table id="usertable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="true" data-state="true"></table>
-    </div>
-    <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
-        <style scoped>
-        .form-group.required .control-label:after {
-            content: "*";
-            color: red;
-            margin-left: 4px;
-        }
-        </style>
-        <div class="modal-dialog" role="document">
-            <form class="modal-content form-horizontal" id="editor">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="editor-title">Add User</h4>
-                </div>
-                <div id=usermodalbody class="modal-body">
-                    <input type="number" id="id" name="id" class="hidden" />
-                    <div class="form-group">
-                        <label for="picctype" class="col-sm-3 control-label">PICC Type</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="picctype" name="picctype" placeholder="PICC Type" disabled>
+        <div class="panel panel-default">
+            <table id="usertable" class="table" data-paging="true" data-filtering="true" data-sorting="true" data-editing="true" data-state="true"></table>
+        </div>
+        <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
+            <style scoped>
+            .form-group.required .control-label:after {
+                content: "*";
+                color: red;
+                margin-left: 4px;
+            }
+            </style>
+            <div class="modal-dialog" role="document">
+                <form class="modal-content form-horizontal" id="editor">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="editor-title">Add User</h4>
+                    </div>
+                    <div id=usermodalbody class="modal-body">
+                        <input type="number" id="id" name="id" class="hidden" />
+                        <div class="form-group">
+                            <label for="picctype" class="col-sm-3 control-label">PICC Type</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="picctype" name="picctype" placeholder="PICC Type" disabled>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="uid" class="col-sm-3 control-label">UID</label>
+                            <div class="col-sm-9" style="font-family:monospace">
+                                <input type="text" class="form-control" id="uid" name="uid" placeholder="UID" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode" class="col-sm-3 control-label">Pin code</label>
+                            <div class="col-sm-9" style="font-family:monospace">
+                                <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin code">
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="username" class="col-sm-3 control-label">User Name or Label</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="User Name or Label" required>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="validsince" class="col-sm-3 control-label">Valid Since</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" id="validsince" name="validsince" value="1970-01-01" placeholder="Valid Since" required>
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label for="validuntil" class="col-sm-3 control-label">Valid Until</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" id="validuntil" name="validuntil" value="2038-01-01" placeholder="Valid Until" required>
+                            </div>
+                        </div>
+                        <div id=useracctype class="form-group required">
+                            <label for="acctype" class="col-sm-3 control-label">Access Type</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="acctype" required>
+                                    <option selected="selected" value="1">Within opening hours</option>
+                                    <option value="2">Within opening hours 2</option>
+                                    <!--
+                                    <option value="2">Within Selected Hours</option>
+                                    <option value="3">Within Selected Days</option>
+                                    <option value="4">Within Selected Days and Hours</option>
+                                    <option value="5">On Weekends</option>
+                                    <option value="6">On Weekdays</option>
+                                    -->
+                                    <option value="0">Disabled</option>
+                                    <option value="99">Admin 24/7</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group required">
-                        <label for="uid" class="col-sm-3 control-label">UID</label>
-                        <div class="col-sm-9" style="font-family:monospace">
-                            <input type="text" class="form-control" id="uid" name="uid" placeholder="UID" required>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     </div>
-                    <div class="form-group">
-                        <label for="pincode" class="col-sm-3 control-label">Pin code</label>
-                        <div class="col-sm-9" style="font-family:monospace">
-                            <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin code">
-                        </div>
-                    </div>
-                    <div class="form-group required">
-                        <label for="username" class="col-sm-3 control-label">User Name or Label</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="username" name="username" placeholder="User Name or Label" required>
-                        </div>
-                    </div>
-                    <div class="form-group required">
-                        <label for="validsince" class="col-sm-3 control-label">Valid Since</label>
-                        <div class="col-sm-9">
-                            <input type="date" class="form-control" id="validsince" name="validsince" value="1970-01-01" placeholder="Valid Since" required>
-                        </div>
-                    </div>
-                    <div class="form-group required">
-                        <label for="validuntil" class="col-sm-3 control-label">Valid Until</label>
-                        <div class="col-sm-9">
-                            <input type="date" class="form-control" id="validuntil" name="validuntil" value="2038-01-01" placeholder="Valid Until" required>
-                        </div>
-                    </div>
-                    <div id=useracctype class="form-group required">
-                        <label for="acctype" class="col-sm-3 control-label">Access Type</label>
-                        <div class="col-sm-9">
-                            <select class="form-control" id="acctype" required>
-                                <option selected="selected" value="1">Within opening hours</option>
-                                <option value="2">Within opening hours 2</option>
-                                <!--
-                                <option value="2">Within Selected Hours</option>
-                                <option value="3">Within Selected Days</option>
-                                <option value="4">Within Selected Days and Hours</option>
-                                <option value="5">On Weekends</option>
-                                <option value="6">On Weekdays</option>
-                                -->
-                                <option value="0">Disabled</option>
-                                <option value="99">Admin 24/7</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                </div>
-            </form>
+                </form>
+            </div>
+        </div>
+        <br>    
+        <div class="text-center" id="usersbanner">
+            <h5>You can add new users by either scanning a RFID Tag or by clicking on "New User" button.</h5>
         </div>
     </div>
     <br>
