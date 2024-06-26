@@ -42,10 +42,10 @@ curently ESP32-RFID support 3 boards:
 
 * without Ethernet
     * generic image: generic.bin, debug-image: debug.bin
-    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) image: genericapw.bin, debug-image: debugapw.bin
+    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) image: [genericapw.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/genericapw.bin), debug-image: [debugapw.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/debugapw.bin)
 * with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (with debug settings: no extras like Doorstatus, Exit-Button, ..., only Wiegand) image: ethernetdtw.bin, debug-image: ethdtwdebug.bin
-    * [lilygo t-internet-com](boards/t-internet-com/) image: ethernetlil.bin, debug-image: ethlildebug.bin
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (with debug settings: no extras like Doorstatus, Exit-Button, ..., only Wiegand) image: [ethernetdtw.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernetdtw.bin), debug-image: [ethdtwdebug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethdtwdebug.bin)
+    * [lilygo t-internet-com](boards/t-internet-com/) image: [ethernetlil.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernetlil.bin), debug-image: [ethlildebug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethlildebug.bin)
 
 You can find gerber files and pictures for each board in the board subfolder.     
 In each subfolder there is a gerber file for an adapter board to wiegand interface, door status and exit button.      
