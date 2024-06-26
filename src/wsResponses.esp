@@ -187,10 +187,11 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 		root["netmask"] = printIP(WiFi.subnetMask());
 	}
 
-	IPAddress ipaddreth = config.ipAddressEth; //ETH.localIP();
-	IPAddress gwaddreth = config.gatewayIpEth; //ETH.gatewayIP();
-	IPAddress nmaddreth = config.subnetIpEth; //ETH.subnetMask();
-	IPAddress dnseth = config.dnsIpEth; //ETH.dnsIP();
+#ifdef ETHERNET
+	IPAddress ipaddreth = config.ipAddressEth; 
+	IPAddress gwaddreth = config.gatewayIpEth; 
+	IPAddress nmaddreth = config.subnetIpEth;
+	IPAddress dnseth = config.dnsIpEth; 
 
 	root["ipeth"] = printIP(ipaddreth);
 	root["gatewayeth"] = printIP(gwaddreth);
@@ -198,7 +199,7 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	root["dnseth"] = printIP(dnseth);
 	root["maceth"] = config.ethmac;
 	root["speedeth"] = config.ethlink;
-
+#endif
 
 	size_t len = measureJson(root);
 	AsyncWebSocketMessageBuffer *buffer = ws.makeBuffer(len);
