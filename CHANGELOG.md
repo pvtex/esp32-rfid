@@ -1,9 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.6] - 2024-06-27
+- [firmware] Wiegand reader working again, fixed WiegandNG library
 ## [1.1.5] - 2024-06-25
-- [firmware]  JL1101 Ethenet full working and testet.
-- [firmware]  prepared for LAN8720 ethernet, not tested yet
+- [firmware] L1101 Ethenet full working and testet.
+- [firmware] prepared for LAN8720 ethernet, not tested yet
 ## [1.1.4] - 2024-06-18
 - [firmware] prepared for JL1101 Ethernet (ethernet.bin)
                 - Ethernet infos shown on status page
