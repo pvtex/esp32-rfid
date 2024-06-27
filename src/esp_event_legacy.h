@@ -17,9 +17,16 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "esp_err.h"
 #include "esp_wifi_types.h"
 #include "esp_netif.h"
+
+#include "esp_err.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "freertos/semphr.h"
+
+#include "esp_event_base.h"
 
 #ifdef __cplusplus
 extern "C" {

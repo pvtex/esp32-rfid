@@ -38,66 +38,9 @@
 
 #ifndef MAIN_WIFIEVENTHANDLER_H_
 #define MAIN_WIFIEVENTHANDLER_H_
-#include <esp_event.h>
-#include <esp_event_base.h>
-#include "esp_event_legacy.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
-/**
- * @brief %WiFi state event handler.
- *
- * Here is an example class that implements all the virtual functions that can be called
- * for events:
- *
- * @code{.cpp}
- * MyHandler::MyHandler() {
- * }
- *
- * MyHandler::~MyHandler() {
- * }
- *
- * esp_err_t MyHandler::apStart() {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staConnected(system_event_sta_connected_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staDisconnected(system_event_sta_disconnected_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::apStaConnected(system_event_ap_staconnected_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::apStaDisconnected(system_event_ap_stadisconnected_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staStart() {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staGotIp(system_event_sta_got_ip_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staScanDone(system_event_sta_scan_done_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::staAuthChange(system_event_sta_authmode_change_t info) {
- *   return ESP_OK;
- * }
- *
- * esp_err_t MyHandler::wifiReady() {
- *   return ESP_OK;
- * }
- * @endcode
- */
+#include "esp_event_legacy.h"
+
 class WiFiEventHandler {
 public:
 	WiFiEventHandler();
