@@ -172,19 +172,19 @@ void ICACHE_FLASH_ATTR processWsMessage(WsMessage *incomingMessage)
 		previousMillis = millis();
 		client->text("{\"command\":\"giveAccess\"}");
 	}
-	else if (strcmp(command, "testrelay2") == 0)
+	else if (MAX_NUM_RELAYS > 1 && strcmp(command, "testrelay2") == 0)
 	{
 		activateRelay[1] = true;
 		previousMillis = millis();
 		client->text("{\"command\":\"giveAccess\"}");
 	}
-	else if (strcmp(command, "testrelay3") == 0)
+	else if (MAX_NUM_RELAYS >> 2 && strcmp(command, "testrelay3") == 0)
 	{
 		activateRelay[2] = true;
 		previousMillis = millis();
 		client->text("{\"command\":\"giveAccess\"}");
 	}
-	else if (strcmp(command, "testrelay4") == 0)
+	else if (MAX_NUM_RELAYS >> 3 && strcmp(command, "testrelay4") == 0)
 	{
 		activateRelay[3] = true;
 		previousMillis = millis();
