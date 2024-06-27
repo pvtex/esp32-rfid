@@ -1,17 +1,7 @@
 function handleBoard() {
     var bType = parseInt(document.getElementById("boardtype").value)
     if (bType === 1) { // generic
-      document.getElementById("numrlys").value = "1";
-      document.getElementById("changenumrly").click();
-      document.getElementById("gpiorly"). value = "255";
-      document.getElementById("accessdeniedpin").value = "255";
-      document.getElementById("beeperpin").value = "255";
-      document.getElementById("doorstatpin").value = "255";
-      document.getElementById("ledwaitingpin").value = "255";
-      document.getElementById("openlockpin").value = "255";
-      document.getElementById("wifipin").value = "255";
-      document.getElementById("wg0pin").value = "4";
-      document.getElementById("wg1pin").value = "5";
+
     } else if (bType === 2) { // APWIKOGER Relay X1
       document.getElementById("numrlys").value = "1";
       document.getElementById("changenumrly").click();

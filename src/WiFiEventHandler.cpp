@@ -6,7 +6,7 @@
  */
 
 #include "WiFiEventHandler.h"
-#include <esp_wifi.h>
+//#include <esp_wifi.h>
 #include <esp_log.h>
 #include "sdkconfig.h"
 
