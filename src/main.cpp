@@ -45,7 +45,7 @@ bool eth_connected = false;
 #include <Ticker.h>
 #include <AsyncMqttClient.h>
 #include <Bounce2.h>
-#include <esp_task_wdt.h>
+//#include <esp_task_wdt.h>
 #include <Update.h>
 #include "magicnumbers.h"
 #include "config.h"

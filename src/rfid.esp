@@ -45,36 +45,6 @@ void rfidPrepareRead()
 	loadWiegandData();
 }
 
-void PrintBinary(WiegandNG &tempwg) {
-	volatile unsigned char *buffer = buffer = tempwg.getRawData();
-	unsigned int bufferSize = 0;
-	bufferSize = tempwg.getBufferSize();
-	unsigned int countedBits = 0;
-	countedBits = tempwg.getBitCounted();
-
-	unsigned int countedBytes = (countedBits/8);
-	if ((countedBits % 8)>0) countedBytes++;
-	// unsigned int bitsUsed = countedBytes * 8;
-
-#ifdef DEBUG
-	for (unsigned int i=bufferSize-countedBytes; i< bufferSize;i++) {
-		unsigned char bufByte=buffer[i];
-		for(int x=0; x<8;x++) {
-			if ( (((bufferSize-i) *8)-x) <= countedBits) {
-				if((bufByte & 0x80)) {
-					Serial.print("1");
-				}
-				else {
-					Serial.print("0");
-				}
-			}
-			bufByte<<=1;
-		}
-	}
-	Serial.println();
-#endif
-}
-
 void ICACHE_FLASH_ATTR wiegandRead()
 {
 	if (wiegandAvailable && rfidState == waitingRfid)
@@ -85,10 +55,13 @@ void ICACHE_FLASH_ATTR wiegandRead()
 		{
 			uid = String(wg.getUID(bool(config.removeParityBits), config.wiegandReadHex));
 			type = String(wg.getBitCounted(), DEC);
+			wg.clear();
 
 #ifdef DEBUG
 			Serial.print(F("[ INFO ] PICC's UID: "));
 			Serial.println(uid);
+			Serial.print(F("[ INFO ] Wiegand Bits: "));
+			Serial.println(type);
 #endif
 			// user exists, we should wait for pincode
 			String filename = "/P/";
@@ -535,12 +508,12 @@ void rfidLoop()
 
 void ICACHE_FLASH_ATTR setupWiegandReader(int d0, int d1, bool removeParityBits)
 {
-	wg.begin(d0, d1, 58, 15); //58bit
+	wg.begin(d0, d1, 58, 25); //58bit
 	rfidState = waitingRfid;
 }
 
 void ICACHE_FLASH_ATTR setupWiegandReader(int d0, int d1, bool removeParityBits, int wiegandbits)
 {
-	wg.begin(d0, d1, wiegandbits, 15); 
+	wg.begin(d0, d1, wiegandbits, 25); 
 	rfidState = waitingRfid;
 }

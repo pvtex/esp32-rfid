@@ -181,6 +181,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 
 			// mind the watchdog timer - this may take a couple of seconds...
 
+			/*
 			esp_task_wdt_config_t twdt_config1 = {
         		.timeout_ms = 2000,
         		.idle_core_mask = uint32_t((1 << ESP.getChipCores()) - 1),    // Bitmask of all cores
@@ -188,6 +189,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
     		};
 			esp_task_wdt_init(&twdt_config1); // (2, true) enable panic so ESP32 restarts
   			esp_task_wdt_add(NULL);
+			*/
 
 			// read the first half of the file
 
@@ -196,7 +198,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 				String item = String();
 				item = logFile.readStringUntil('\n');
 				newFile1.println(item);
-				esp_task_wdt_reset(); // tell the watchdog we're still doing stuff
+				//esp_task_wdt_reset(); // tell the watchdog we're still doing stuff
 			}
 
 			// read the rest
@@ -206,7 +208,7 @@ void ICACHE_FLASH_ATTR logMaintenance(String action, String filename, AsyncWebSo
 				String item = String();
 				item = logFile.readStringUntil('\n');
 				newFile2.println(item);
-				esp_task_wdt_reset(); // no reset please
+				//esp_task_wdt_reset(); // no reset please
 			}
 
 			logFile.close();
