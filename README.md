@@ -84,23 +84,26 @@ The resulting (built) image(s) can be found in the directory ```/bin``` created 
 
 The following table shows the typical pin layout used for connecting readers hardware to ESP:
 
-| ESP32   | generic | DTWonder | lilygo | APWIKOGER |
-|--------:|:-------:|:--------:|:------:|:---------:|
-| GPIO-1  |         | LED      |        |           |
-| GPIO-2  |         | Relay 2  |        |           |
-| GPIO-3  |         | Buzzer   |        |           |
-| GPIO-4  | Relay   | D0       |        |           |
-| GPIO-5  |         | D1       |        |           |
-| GPIO-12 | D1      |          |        |           |
-| GPIO-13 | D0      |          |        | Buzzer    |
-| GPIO-14 |         |          |        | LED       |
-| GPIO-15 | Buzzer  |          |        |           |
-| GPIO-16 | LED     | Relay 1  |        | Relay 1   |  
-| GPIO-18 |         |          |        | Exit      |
-| GPIO-26 |         |          |        | D0        |
-| GPIO-33 |         |          |        | D1        |
-| GPIO-36 |         | Door     |        |           |
-| GPIO-39 |         | Exit     |        |           |
+| ESP32   | generic | APWIKOGER |DTWonder  | DTWonder 16M | lilygo    |
+|--------:|:-------:|:---------:|:--------:|:------------:|:---------:|
+| GPIO-1  |         |           | LED      | LED          |           |
+| GPIO-2  |         |           | Relay 2  | Relay 2      | D1        |
+| GPIO-3  |         |           | Buzzer   | Buzzer       |           |
+| GPIO-4  | Relay   |           | D0       | D0           |           |
+| GPIO-5  |         |           | D1       | D1           |           |
+| GPIO-12 | D1      |           |          |              |           |
+| GPIO-13 | D0      | Buzzer    | Buzzer   | Buzzer       | LED       |
+| GPIO-14 |         | LED       | LED      | LED          | D0        |
+| GPIO-15 | Buzzer  |           |          |              | Buzzer    |
+| GPIO-16 | LED     | Relay 1   | Relay 1  | Relay 1      |           | 
+| GPIO-17 | Door    | Door      |          |              |           | 
+| GPIO-18 | Exit    | Exit      |          |              |           |
+| GPIO-26 |         | D0        |          |              |           |
+| GPIO-32 |         |           |          |              | Relay 1   |
+| GPIO-33 |         | D1        |          |              | Door      |
+| GPIO-35 |         |           |          |              | Exit      |
+| GPIO-36 |         |           | Door     | Door         |           |
+| GPIO-39 |         |           | Exit     | Exit         |           |
 
 
 
