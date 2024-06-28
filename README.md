@@ -90,15 +90,15 @@ The following table shows the typical pin layout used for connecting readers har
 | GPIO-1     |         |           | LED      | LED          |           |
 | GPIO-2     |         |           | Relay 2  | Relay 2      | D1        |
 | GPIO-3     |         |           | Buzzer   | Buzzer       |           |
-| GPIO-4     | Relay   |           | D0       | D0           |           |
-| GPIO-5     |         |           | D1       | D1           |           |
-| GPIO-12    | D1      |           |          |              |           |
-| GPIO-13    | D0      | Buzzer    | Buzzer   | Buzzer       | LED       |
-| GPIO-14    |         | LED       | LED      | LED          | D0        |
-| GPIO-15    | Buzzer  |           |          |              | Buzzer    |
-| GPIO-16    | LED     | Relay 1   | Relay 1  | Relay 1      |           | 
-| GPIO-17    | Door    | Door      |          |              |           | 
-| GPIO-18    | Exit    | Exit      |          |              |           |
+| GPIO-4     | D0      |           | D0       | D0           |           |
+| GPIO-5     | D1      |           | D1       | D1           |           |
+| GPIO-12    | LED     |           |          |              |           |
+| GPIO-13    | Buzzer  | Buzzer    | Buzzer   | Buzzer       | LED       |
+| GPIO-14    | Door    | LED       | LED      | LED          | D0        |
+| GPIO-15    | Exit    |           |          |              | Buzzer    |
+| GPIO-16    | Relay 1 | Relay 1   | Relay 1  | Relay 1      |           | 
+| GPIO-17    |         | Door      |          |              |           | 
+| GPIO-18    |         | Exit      |          |              |           |
 | GPIO-26    |         | D0        |          |              |           |
 | GPIO-32    |         |           |          |              | Relay 1   |
 | GPIO-33    |         | D1        |          |              | Door      |
