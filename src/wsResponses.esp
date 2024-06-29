@@ -146,7 +146,15 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
   	int m = remh / 60;
   	int s = remh % 60;
 	char uptimebuffer[15];
-	sprintf(uptimebuffer, "%d days %02d:%02d:%02d", d, h, m, s);
+	if ( d == 0 ) 
+	{
+		sprintf(uptimebuffer, "%02d:%02d:%02d", h, m, s);
+	} else if ( d == 1 )
+	{
+		sprintf(uptimebuffer, "%d day %02d:%02d:%02d", d, h, m, s);
+	} else {
+		sprintf(uptimebuffer, "%d days %02d:%02d:%02d", d, h, m, s);
+	}
 
 	root["uptime"] = uptimebuffer;
 	root["version"] = VERSION;
