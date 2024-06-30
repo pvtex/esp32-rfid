@@ -877,9 +877,15 @@ function listStats() {
   document.getElementById("littlefs").style.width = (ajaxobj.availlittlefs * 100) / ajaxobj.littlefssize + "%";
   colorStatusbar(document.getElementById("littlefs"));
   document.getElementById("ssidstat").innerHTML = ajaxobj.ssid;
-  document.getElementById("rssiperc").innerHTML = ajaxobj.rssi;
-  document.getElementById("rssiperc").style.width = ajaxobj.rssiperc + "%";
-  colorStatusbar(document.getElementById("rssiperc"));
+  if (ajaxobj.rssiperc) {
+    document.getElementById("rssiperc").innerHTML = ajaxobj.rssi;
+    document.getElementById("rssiperc").style.width = ajaxobj.rssiperc + "%";
+    colorStatusbar(document.getElementById("rssiperc"));
+  } else {
+    document.getElementById("rssiperc").innerHTML = "AP-Mode";
+    document.getElementById("rssiperc").style.textAlign = "center";
+    document.getElementById("rssiperc").style.width = "100%";
+  }
   document.getElementById("ip").innerHTML = ajaxobj.ip;
   document.getElementById("gate").innerHTML = ajaxobj.gateway;
   document.getElementById("mask").innerHTML = ajaxobj.netmask;
