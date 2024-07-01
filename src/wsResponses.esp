@@ -118,11 +118,11 @@ void ICACHE_FLASH_ATTR sendStatus(AsyncWebSocketClient *client)
 	JsonDocument root;
 	root["command"] = "status";
 
-	bool ethernet = false;
+	bool ethenabled = false;
 #ifdef ETHERNET
-	ethernet = true;
+	ethenabled = true;
 #endif
-	root["ethernet"] = ethernet;
+	root["ethernet"] = ethenabled;
 	root["heap"] = ESP.getFreeHeap();
 	root["heapsize"] = ESP.getHeapSize();
 	uint32_t chipID = 0;

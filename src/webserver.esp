@@ -102,6 +102,6 @@ void ICACHE_FLASH_ATTR setupWebServer() {
 	server.rewrite("/", "/index.html");
 	server.begin();
 #ifdef DEBUG
-	Serial.println("[ INFO] Webserver started");
+	Serial.println("[ INFO ] Webserver started");
 #endif
 }

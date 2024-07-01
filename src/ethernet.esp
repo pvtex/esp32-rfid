@@ -155,25 +155,26 @@ void ICACHE_FLASH_ATTR enableEthernet()
 
 void setupEth(bool configured)
 {
+#ifdef DEBUG
+	Serial.println("[ INFO ] Ethernet Setup ");
+#endif
 	if (!configured)
 	{
 		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
 		ETH.setHostname("ESP32-RFID");
 	} else
 	{
-		
 		ETH.begin(ETH_PHY_TYPE, ETH_PHY_ADDR, ETH_PHY_MDC, ETH_PHY_MDIO, ETH_PHY_POWER, ETH_CLK_MODE);
-		if (config.dhcpEnabledEth) 
+		ETH.setHostname(config.deviceHostname);
+		
+		if (!config.dhcpEnabledEth) 
 		{
-			
-		} else 
-		{	
 			ETH.config(config.ipAddressEth, config.gatewayIpEth, config.subnetIpEth, config.dnsIpEth, config.dnsIpEth);
 		}
-		WiFi.onEvent(onEthConnect, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
-		WiFi.onEvent(onEthDisconnect, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
-		WiFi.onEvent(onEthGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
-		ETH.setHostname(config.deviceHostname);
-		//enableEth();
 	}
+	WiFi.onEvent(onEthConnect, WiFiEvent_t::ARDUINO_EVENT_ETH_CONNECTED);
+	WiFi.onEvent(onEthDisconnect, WiFiEvent_t::ARDUINO_EVENT_ETH_DISCONNECTED);
+	WiFi.onEvent(onEthGotIP, WiFiEvent_t::ARDUINO_EVENT_ETH_GOT_IP);
+	
+	//enableEth();
 }
