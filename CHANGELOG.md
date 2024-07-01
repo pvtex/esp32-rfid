@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.8] - 2024-07-01 [download](https://github.com/pvtex/esp32-rfid/releases/tag/1.1.8)
+|  Type      | Change |
+|:----------:|:------:| 
+| [firmware]  | LILYGo t-internet-com working |  
 ## [1.1.7] - 2024-06-29 [download](https://github.com/pvtex/esp32-rfid/releases/tag/1.1.7)
 |  Type      | Change |
 |:----------:|:------:|
