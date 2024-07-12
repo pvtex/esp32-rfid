@@ -35,8 +35,8 @@ function handleBoard() {
       document.getElementById("ledwaitingpin").value = "1";
       document.getElementById("openlockpin").value = "39";
       document.getElementById("wifipin").value = "255";
-      document.getElementById("wg0pin").value = "4";
-      document.getElementById("wg1pin").value = "5";
+      document.getElementById("wg0pin").value = "5";
+      document.getElementById("wg1pin").value = "4";
     } else if (bType === 4) { // LILYGO t-internet-com
       document.getElementById("numrlys").value = "1";
       document.getElementById("changenumrly").click();
