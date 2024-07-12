@@ -32,7 +32,7 @@ This project still in its development phase. New features (and also bugs) are in
 * Get the latest release from [here](https://github.com/pvtex/esp32-rfid/releases).
 * See [Known Issues](https://github.com/pvtex/esp32-rfid#known-issues) before starting right away.
 * See [Security](https://github.com/pvtex/esp32-rfid#security) for your safety.
-* See [ChangeLog](https://github.com/pvtex/esp32-rfid/blob/dev/CHANGELOG.md)
+* See [ChangeLog](CHANGELOG.md)
 
 ### What You Will Need
 * An ESP32 module or a development board with at least **32Mbit Flash (equals to 4MBytes)** **128MBit Flash (equals to 16MBytes) is much better**
@@ -158,7 +158,7 @@ We are syncing time from a NTP Server (in Client -aka infrastructure- Mode). Thi
 This will require you to sync time manually. ESP32 can store and hold time for you approximately 51 days without major issues, device time can drift from actual time depending on usage, temperature, etc. so you have to login to settings page and sync it in a timely fashion.
 Timezones are supported with automatic switch to and from daylight saving time.
 
-## **Security**
+## Security
 We assume **ESP32-RFID** project -as a whole- does not offer strong security. There are PICCs available that their UID (Unique Identification Numbers) can be set manually (Currently esp-rfid relies only UID to identify its users). Also there may be a bug in the code that may result free access to your belongings. And also, like every other network connected device es32p-rfid is vulnerable to many attacks including Man-in-the-middle, Brute-force, etc.
 
 This is a simple, hobby grade project, do not use it where strong security is needed.
