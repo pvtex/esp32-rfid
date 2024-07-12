@@ -227,7 +227,7 @@ See [ChangeLog](CHANGELOG.md)
 [:top:](#index)
 
 ## License
-The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.  
+The code parts written by ESP-RFID project's authors are licensed under [MIT License](LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.  
 
 [:top:](#index)
 
