@@ -39,6 +39,7 @@ This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 * Capable of managing up to 1.000 Users (even more is possible)
 * Great for Maker Spaces, Labs, Schools, etc
 * Cheap to build and easy to maintain
+  
 ### For Tinkerers
 * Open Source (minimum amount of hardcoded variable, this means more freedom)
 * Using WebSocket protocol to exchange data between Hardware and Web Browser
@@ -71,9 +72,10 @@ currently ESP32-RFID supports 4 types of boards:
 |:-----:|:-----:|:----:|:---:|:-------:|:--:|:-----:|:-----------:|
 | generic | 4MB | :heavy_check_mark: | :heavy_multiplication_x: | | | [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin) | [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin) |
 | APWIKOGER Relay-X1 | 4MB | :heavy_check_mark: | :heavy_multiplication_x: | [:camera_flash:](./boards/APWIKOGER-Relay-X1/board.png) | [3D](./boards/APWIKOGER-Relay-X1/front.png) | [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin) | [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin) |
-| DTWonder DT-R002 | 4MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin) | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin) |
-| DTWonder DT-R002 | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
-| lilygo t-internet-com | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/t-internet-com/board.jpg) | [3D](./boards/t-internet-com/front_v2.png) | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin) | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin) |
+| DTWonder DT-R002 [^1] | 4MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin) | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin) |
+| DTWonder DT-R002 [^1] | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
+| lilygo t-internet-com | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/t-internet-com/board.jpg) | [3D](./boards/t-internet-com/front_v2.png) | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin) | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin) |       
+
 
 You can find pictures of each board and the wiegand adapter in the board subfolder and     
 a gerber file for an adapter board to wiegand interface, door status and exit button.    
@@ -133,10 +135,9 @@ platformio run
 
 When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries automatically.      
 
-**!!! IMPORTANT !!!**   
-If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
-All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).     
-**!!! IMPORTANT !!!** 
+> [!IMPORTANT]  
+> If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
+> All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).     
 
 ### Useful commands
 
@@ -199,4 +200,9 @@ See [ChangeLog](./CHANGELOG.md)
 * [ESP32-RFID](https://github.com/pvtex/esp32-rfid) ESP32-RFID - Access Control with ESP32 and Wiegand
 
 ## License
-The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.
+The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.    
+
+
+
+[^1]: If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
+      All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/). 
