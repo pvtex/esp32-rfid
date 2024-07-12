@@ -54,7 +54,17 @@ currently ESP32-RFID supports 4 types of boards:
 
 
 You can find pictures for each board in the board subfolder and     
-a gerber file for an adapter board to wiegand interface, door status and exit button.      
+a gerber file for an adapter board to wiegand interface, door status and exit button.    
+
+| Board | Gerber | BOM | PickandPlace | 
+|:-----:|:------:|:---:|:------------:|
+| APWIKOGER Relay-X1 | [gerber](./boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](./boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](./boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
+| DTWonder DT-R002 | [gerber](./boards/dtwonder-DT-R002/Gerber.zip) | [BOM](./boards/dtwonder-DT-R002/BOM.xlsx) | [PaP](./boards/dtwonder-DT-R002/PickAndPlace.xlsx) |
+| lilygo t-internet-com | [gerber](./boards/t-internet-com/Gerber.zip) | [BOM](./boards/t-internet-com/BOM.xlsx) | [PaP](./boards/t-internet-com/PickAndPlace.xlsx) |
+
+**IMPORTANT**
+If you use the DTWonder DR-R002 board you have to patch the erthernet library.    
+All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).
 
 ### Software
 
