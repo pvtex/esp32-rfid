@@ -35,32 +35,25 @@ This project still in its development phase. New features (and also bugs) are in
 * See [ChangeLog](https://github.com/pvtex/esp32-rfid/blob/dev/CHANGELOG.md)
 
 ### What You Will Need
-* An ESP32 module or a development board with at least **32Mbit Flash (equals to 4MBytes)**
+* An ESP32 module or a development board with at least **32Mbit Flash (equals to 4MBytes)** **128MBit Flash (equals to 16MBytes) is much better**
 * 4 port Level Shifter for connecting the Wiegand reader to ESP32 (needed for D0, D1, Buzzer and LED)
-* Wiegand based RFID reader
-* A Relay Module (or you can build your own circuit)
+* Wiegand based RFID reader (any with a bit count of 26 to 58 will work, including keypad)
+* A Relay Module (or you can build your own circuit, all boards described below have 1 or 2 relays on board)
 * n quantity of RFID Tags (for example Mifare Classic 1KB , or any other Tag with a 4 or 7byte ID) equivalent to User Number
 
 ### ESP32-Board
 currently ESP32-RFID supports 4 types of boards:
 
-* without Ethernet
-    * generic (every ESP32 board descirbed above)
-        * image: [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin)
-        * debug-image: [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin)
-    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) [pic](./boards/APWIKOGER-Relay-X1/board.png) [3D](./boards/APWIKOGER-Relay-X1/front.png)
-        * image: [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin)
-        * debug-image: [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin)
-* with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) [pic](./boards/dtwonder-DT-R002/board.png) [3D](./boards/dtwonder-DT-R002/front.png) (in debug mode: no LED and Buzzer on Wiegand-Reader) 
-        * image: [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin)
-        * debug-image: [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin)
-    * [lilygo t-internet-com](boards/t-internet-com/) [pic](./boards/t-internet-com/board.jpg) [3D](./boards/t-internet-com/front_v2.png)
-        * image: [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin)
-        * debug-image: [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin)
+| Board | WiFi | LAN | Picture | 3D | image | debug-image |
+|:-----:|:----:|:---:|:-------:|:--:|:-----:|:-----------:|
+| generic | Y | N | | | [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin) | [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin) |
+| APWIKOGER Relay-X1 | Y | N | [pic](./boards/APWIKOGER-Relay-X1/board.png) | [3D](./boards/APWIKOGER-Relay-X1/front.png) | [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin) | [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin) |
+| DTWonder DT-R002 | Y | Y | [pic](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin) | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin) |
+| lilygo t-internet-com | Y | Y | [pic](./boards/t-internet-com/board.jpg) | [3D](./boards/t-internet-com/front_v2.png) | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin) | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin) |
 
-You can find gerber files and pictures for each board in the board subfolder.     
-In each subfolder there is a gerber file for an adapter board to wiegand interface, door status and exit button.      
+
+You can find pictures for each board in the board subfolder and     
+a gerber file for an adapter board to wiegand interface, door status and exit button.      
 
 ### Software
 
