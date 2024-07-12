@@ -1,4 +1,4 @@
-# ESP32-RFID with extended MQTT Functions
+# ESP32-RFID With Extended MQTT Functions
 
 ## Index
 * [Broker Settings](#broker-settings)
