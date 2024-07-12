@@ -26,7 +26,8 @@ This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 * [MQTT](#mqtt)
 * [Time](#time)
 * [User Instructions](#user-instructions)
-  * [Installation](@installation)
+  * [Installation](#installation)
+  * [Adding A User](#adding-a-user)
 * [Known Issues](#known-issues)
 * [Security](#security)
 * [Changelog](#changelog)
@@ -171,19 +172,24 @@ Timezones are supported with automatic switch to and from daylight saving time.
 ### Installation
 * First, flash firmware (you can use /bin/flash.bat on Windows) to your ESP either using Arduino IDE or with your favourite flash tool
 * (optional) Fire up your serial monitor to get informed
-* Search for Wireless Network "esp32-rfid-xxxxxx" and connect to it (It should be an open network and does not require password)
-* Open your browser and visit either "http://192.168.4.1" or "http://esp32-rfid.local" (.local needs Bonjour installed on your computer).
+* For WiFI:
+  * Search for Wireless Network "esp32-rfid-xxxxxx" and connect to it (It should be an open network and does not require password)
+  * Open your browser and visit either "http://192.168.4.1" or "http://esp32-rfid.local" (.local needs Bonjour installed on your computer).
+* For Ethernet:
+  * The ESP32-RFID board will use DHCP for optaining an IP address, if this fails it will get the IP 192.168.5.1
+  * Open your browser and visit either "http://192.168.5.1" (or the DHCP IP address) or "http://esp32-rfid.local" (.local needs Bonjour installed on your computer).
 * Log on to ESP32, default password is "admin"
 * Go to "Settings" page
 * Configure your amazing access control device. Push "Scan" button to join your wireless network, configure RFID hardware, Relay Module.
 * Save settings, when rebooted your ESP32 will try to join your wireless network.
 * Check your new IP address from serial monitor and connect to your ESP again. (You can also connect to "http://esp32-rfid.local")
+  
+### Adding A User
 * Go to "Users" page
 * Scan a PICC (RFID Tag) then it should glimpse on your Browser's screen.
 * Type "User Name" or "Label" for the PICC you scanned.
 * Choose "Allow Access" if you want to
 * Click "Add"
-* Congratulations, everything went well, if you encounter any issue feel free to ask help on GitHub.
 
 [:top:](#index)
 
