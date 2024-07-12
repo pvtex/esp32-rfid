@@ -72,49 +72,49 @@ This project still in its development phase. New features (and also bugs) are in
 ### ESP32-Boards
 currently ESP32-RFID supports 4 types of boards:
 
-| Board | Flash | WiFi | LAN | Picture | 3D | image | debug-image |
-|:-----:|:-----:|:----:|:---:|:-------:|:--:|:-----:|:-----------:|
-| generic | 4MB | :heavy_check_mark: | :heavy_multiplication_x: | | | [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin) | [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin) |
-| APWIKOGER Relay-X1 | 4MB | :heavy_check_mark: | :heavy_multiplication_x: | [:camera_flash:](./boards/APWIKOGER-Relay-X1/board.png) | [3D](./boards/APWIKOGER-Relay-X1/front.png) | [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin) | [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin) |
-| DTWonder DT-R002 [^1] | 4MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin) | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin) |
-| DTWonder DT-R002 [^1] | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
-| lilygo t-internet-com | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/t-internet-com/board.jpg) | [3D](./boards/t-internet-com/front_v2.png) | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin) | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin) |       
+| Board                 | Flash | WiFi               | LAN                      | Picture                                                 | 3D                                          | Image                                                                                                     | Debug-Image                                                                                                           |
+|:---------------------:|:-----:|:------------------:|:------------------------:|:-------------------------------------------------------:|:-------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
+| generic               | 4MB   | :heavy_check_mark: | :heavy_multiplication_x: |                                                         |                                             | [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin)                                   | [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin)                                   |
+| APWIKOGER Relay-X1    | 4MB   | :heavy_check_mark: | :heavy_multiplication_x: | [:camera_flash:](./boards/APWIKOGER-Relay-X1/board.png) | [3D](./boards/APWIKOGER-Relay-X1/front.png) | [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin)               | [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin)               |
+| DTWonder DT-R002 [^1] | 4MB   | :heavy_check_mark: | :heavy_check_mark:       | [:camera_flash:](./boards/dtwonder-DT-R002/board.png)   | [3D](./boards/dtwonder-DT-R002/front.png)   | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin)         | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin)         | 
+| DTWonder DT-R002 [^1] | 16MB  | :heavy_check_mark: | :heavy_check_mark:       | [:camera_flash:](./boards/dtwonder-DT-R002/board.png)   | [3D](./boards/dtwonder-DT-R002/front.png)   | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
+| lilygo t-internet-com | 16MB  | :heavy_check_mark: | :heavy_check_mark:       | [:camera_flash:](./boards/t-internet-com/board.jpg)     | [3D](./boards/t-internet-com/front_v2.png)  | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin)             | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin)             |       
 
 
 You can find pictures of each board and the wiegand adapter in the board subfolder and     
 a gerber file for an adapter board to wiegand interface, door status and exit button.    
 
-| Board | Gerber | BOM | PickandPlace | 
-|:-----:|:------:|:---:|:------------:|
-| APWIKOGER Relay-X1 | [gerber](./boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](./boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](./boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
-| DTWonder DT-R002 | [gerber](./boards/dtwonder-DT-R002/Gerber.zip) | [BOM](./boards/dtwonder-DT-R002/BOM.xlsx) | [PaP](./boards/dtwonder-DT-R002/PickAndPlace.xlsx) |
-| lilygo t-internet-com | [gerber](./boards/t-internet-com/Gerber.zip) | [BOM](./boards/t-internet-com/BOM.xlsx) | [PaP](./boards/t-internet-com/PickAndPlace.xlsx) |
+| Board                 | Gerber                                           | BOM                                         | PickandPlace                                         | 
+|:---------------------:|:------------------------------------------------:|:-------------------------------------------:|:----------------------------------------------------:|
+| APWIKOGER Relay-X1    | [gerber](./boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](./boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](./boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
+| DTWonder DT-R002 [^1] | [gerber](./boards/dtwonder-DT-R002/Gerber.zip)   | [BOM](./boards/dtwonder-DT-R002/BOM.xlsx)   | [PaP](./boards/dtwonder-DT-R002/PickAndPlace.xlsx)   |
+| lilygo t-internet-com | [gerber](./boards/t-internet-com/Gerber.zip)     | [BOM](./boards/t-internet-com/BOM.xlsx)     | [PaP](./boards/t-internet-com/PickAndPlace.xlsx)     |
 
 ### Pin Layout
 
 The following table shows the typical pin layout used for connecting readers hardware to ESP:
 
-| ESP32      | generic | APWIKOGER |DTWonder  | DTWonder 16M | lilygo    |
-|-----------:|:-------:|:---------:|:--------:|:------------:|:---------:|
-| Connection | WiFI    | WiFi      | ETH+WiFi | ETH+WiFi     | ETH+WiFi  |
-| GPIO-1     |         |           | LED      | LED          |           |
-| GPIO-2     |         |           | Relay 2  | Relay 2      | D1        |
-| GPIO-3     |         |           | Buzzer   | Buzzer       |           |
-| GPIO-4     | D0      |           | D1       | D0           |           |
-| GPIO-5     | D1      |           | D0       | D1           |           |
-| GPIO-12    | LED     |           |          |              |           |
-| GPIO-13    | Buzzer  | Buzzer    | Buzzer   | Buzzer       | LED       |
-| GPIO-14    | Door    | LED       | LED      | LED          | D0        |
-| GPIO-15    | Exit    |           |          |              | Buzzer    |
-| GPIO-16    | Relay 1 | Relay 1   | Relay 1  | Relay 1      |           | 
-| GPIO-17    |         | Door      |          |              |           | 
-| GPIO-18    |         | Exit      |          |              |           |
-| GPIO-26    |         | D0        |          |              |           |
-| GPIO-32    |         |           |          |              | Relay 1   |
-| GPIO-33    |         | D1        |          |              | Door      |
-| GPIO-35    |         |           |          |              | Exit      |
-| GPIO-36    |         |           | Door     | Door         |           |
-| GPIO-39    |         |           | Exit     | Exit         |           |
+| ESP32      | generic | APWIKOGER | DTWonder [^1]  | lilygo    |
+|-----------:|:-------:|:---------:|:--------------:|:---------:|
+| Connection | WiFI    | WiFi      | ETH+WiFi       | ETH+WiFi  |
+| GPIO-1     |         |           | LED            |       c   |
+| GPIO-2     |         |           | Relay 2        | D1        |
+| GPIO-3     |         |           | Buzzer         |           |
+| GPIO-4     | D0      |           | D1             |           |
+| GPIO-5     | D1      |           | D0             |           |
+| GPIO-12    | LED     |           |                |           |
+| GPIO-13    | Buzzer  | Buzzer    | Buzzer         | LED       |
+| GPIO-14    | Door    | LED       | LED            | D0        |
+| GPIO-15    | Exit    |           |                | Buzzer    |
+| GPIO-16    | Relay 1 | Relay 1   | Relay 1        |           | 
+| GPIO-17    |         | Door      |                |           | 
+| GPIO-18    |         | Exit      |                |           |
+| GPIO-26    |         | D0        |                |           |
+| GPIO-32    |         |           |                | Relay 1   |
+| GPIO-33    |         | D1        |                | Door      |
+| GPIO-35    |         |           |                | Exit      |
+| GPIO-36    |         |           | Door           |           |
+| GPIO-39    |         |           | Exit           |           |
 
 [:top:](#index)
      
