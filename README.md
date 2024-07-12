@@ -73,9 +73,9 @@ This project still in its development phase. New features (and also bugs) are in
 ### ESP32-Boards
 currently ESP32-RFID supports 4 types of boards:
 
-| Board                 | Flash | WiFi               | LAN                      | Picture                                                 | 3D                                          | Image                                                                                                     | Debug-Image                                                                                                           |
-|:---------------------:|:-----:|:------------------:|:------------------------:|:-------------------------------------------------------:|:-------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
-| generic               | 4MB   | :heavy_check_mark: | :heavy_multiplication_x: |                                                         |                                             | [wifi.bin](raw/master/bin/wifi.bin)                                   | [wifi-debug.bin](raw/master/bin/wifi-debug.bin)                                   |
+| Board                 | Flash | WiFi               | LAN                      | Picture                                               | 3D                                        | Image                                                                                                     | Debug-Image                                                                                                           |
+|:---------------------:|:-----:|:------------------:|:------------------------:|:-----------------------------------------------------:|:-----------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:|
+| generic               | 4MB   | :heavy_check_mark: | :heavy_multiplication_x: |                                                       |                                           | [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin)                                   | [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin)                                   |
 | APWIKOGER Relay-X1    | 4MB   | :heavy_check_mark: | :heavy_multiplication_x: | [:camera_flash:](boards/APWIKOGER-Relay-X1/board.png) | [3D](boards/APWIKOGER-Relay-X1/front.png) | [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin)               | [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin)               |
 | DTWonder DT-R002 [^1] | 4MB   | :heavy_check_mark: | :heavy_check_mark:       | [:camera_flash:](boards/dtwonder-DT-R002/board.png)   | [3D](boards/dtwonder-DT-R002/front.png)   | [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin)         | [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin)         | 
 | DTWonder DT-R002 [^1] | 16MB  | :heavy_check_mark: | :heavy_check_mark:       | [:camera_flash:](boards/dtwonder-DT-R002/board.png)   | [3D](boards/dtwonder-DT-R002/front.png)   | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
@@ -126,6 +126,8 @@ Download compiled binaries from GitHub Releases page
 https://github.com/pvtex/esp32-rfid/releases
 
 On Windows you can use **"flash.bat"**, it will ask you which COM port that ESP is connected and then flashes it. You can use any flashing tool and do the flashing manually. The flashing process itself has been described at numerous places on Internet.
+
+[:top:](#index)
 
 ### Building With PlatformIO
 
