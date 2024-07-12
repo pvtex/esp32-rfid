@@ -141,7 +141,7 @@ cd esp32-rfid
 platformio run
 ```
 
-When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries automatically.      
+When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries [^1] automatically.      
 
 > [!IMPORTANT]  
 > If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
@@ -150,7 +150,7 @@ When you run ```platformio run``` for the first time, it will download the toolc
 ### Useful commands
 
 * ```platformio run``` - process/build all targets
-* ```platformio run -e generic -t upload``` - process/build and flash just the ESP12e target (the NodeMcu v2)
+* ```platformio run -e wifi -t upload``` - process/build and flash just the generic ESP32 target
 * ```platformio run -t clean``` - clean project (remove compiled files)
 
 The resulting (built) image(s) can be found in the directory ```/bin``` created during the build process.
