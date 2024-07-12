@@ -49,6 +49,8 @@ This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 * Bootstrap, jQuery, FooTables for beautiful Web Pages for both Mobile and Desktop Screens
 * Thanks to ESPAsyncWebServer Library communication is Asynchronous
 
+[:top:](#index)
+
 ## Getting Started
 This project still in its development phase. New features (and also bugs) are introduced often and some functions may become deprecated. Please feel free to comment or give feedback.
 
@@ -56,6 +58,8 @@ This project still in its development phase. New features (and also bugs) are in
 * See [Known Issues](#known-issues) before starting right away.
 * See [Security](#security) for your safety.
 * See [ChangeLog](CHANGELOG.md)
+
+[:top:](#index)
 
 ## Hardware
 ### What You Will Need
@@ -111,7 +115,8 @@ The following table shows the typical pin layout used for connecting readers har
 | GPIO-35    |         |           |          |              | Exit      |
 | GPIO-36    |         |           | Door     | Door         |           |
 | GPIO-39    |         |           | Exit     | Exit         |           |
-    
+
+[:top:](#index)
      
 ## Software
 
@@ -147,13 +152,19 @@ When you run ```platformio run``` for the first time, it will download the toolc
 
 The resulting (built) image(s) can be found in the directory ```/bin``` created during the build process.
 
+[:top:](#index)
+
 ## MQTT
 You can integrate ESP32-RFID with other systems using MQTT. Read the [additional documentation](./README-MQTT.md) for all the details.
+
+[:top:](#index)
 
 ## Time
 We are syncing time from a NTP Server (in Client -aka infrastructure- Mode). This will require ESP to have an Internet connection. Additionally your ESP32 can also work without Internet connection (Access Point -aka Ad-Hoc- Mode), without giving up functionality.
 This will require you to sync time manually. ESP32 can store and hold time for you approximately 51 days without major issues, device time can drift from actual time depending on usage, temperature, etc. so you have to login to settings page and sync it in a timely fashion.
 Timezones are supported with automatic switch to and from daylight saving time.
+
+[:top:](#index)
 
 ## User Instructions
 
@@ -174,10 +185,12 @@ Timezones are supported with automatic switch to and from daylight saving time.
 * Click "Add"
 * Congratulations, everything went well, if you encounter any issue feel free to ask help on GitHub.
 
-
+[:top:](#index)
 
 ## Known Issues
 * Please also check [GitHub issues](https://github.com/pvtex/esp32-rfid/issues).
+
+[:top:](#index)
 
 ## Security
 We assume **ESP32-RFID** project -as a whole- does not offer strong security. There are PICCs available that their UID (Unique Identification Numbers) can be set manually (Currently esp-rfid relies only UID to identify its users). Also there may be a bug in the code that may result free access to your belongings. And also, like every other network connected device es32p-rfid is vulnerable to many attacks including Man-in-the-middle, Brute-force, etc.
@@ -190,17 +203,25 @@ What can be done to increase security? (by you and by us)
 * You can disable wireless network to reduce attack surface. (This can be configured in Web UI Settings page)
 * Choose a strong password for the Web UI
 
+[:top:](#index)
+
 ## Changelog
 
 See [ChangeLog](./CHANGELOG.md)
+
+[:top:](#index)
 
 ## My Projects Based On ESP-RFID
 
 * [ESP-RFID v2](https://github.com/pvtex/esp-rfid) ESP-RFID v2 - Access Control with ESP8266 and Wiegand
 * [ESP32-RFID](https://github.com/pvtex/esp32-rfid) ESP32-RFID - Access Control with ESP32 and Wiegand
 
+[:top:](#index)
+
 ## License
-The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.    
+The code parts written by ESP-RFID project's authors are licensed under [MIT License](https://github.com/pvtex/esp32-rfid/blob/stable/LICENSE), 3rd party libraries that are used by this project are licensed under different license schemes, please check them out as well.  
+
+[:top:](#index)
 
 
 
