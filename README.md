@@ -7,7 +7,7 @@ Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microco
 
 ![Screenshot Status](./demo/screenshot_status.png)
 
-![Prototype](./boards/dtwonder-DT-R002/prototype.jpg)
+![Prototype](./boards/dtwonder-DT-R002/prototype.jpg)     
 This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 
 
@@ -52,7 +52,6 @@ currently ESP32-RFID supports 4 types of boards:
 | DTWonder DT-R002 | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/dtwonder-DT-R002/board.png) | [3D](./boards/dtwonder-DT-R002/front.png) | [ethernet-dtwonder-16M.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M.bin) | [ethernet-dtwonder-16M-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-16M-debug.bin) |
 | lilygo t-internet-com | 16MB | :heavy_check_mark: | :heavy_check_mark: | [:camera_flash:](./boards/t-internet-com/board.jpg) | [3D](./boards/t-internet-com/front_v2.png) | [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin) | [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin) |
 
-
 You can find pictures for each board in the board subfolder and     
 a gerber file for an adapter board to wiegand interface, door status and exit button.    
 
@@ -61,12 +60,7 @@ a gerber file for an adapter board to wiegand interface, door status and exit bu
 | APWIKOGER Relay-X1 | [gerber](./boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](./boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](./boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
 | DTWonder DT-R002 | [gerber](./boards/dtwonder-DT-R002/Gerber.zip) | [BOM](./boards/dtwonder-DT-R002/BOM.xlsx) | [PaP](./boards/dtwonder-DT-R002/PickAndPlace.xlsx) |
 | lilygo t-internet-com | [gerber](./boards/t-internet-com/Gerber.zip) | [BOM](./boards/t-internet-com/BOM.xlsx) | [PaP](./boards/t-internet-com/PickAndPlace.xlsx) |
-
-**IMPORTANT**   
-If you use the DTWonder DR-R002 board you have to patch the erthernet library if you want to compile the firmware on your own.     
-All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).     
-**IMPORTANT**     
-
+    
 
 ### Software
 
@@ -88,7 +82,14 @@ cd esp32-rfid
 platformio run
 ```
 
-When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries automatically.
+When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries automatically.      
+
+**!!! IMPORTANT !!!**   
+If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
+All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).     
+**!!! IMPORTANT !!!** 
+
+
 
 ##### Useful commands:
 
