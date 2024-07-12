@@ -3,7 +3,7 @@
 ## Index
 * [Broker Settings](#broker-settings)
   * [Auto-Topic](#auto-topic)
-* [Commands received by ESP32-RFID](#commands-received-by-esp32-rfid)
+* [Commands Received By ESP32-RFID](#commands-received-by-esp32-rfid)
   * [Add User](#add-user)
   * [Get all the users](#get-all-the-users)
   * [Delete User](#delete-user)
@@ -63,7 +63,7 @@ By knowing the MAC addresses in advance you can setup them all with a standard c
 
 [:top:](#index)
 
-## Commands received by ESP32-RFID
+## Commands Received By ESP32-RFID
 The message format is JSON.
 
 The message has to include the IP of the device together with one of the supported commands.
@@ -211,7 +211,7 @@ Response will be an object with a `configfile` key which holds the entire config
 
 [:top:](#index)
 
-### Update configuration
+### Update Configuration
 Update the global configuration. You can pass a configuration object, which will be used as the new configuration. Then the system will restart to load the new configuration.
 
 Command:
