@@ -100,8 +100,8 @@ The following table shows the typical pin layout used for connecting readers har
 | GPIO-1     |         |           | LED      | LED          |           |
 | GPIO-2     |         |           | Relay 2  | Relay 2      | D1        |
 | GPIO-3     |         |           | Buzzer   | Buzzer       |           |
-| GPIO-4     | D0      |           | D0       | D0           |           |
-| GPIO-5     | D1      |           | D1       | D1           |           |
+| GPIO-4     | D0      |           | D1       | D0           |           |
+| GPIO-5     | D1      |           | D0       | D1           |           |
 | GPIO-12    | LED     |           |          |              |           |
 | GPIO-13    | Buzzer  | Buzzer    | Buzzer   | Buzzer       | LED       |
 | GPIO-14    | Door    | LED       | LED      | LED          | D0        |
