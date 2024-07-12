@@ -5,9 +5,9 @@
 
 Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microcontroller. 
 
-![Screenshot Status](./demo/screenshot_status.png)
+![Screenshot Status](demo/screenshot_status.png)
 
-![Prototype](./boards/dtwonder-DT-R002/prototype.jpg)     
+![Prototype](boards/dtwonder-DT-R002/prototype.jpg)     
 This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 
 ## Index
@@ -55,7 +55,7 @@ This is the first prototype with a dtwonder board and a 58bit wiegand reader.
 ## Getting Started
 This project still in its development phase. New features (and also bugs) are introduced often and some functions may become deprecated. Please feel free to comment or give feedback.
 
-* Get the latest release from [here](https://github.com/pvtex/esp32-rfid/releases).
+* Get the latest release from [here](releases).
 * See [Known Issues](#known-issues) before starting right away.
 * See [Security](#security) for your safety.
 * See [ChangeLog](CHANGELOG.md)
@@ -85,11 +85,11 @@ currently ESP32-RFID supports 4 types of boards:
 You can find pictures of each board and the wiegand adapter in the board subfolder and     
 a gerber file for an adapter board to wiegand interface, door status and exit button.    
 
-| Board                 | Gerber                                           | BOM                                         | PickandPlace                                         | 
-|:---------------------:|:------------------------------------------------:|:-------------------------------------------:|:----------------------------------------------------:|
-| APWIKOGER Relay-X1    | [gerber](./boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](./boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](./boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
-| DTWonder DT-R002 [^1] | [gerber](./boards/dtwonder-DT-R002/Gerber.zip)   | [BOM](./boards/dtwonder-DT-R002/BOM.xlsx)   | [PaP](./boards/dtwonder-DT-R002/PickAndPlace.xlsx)   |
-| lilygo t-internet-com | [gerber](./boards/t-internet-com/Gerber.zip)     | [BOM](./boards/t-internet-com/BOM.xlsx)     | [PaP](./boards/t-internet-com/PickAndPlace.xlsx)     |
+| Board                 | Gerber                                         | BOM                                       | PickandPlace                                       | 
+|:---------------------:|:----------------------------------------------:|:-----------------------------------------:|:--------------------------------------------------:|
+| APWIKOGER Relay-X1    | [gerber](boards/APWIKOGER-Relay-X1/Gerber.zip) | [BOM](boards/APWIKOGER-Relay-X1/BOM.xlsx) | [PaP](boards/APWIKOGER-Relay-X1/PickAndPlace.xlsx) |
+| DTWonder DT-R002 [^1] | [gerber](boards/dtwonder-DT-R002/Gerber.zip)   | [BOM](boards/dtwonder-DT-R002/BOM.xlsx)   | [PaP](boards/dtwonder-DT-R002/PickAndPlace.xlsx)   |
+| lilygo t-internet-com | [gerber](boards/t-internet-com/Gerber.zip)     | [BOM](boards/t-internet-com/BOM.xlsx)     | [PaP](boards/t-internet-com/PickAndPlace.xlsx)     |
 
 ### Pin Layout
 
@@ -143,7 +143,7 @@ When you run ```platformio run``` for the first time, it will download the toolc
 
 > [!IMPORTANT]  
 > If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
-> All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/).     
+> All needed information can be found [here](boards/dtwonder-DT-R002/PATCH/).     
 
 ### Useful commands
 
@@ -156,7 +156,7 @@ The resulting (built) image(s) can be found in the directory ```/bin``` created 
 [:top:](#index)
 
 ## MQTT
-You can integrate ESP32-RFID with other systems using MQTT. Read the [additional documentation](./README-MQTT.md) for all the details.
+You can integrate ESP32-RFID with other systems using MQTT. Read the [additional documentation](README-MQTT.md) for all the details.
 
 [:top:](#index)
 
@@ -194,7 +194,7 @@ Timezones are supported with automatic switch to and from daylight saving time.
 [:top:](#index)
 
 ## Known Issues
-* Please also check [GitHub issues](https://github.com/pvtex/esp32-rfid/issues).
+* Please also check [GitHub issues](issues).
 
 [:top:](#index)
 
@@ -213,7 +213,7 @@ What can be done to increase security? (by you and by us)
 
 ## Changelog
 
-See [ChangeLog](./CHANGELOG.md)
+See [ChangeLog](CHANGELOG.md)
 
 [:top:](#index)
 
@@ -232,4 +232,4 @@ The code parts written by ESP-RFID project's authors are licensed under [MIT Lic
 
 
 [^1]: If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
-      All needed information can be found [here](./boards/dtwonder-DT-R002/PATCH/). 
+      All needed information can be found [here](boards/dtwonder-DT-R002/PATCH/). 
