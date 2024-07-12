@@ -1,7 +1,4 @@
-# ESP RFID with extended MQTT Functions
-
-Hardware:
-* Any esp-rfid board like esp-rfid-relay-board, marelab ESP-DOOR
+# ESP32-RFID with extended MQTT Functions
 
 This has been added so far:
 * Reading all user data over MQTT
@@ -14,13 +11,44 @@ This has been added so far:
 * Sending log event & access data over MQTT
 * Demo NODE-RED flow & GUI to centralize managment of ESP-RFID devices & users
 
+## Index
+* [Broker Settings](#broker-settings)
+  * [Auto-Topic](#auto-topic)
+* [Commands received by ESP32-RFID](#commands-received-by-esp32-rfid)
+  * [Add User](#add-user)
+  * [Get all the users](#get-all-the-users)
+  * [Delete User](#delete-user)
+  * [Delete All Users](#delete-all-users)
+  * [Get Configuration](#get-configuration)
+  * [Update Configuration](#update-configuration)
+  * [Open Door](#open-door)
+* [Messages Sent By ESP32-RFID](#messages-sent-by-esp32-rfid)
+  * [Base Messages](#base-messages)
+    * [Boot](#boot)
+    * [Heartbeat](#heartbeat)
+    * [Publish Access](#publish-access)
+    * [Log messages](#log-messages)
+    * [Door Status](#door-status)
+    * [Doorbell](#doorbell)
+    * [Tamper Status](#tamper-status)
+    * [WiFi Status](#wifi-status)
+    * [MQTT Status](#mqtt-status)
+    * [System Messages](#system-messages)
+  * [Home Assistant Messages](home-assistant-messages)
+    * [Boot Sequence](#boot-sequence)
+    * [IO Messages](#io-messages)
+    * [Publish Access](#publish-access)
+
+
 ## Broker settings
 You can add all the broker details in the web UI:
 
 ![MQTT settings](./demo/mqtt_settings.png)
 
 ## Using MQTT Topics
-For the MQTT communication some additional TOPICs have been added internally. The default Topic is configured in the web UI. If you use more then one device, every device should have the same `TOPIC` name configured. All MQTT communication is done with JSON Payload as MQTT Message.
+For the MQTT communication some additional TOPICs have been added internally. The default Topic is configured in the web UI.     
+If you use more then one device, every device should have the same `TOPIC` name configured.     
+All MQTT communication is done with JSON Payload as MQTT Message.
 
 This is the used Topic hierarchy:
 
@@ -35,105 +63,34 @@ TOPIC---+---/send
   * /rfid/send
   * /rfid/cmd
 
-### Auto-topic
+[:top:](#index)
 
-If auto-topic option is selected, esp-rfid will add the last 6 characters from the device MAC address to the MQTT topic.
+### Auto-Topic
 
-This can be useful to deploy a batch of esp-rfid in one go. By knowing the MAC addresses in advance you can setup them all with a standard configuration and each one will talk on a separate topic.
+If auto-topic option is selected, ESP23-RFID will add the last 6 characters from the device MAC address to the MQTT topic.
 
-## Commands received by ESP-RFID
+This can be useful to deploy a batch of ESP32-RFID in one go.      
+By knowing the MAC addresses in advance you can setup them all with a standard configuration and each one will talk on a separate topic.
+
+[:top:](#index)
+
+## Commands received by ESP32-RFID
 The message format is JSON.
 
 The message has to include the IP of the device together with one of the supported commands.
 
 The commands should be sent to the `TOPIC/cmd` and the responses will be sent on  the topic `TOPIC/send`.
 
-### Get all the users
-When sending the following command:
-```
-{
-   "cmd":"getuserlist",
-   "doorip":"(The ESP-RFID IP address as String)"
-}
-```
+[:top:](#index)
 
-A list of messages like the following will be sent, one for each user:
-```
-{
-    "command": "userfile",
-    "uid": "1234",
-    "user": "User Name",
-    "acctype": 1,
-    "acctype2": null,
-    "acctype3": null,
-    "acctype4": null,
-    "validsince": 0,
-    "validuntil": 1608336000
-}
-```
-
-### Open door
-Opens the Door/Magnetic Lock.
-
-Command:
-```
-{
-    "cmd":"opendoor",
-    "doorip":"(The ESP-RFID IP of the door to open as String)"
-}
-```
-
-Response will be a standard [Publish Access](#publish-access) message.
-
-### Delete user
-Delete a single user by UID.
-
-Command:
-```
-{
-     "cmd":"deletuid",
-     "doorip":"(The ESP-RFID IP address as String)",
-     "uid":"(The UID of the user to delete as String)"
-}
-```
-
-Response will be an acknowledgment to let the other party know that the message was processed:
-```
-{
-  "type":"deletuid",
-  "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
-}
-```
-
-### Delete all users
-Delete all user files.
-
-Command:
-```
-{
-     "cmd":"deletusers",
-     "doorip":"(The ESP-RFID IP address as String)"
-}
-```
-
-Response will be an acknowledgment to let the other party know that the message was processed:
-```
-{
-  "type":"deletusers",
-  "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
-}
-```
-
-### Add user
+### Add User
 Adds a user as a file to the device.
 
 Command:
 ```
 {
      "cmd":"adduser",
-     "doorip":"(The ESP-RFID IP address as String)",
+     "doorip":"(The ESP32-RFID IP address as String)",
      "uid": "(The PIN as String)",
      "user": "(User Name as String)",
      "acctype": "1",
@@ -161,18 +118,93 @@ Response will be an acknowledgment to let the other party know that the message 
 {
   "type":"adduser",
   "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
-### Get configuration
+[:top:](#index)
+
+### Get All The Users
+When sending the following command:
+```
+{
+   "cmd":"getuserlist",
+   "doorip":"(The ESP32-RFID IP address as String)"
+}
+```
+
+A list of messages like the following will be sent, one for each user:
+```
+{
+    "command": "userfile",
+    "uid": "1234",
+    "user": "User Name",
+    "acctype": 1,
+    "acctype2": null,
+    "acctype3": null,
+    "acctype4": null,
+    "validsince": 0,
+    "validuntil": 1608336000
+}
+```
+
+Response will be a standard [Publish Access](#publish-access) message.
+
+[:top:](#index)
+
+### Delete User
+Delete a single user by UID.
+
+Command:
+```
+{
+     "cmd":"deletuid",
+     "doorip":"(The ESP32-RFID IP address as String)",
+     "uid":"(The UID of the user to delete as String)"
+}
+```
+
+Response will be an acknowledgment to let the other party know that the message was processed:
+```
+{
+  "type":"deletuid",
+  "ip":"192.168.1.xxx",
+  "hostname":"your ESP32-RFID hostname"
+}
+```
+
+[:top:](#index)
+
+### Delete All Users
+Delete all user files.
+
+Command:
+```
+{
+     "cmd":"deletusers",
+     "doorip":"(The ESP32-RFID IP address as String)"
+}
+```
+
+Response will be an acknowledgment to let the other party know that the message was processed:
+```
+{
+  "type":"deletusers",
+  "ip":"192.168.1.xxx",
+  "hostname":"your ESP32-RFID hostname"
+}
+```
+
+[:top:](#index)
+
+### Get Configuration
 Get the global configuration.
 
 Command:
 ```
 {
      "cmd":"getconf",
-     "doorip":"(The ESP-RFID IP address as String)"
+     "doorip":"(The ESP32-RFID IP address as String)"
 }
 ```
 
@@ -181,12 +213,14 @@ Response will be an object with a `configfile` key which holds the entire config
 {
   "type":"getconf",
   "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname",
+  "hostname":"your ESP32-RFID hostname",
   "configfile": {
     // the entire configuration object
   }
 }
 ```
+
+[:top:](#index)
 
 ### Update configuration
 Update the global configuration. You can pass a configuration object, which will be used as the new configuration. Then the system will restart to load the new configuration.
@@ -195,7 +229,7 @@ Command:
 ```
 {
      "cmd":"updateconf",
-     "doorip":"(The ESP-RFID IP address as String)",
+     "doorip":"(The ESP32-RFID IP address as String)",
      "configfile": {
       // the entire configuration object
      }
@@ -207,18 +241,35 @@ Response will be an acknowledgment to let the other party know that the message 
 {
   "type":"updateconf",
   "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
 Then the system will automatically restart to use the new configuration.
 
-## Messages sent by ESP-RFID
+[:top:](#index)
+
+### Open Door
+Opens the Door/Magnetic Lock.
+
+Command:
+```
+{
+    "cmd":"opendoor",
+    "doorip":"(The ESP32-RFID IP of the door to open as String)"
+}
+```
+
+[:top:](#index)
+
+## Messages Sent By ESP32-RFID
 ESP-RFID sends a set of MQTT messages for the most significant actions that it does, plus can be configured to send all the logs over MQTT, instead of keeping them locally.
 
 All the messages are sent at the topic: `TOPIC/send`.
 
 For Home Assistant, check the specific topics and messages below.
+
+[:top:](#index)
 
 ### Base messages
 
@@ -231,12 +282,14 @@ Once booted and connected to the WiFi, it sends this message.
   "time":1605987212,
   "uptime":0,
   "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
+[:top:](#index)
+
 #### Heartbeat
-Every X seconds ESP-RFID sends a heartbeat over MQTT. The interval can be customised in the web UI, the default is 180 seconds.
+Every X seconds ESP32-RFID sends a heartbeat over MQTT. The interval can be customised in the web UI, the default is 180 seconds.
 
 ```
 {
@@ -244,9 +297,11 @@ Every X seconds ESP-RFID sends a heartbeat over MQTT. The interval can be custom
   "time":1605991375,
   "uptime":999,
   "ip":"192.168.1.xxx",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
+
+[:top:](#index)
 
 #### Publish Access
 When a RFID token is detected a set of messages can be sent, depending on the presence of the token UID in the database.
@@ -266,7 +321,7 @@ If the UID is in the users list, there can be a set of possible "access" configu
   "access":"the access state",
   "username":"username",
   "uid":"token UID",
-  "hostname":"your esp-rfid hostname",
+  "hostname":"your ESP32-RFID hostname",
   "doorName":"your door name"
 }
 ```
@@ -280,7 +335,7 @@ If instead the UID is not present in the users list the message will be:
   "access":"Denied",
   "username":"Unknown",
   "uid":"token UID",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -294,7 +349,7 @@ If the tag is unknown the message will be different:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -308,15 +363,19 @@ In case of multiple doors managed by one esp-rfid, you'll get an array for doorn
   "access":["the access state door 1", "access state door 2"],
   "username":"username",
   "uid":"token UID",
-  "hostname":"your esp-rfid hostname",
+  "hostname":"your ESP32-RFID hostname",
   "doorName":["door 1", "door 2"]
 }
 ```
 
-### Log messages
-Besides the above messages, ESP-RFID can send all the logs via MQTT instead of storing those locally. If this is enabled via the web UI, also the following messages are sent.
+[:top:](#index)
 
-#### Door status
+### Log Messages
+Besides the above messages, ESP32-RFID can send all the logs via MQTT instead of storing those locally. If this is enabled via the web UI, also the following messages are sent.
+
+[:top:](#index)
+
+#### Door Status
 If the door sensor is enabled, two messages are sent, one when the door is opened:
 
 ```
@@ -327,7 +386,7 @@ If the door sensor is enabled, two messages are sent, one when the door is opene
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -341,9 +400,11 @@ And one when the door is closed:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your EP32-RFID hostname"
 }
 ```
+
+[:top:](#index)
 
 #### Doorbell
 If the doorbell is enabled, a message is sent when it's ringing:
@@ -356,11 +417,13 @@ If the doorbell is enabled, a message is sent when it's ringing:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
-#### Tamper status
+[:top:](#index)
+
+#### Tamper Status
 If the door is tampered, or open when it shouldn't be a message is sent:
 
 ```
@@ -371,7 +434,7 @@ If the door is tampered, or open when it shouldn't be a message is sent:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"yourESP32-RFID hostname"
 }
 ```
 
@@ -385,11 +448,13 @@ And then if the open is not closed before the maximum allowed time:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
-#### WiFi status
+[:top:](#index)
+
+#### WiFi Status
 Some messages around WiFi handling are also sent.
 
 Enabling/disabling of WiFi:
@@ -402,11 +467,13 @@ Enabling/disabling of WiFi:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
-#### MQTT status
+[:top:](#index)
+
+#### MQTT Status
 MQTT connection or message handling related.
 
 On connecting to the broker:
@@ -418,7 +485,7 @@ On connecting to the broker:
   "data":"Session Present",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -431,7 +498,7 @@ On disconnecting from the broker:
   "data":"reason of disconnection",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -444,11 +511,13 @@ When the ESP8266 cannot store in memory incoming messages due to low memory a me
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
-#### System messages
+[:top:](#index)
+
+#### System Messages
 When the system configuration is done and the system is up and running
 ```
 {
@@ -458,7 +527,7 @@ When the system configuration is done and the system is up and running
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -471,7 +540,7 @@ Before performing a requested reboot:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -484,7 +553,7 @@ Before performing a scheduled reboot:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -497,7 +566,7 @@ On a FS format:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -510,7 +579,7 @@ When saving the configuration on LittleFS:
   "data":"xxx bytes",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
 ```
 
@@ -523,8 +592,9 @@ After deleting all the event logs:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+````
 
 After deleting all the access logs:
 ```
@@ -535,8 +605,9 @@ After deleting all the access logs:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
 When starting the firmware update:
 ```
@@ -547,8 +618,9 @@ When starting the firmware update:
   "data":"file name",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
 If there's no space to upload the firmware:
 ```
@@ -559,8 +631,9 @@ If there's no space to upload the firmware:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
 If the firmware update failed because it's not possible to write on flash:
 ```
@@ -571,8 +644,9 @@ If the firmware update failed because it's not possible to write on flash:
   "data":"file name",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
 If the firmware update successfully finished:
 ```
@@ -583,8 +657,9 @@ If the firmware update successfully finished:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
 If the firmware update failed:
 ```
@@ -595,29 +670,34 @@ If the firmware update failed:
   "data":"",
   "time":1605991375,
   "cmd":"event",
-  "hostname":"your esp-rfid hostname"
+  "hostname":"your ESP32-RFID hostname"
 }
+```
 
-### Home Assistant messages
+[:top:](#index)
 
-#### Boot sequence
-When esp-rfid finishes the boot sequence and connects to WiFi and MQTT broker sends HA-specific messages to setup: lock, door, doorbell, tag, user, door tamper, avty.
+### Home Assistant Messages
 
-#### IO messages
-During normal usage, esp-rfid sends to Home Assistant messages on the `/io/*` topics for the following:
+#### Boot Sequence
+When ESP32-RFID finishes the boot sequence and connects to WiFi and MQTT broker sends HA-specific messages to setup: lock, door, doorbell, tag, user, door tamper, avty.
+
+[:top:](#index)
+
+#### IO Messages
+During normal usage, ESP32-RFID sends to Home Assistant messages on the `/io/*` topics for the following:
 - door status, open/closed
 - door tamper
 - doorbell on/off
 - lock locked/unlocked
 
+[:top:](#index)
 
-#### Publish access
+#### Publish Access
 Similarly to what is published for the standard MQTT settings, when Home Assistant is setup, esp-rfid sends a set of messages when a rfid card is swiped.
 
 Read above for the possible cases, the significant part fo HA is that the topic to which the message is sent is different: `TOPIC/tag`.
 
 And the message looks like this:
-
 ```
 {
   "uid":"token UID",
@@ -626,3 +706,5 @@ And the message looks like this:
   "time":1605991375,
  }
 ```
+
+[:top:](#index)
