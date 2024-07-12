@@ -23,7 +23,7 @@
     * [WiFi Status](#wifi-status)
     * [MQTT Status](#mqtt-status)
     * [System Messages](#system-messages)
-  * [Home Assistant Messages](home-assistant-messages)
+  * [Home Assistant Messages](#home-assistant-messages)
     * [Boot Sequence](#boot-sequence)
     * [IO Messages](#io-messages)
     * [Publish Access](#publish-access)
