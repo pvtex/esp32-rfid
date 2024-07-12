@@ -42,20 +42,20 @@ This project still in its development phase. New features (and also bugs) are in
 * n quantity of RFID Tags (for example Mifare Classic 1KB , or any other Tag with a 4 or 7byte ID) equivalent to User Number
 
 ### ESP32-Board
-curently ESP32-RFID support 3 boards:
+currently ESP32-RFID supports 4 types of boards:
 
 * without Ethernet
-    * generic 
+    * generic (every ESP32 board descirbed above)
         * image: [wifi.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi.bin)
         * debug-image: [wifi-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-debug.bin)
-    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) 
+    * [APWIKOGER-Relay-X1](boards/APWIKOGER-Relay-X1) ![pic](./boards/APWIKOGER-Relay-X1/board.png)
         * image: [wifi-apwikoger.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger.bin)
         * debug-image: [wifi-apwikoger-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/wifi-apwikoger-debug.bin)
 * with Ethernet
-    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) (in debug mode: no LED and Buzzer on Wiegand-Reader) 
+    * [DTWonder DT-R002](boards/dtwonder-DT-R002/) ![pic](./boards/dtwonder-DT-R002/board.png)(in debug mode: no LED and Buzzer on Wiegand-Reader) 
         * image: [ethernet-dtwonder.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder.bin)
         * debug-image: [ethernet-dtwonder-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-dtwonder-debug.bin)
-    * [lilygo t-internet-com](boards/t-internet-com/) 
+    * [lilygo t-internet-com](boards/t-internet-com/) ![pic](./boards/t-internet-com/board.jpg)
         * image: [ethernet-lilygo.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo.bin)
         * debug-image: [ethernet-lilygo-debug.bin](https://github.com/pvtex/esp32-rfid/raw/master/bin/ethernet-lilygo-debug.bin)
 
