@@ -4,9 +4,20 @@ I had success copying the driver from ESPHome (https://github.com/esphome/esphom
 into esp-idf/components/esp_eth/src, 
 
 adding the source to esp-idf/components/esp_eth/CMakeLists.txt 
-and also adding the prototype of esp_eth_phy_new_jl1101() to esp-idf/components/esp_eth/eclude/sp_eth_phy.h.
+and also adding the prototype of esp_eth_phy_new_jl1101() to esp-idf/components/esp_eth/inlude/esp_eth_phy.h.
 
-Used the ESP-IDF version 5.1.2 and used it to compile MicroPython (where I added a bit more stuff to get access to JL1101 PHY).
+/**
+* @brief Create a PHY instance of JL1101
+*
+* @param[in] config: configuration of PHY
+*
+* @return
+*      - instance: create PHY instance successfully
+*      - NULL: create PHY instance failed because some error occurred
+*/
+esp_eth_phy_new_jl1101()
+
+
 
 The configuration pins were also borrowed from ESPHome and replicated to my MicroPython build:
 

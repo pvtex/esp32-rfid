@@ -7,6 +7,10 @@ Access Control system using a Wiegand RFID readers and Espressif's ESP32 Microco
 
 ![Screenshot Status](./demo/screenshot_status.png)
 
+![Prototype](./boards/dtwonder-DT-R002/prototype.jpg)
+This is the first prototype with a dtwonder board and a 58bit wiegand reader.
+
+
 ## Features
 ### For Users
 * Minimal effort for setting up your Access Control system, just flash and everything can be configured via Web UI
