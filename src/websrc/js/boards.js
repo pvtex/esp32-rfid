@@ -34,6 +34,7 @@ function handleBoard() {
       document.getElementById("doorstatpin").value = "36";
       document.getElementById("ledwaitingpin").value = "1";
       document.getElementById("openlockpin").value = "39";
+      document.getElementById('doorbellpin').value = "255";
       document.getElementById("wifipin").value = "255";
       document.getElementById("wg0pin").value = "5";
       document.getElementById("wg1pin").value = "4";
