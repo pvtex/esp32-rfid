@@ -234,4 +234,4 @@ The code parts written by ESP-RFID project's authors are licensed under [MIT Lic
 
 
 [^1]: If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
-      All needed information can be found [here](boards/dtwonder-DT-R002/PATCH/JL1101_Patch.md). 
+      All needed information can be found [here](esp32-rfid/boards/dtwonder-DT-R002/PATCH/JL1101_Patch.md). 
