@@ -424,6 +424,21 @@ void ICACHE_RAM_ATTR loop()
 		}
 		processMqttQueue();
 	}
+	if (config.mqttEnabled && !mqttClient.connected())
+	{
+		writeEvent("INFO", "mqtt", "MQTT connect", "");
+		mqttClient.connect();
+		if ((unsigned)epoch > nextbeat)
+		{
+			mqttPublishHeartbeat(epoch, uptimeSeconds);
+			nextbeat = (unsigned)epoch + config.mqttInterval;
+#ifdef DEBUG
+			Serial.print("[ INFO ] Nextbeat=");
+			Serial.println(nextbeat);
+#endif
+		}
+		processMqttQueue();
+	}
 
 	processWsQueue();
 
