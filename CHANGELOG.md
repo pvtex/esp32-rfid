@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.9] - 2024-07-22 [download](https://github.com/pvtex/esp32-rfid/releases/tag/1.1.9)
+|  Type      | Change |
+|:----------:|:------:| 
+| [firmware] | changed board templates according to new pcb files |
+| [mqtt]     | fixes some problems |
+| [gui]      | some minor changes |
 ## [1.1.8] - 2024-07-01 [download](https://github.com/pvtex/esp32-rfid/releases/tag/1.1.8)
 |  Type      | Change |
 |:----------:|:------:| 
