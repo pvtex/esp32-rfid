@@ -144,7 +144,7 @@ platformio run
 When you run ```platformio run``` for the first time, it will download the toolchains and all necessary libraries [^1] automatically.      
 
 > [!IMPORTANT]  
-> If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
+> If you use the DTWonder DT-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
 > All needed information can be found [here](boards/dtwonder-DT-R002/PATCH/JL1101_Patch.md).     
 
 ### Useful commands
@@ -233,5 +233,5 @@ The code parts written by ESP-RFID project's authors are licensed under [MIT Lic
 
 
 
-[^1]: If you use the DTWonder DR-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
+[^1]: If you use the DTWonder DT-R002 board you have to patch the ethernet library if you want to compile the firmware on your own.     
       All needed information can be found [here](boards/dtwonder-DT-R002/PATCH/JL1101_Patch.md). 
